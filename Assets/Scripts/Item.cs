@@ -1,0 +1,26 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Item : MonoBehaviour {
+	public Vector3 					heldPos = new Vector3 (0f, 0f, 0f);
+	public bool 					________________;
+	public bool 					held = false;
+	private Rigidbody2D 			rigid;
+
+	// Use this for initialization
+	void Start () {
+		rigid =	GetComponent<Rigidbody2D>();
+	}
+
+	public void PickedUp(Player _player){
+		rigid.isKinematic = true;
+		transform.parent = _player.transform;
+		transform.localPosition = heldPos;
+	}
+
+	public void Thrown(Player _player){
+		rigid.isKinematic = false;
+		transform.parent = _player.transform.parent;
+	}
+}
