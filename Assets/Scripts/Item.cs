@@ -19,8 +19,9 @@ public class Item : MonoBehaviour {
 		transform.localPosition = heldPos;
 	}
 
-	public void Thrown(Player _player){
+	public void Thrown(Player _player, Vector3 throwVel){
 		rigid.isKinematic = false;
 		transform.parent = _player.transform.parent;
+		rigid.velocity = throwVel;
 	}
 }

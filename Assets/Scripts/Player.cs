@@ -14,18 +14,24 @@ public class Player : MonoBehaviour {
 	// Insepctor manipulated attributes
 	public float 							xSpeed = 4f;
 	public float							ySpeed = 5f;
-	public GameObject 						projectile;
 	public float 							itemDetectRadius = 0.5f;
+	public float 							throwChargeMax = 10f;
+	public float 							throwChargeRatio = 10f;
 	public bool 							debugMode = false;
 	public bool 							________________;
 	// Encapsulated attributes
 	public PlayerForm						_form = PlayerForm.Normal;
 	public bool								grounded;
-	public Item 						heldItem;
+	public Item 							heldItem;
+
+	// Counters
+	public float							throwChargeCount = 0f;
 
 	// GameObject components & child objects
 	private BoxCollider2D					coll;
 	private Rigidbody2D						rigid;
+	private GameObject 						sprite;
+	private SpriteRenderer					sprend;
 
 	// Detection parameters
 	private float							groundCastLength;
@@ -38,9 +44,11 @@ public class Player : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		// Get GameObject componenets
+		// Get GameObject componenets & chidlren
 		coll = GetComponent<BoxCollider2D> ();
 		rigid = GetComponent<Rigidbody2D> ();
+		sprite = transform.Find ("Sprite").gameObject;
+		sprend = sprite.GetComponent<SpriteRenderer> ();
 
 		// Raycast parameters
 		groundCastLength = 0.6f*coll.size.y;
@@ -85,6 +93,8 @@ public class Player : MonoBehaviour {
 
 	void HoldingUpdate() {
 		CalculateMovement ();
+
+		// Switch to either throwing or setting
 		if (Input.GetKeyDown (KeyCode.S)) {
 			form = PlayerForm.Throwing;
 		} else if (Input.GetKeyDown (KeyCode.D)) {
@@ -94,19 +104,37 @@ public class Player : MonoBehaviour {
 
 	void ThrowingUpdate() {
 		CalculateMovement ();
+		throwChargeCount += Time.deltaTime;
+		sprend.color = Color.Lerp (Color.white, Color.red, throwChargeCount / throwChargeMax);
+
 		if (Input.GetKeyUp (KeyCode.S)) {
-			heldItem.Thrown (this);
+			// Item is thrown
+			if (throwChargeCount > throwChargeMax) {
+				throwChargeCount = throwChargeMax;
+			}
+			// Replace base vector with controller input
+			Vector3 throwVel = new Vector3 (1f, 1f, 0f) * (throwChargeCount*throwChargeRatio);
+			heldItem.Thrown (this, throwVel);
 			heldItem = null;
+			throwChargeCount = 0f;
+			sprend.color = Color.white;
 			form = PlayerForm.Normal;
+		} else if (Input.GetKeyUp (KeyCode.F)) {
+			// Throwing was cancelled
+			throwChargeCount = 0f;
+			sprend.color = Color.white;
+			form = PlayerForm.Holding;
 		}
 	}
 
 	void SettingUpdate() {
 		CalculateMovement ();
-		if (Input.GetKeyUp (KeyCode.D)) {
-			heldItem.Thrown (this);
-			heldItem = null;
-			form = PlayerForm.Normal;
+
+		// TODO: WRITE SETTING BEHAVIOR
+		
+		if (Input.GetKeyUp (KeyCode.F)) {
+			// Setting was cancelled
+			form = PlayerForm.Holding;
 		}
 	}
 

@@ -518,6 +518,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0748e11426da1ed4ab06e7fa93b40f69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  heldPos: {x: 0, y: 0, z: 0}
   ________________: 0
   held: 0
 --- !u!1 &1458581984
@@ -551,12 +552,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   xSpeed: 4
   ySpeed: 5
-  projectile: {fileID: 0}
   itemDetectRadius: 0.5
-  ________________: 0
+  throwChargeMax: 10
+  throwChargeRatio: 5
   debugMode: 0
+  ________________: 0
   _form: 0
   grounded: 0
+  heldItem: {fileID: 0}
+  throwChargeCount: 0
 --- !u!50 &1458581986
 Rigidbody2D:
   serializedVersion: 4
