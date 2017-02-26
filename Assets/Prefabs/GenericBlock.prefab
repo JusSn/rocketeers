@@ -38,7 +38,7 @@ Transform:
   m_GameObject: {fileID: 1480987293945216}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -4.5, y: -3.5, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.05, y: 1.05, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -76,7 +76,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Size: {x: 0.95, y: 0.95}
+  m_Size: {x: 0.9, y: 0.9}
 --- !u!114 &114720795011954418
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -88,12 +88,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea899017a0fc2064e9f5070158584731, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  being_manipulated: 0
-  in_placeable_spot: 0
   mask:
     serializedVersion: 2
     m_Bits: 512
   snap_radius: 0.75
+  ______________________: 0
+  being_manipulated: 0
+  in_placeable_spot: 0
+  block_fell: 0
 --- !u!212 &212019697935995300
 SpriteRenderer:
   m_ObjectHideFlags: 1

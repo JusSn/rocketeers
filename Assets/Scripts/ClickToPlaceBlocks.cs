@@ -34,7 +34,8 @@ public class ClickToPlaceBlocks : MonoBehaviour {
                 created_block.GetComponent<Block>().ConnectBlock();
             }
             else {
-
+                Destroy(created_block);
+                holding_block = false;
             }
         }
 	}
