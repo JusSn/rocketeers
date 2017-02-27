@@ -106,15 +106,15 @@ InputManager:
     descriptiveName: Player one's throwing button
     descriptiveNegativeName: 
     negativeButton: 
-    positiveButton: 
+    positiveButton: joystick button 5
     altNegativeButton: 
     altPositiveButton: 
     gravity: 0
-    dead: 0.2
-    sensitivity: 1
+    dead: 0
+    sensitivity: 0
     snap: 0
     invert: 0
-    type: 2
+    type: 0
     axis: 9
     joyNum: 1
   - serializedVersion: 3
@@ -122,14 +122,14 @@ InputManager:
     descriptiveName: Set objects for Player one
     descriptiveNegativeName: 
     negativeButton: 
-    positiveButton: 
+    positiveButton: joystick button 4
     altNegativeButton: 
     altPositiveButton: 
     gravity: 0
-    dead: 0.2
-    sensitivity: 1
+    dead: 0
+    sensitivity: 0
     snap: 0
     invert: 0
-    type: 2
-    axis: 8
+    type: 0
+    axis: 27
     joyNum: 1

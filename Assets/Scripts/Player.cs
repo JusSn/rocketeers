@@ -101,9 +101,9 @@ public class Player : MonoBehaviour {
 		CalculateMovement ();
 
 		// Switch to either throwing or setting
-		if (Input.GetAxis ("Throw_P1") > 0f) {
+		if (Input.GetButtonDown ("Throw_P1")) {
 			form = PlayerForm.Throwing;
-		} else if (heldItem.IsSettable() && Input.GetAxis ("Set_P1") > 0f) {
+		} else if (heldItem.IsSettable() && Input.GetButtonDown ("Set_P1")) {
 			form = PlayerForm.Setting;
 		}
 	}
@@ -116,7 +116,7 @@ public class Player : MonoBehaviour {
 		throwChargeCount += Time.deltaTime;
 		sprend.color = Color.Lerp (Color.white, Color.red, throwChargeCount / throwChargeMax);
 
-		if (Input.GetAxis ("Throw_P1") == 0f) {
+		if (Input.GetButtonUp ("Throw_P1")) {
 			// Item is thrown
 			if (throwChargeCount > throwChargeMax) {
 				throwChargeCount = throwChargeMax;
@@ -146,7 +146,7 @@ public class Player : MonoBehaviour {
 			Debug.DrawLine (transform.position, setPos, Color.red);
 		}
 
-		if (Input.GetAxis ("Set_P1") == 0f) {
+		if (Input.GetButtonUp ("Set_P1")) {
 			heldItem.Set (setPos);
 			form = PlayerForm.Normal;
 		} else if (Input.GetButtonDown ("Cancel_P1")) {
