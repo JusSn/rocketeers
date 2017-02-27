@@ -57,16 +57,16 @@ public class Block : MonoBehaviour {
             // Check each neighbor to see if one exists
             // If not, add it as a joint and add it to the dictionary
             if(!connected_neighbors.ContainsKey(Direction.NORTH)) {
-                ConnectSingleNeighbor(transform.position + new Vector3(0, 1), Direction.NORTH);
+                ConnectSingleNeighbor(Direction.NORTH);
             }
             if (!connected_neighbors.ContainsKey(Direction.SOUTH)) {
-                ConnectSingleNeighbor(transform.position + new Vector3(0, -1), Direction.SOUTH);
+                ConnectSingleNeighbor(Direction.SOUTH);
             }
             if (!connected_neighbors.ContainsKey(Direction.WEST)) {
-                ConnectSingleNeighbor(transform.position + new Vector3(-1, 0), Direction.WEST);
+                ConnectSingleNeighbor(Direction.WEST);
             }
             if (!connected_neighbors.ContainsKey(Direction.EAST)) {
-                ConnectSingleNeighbor(transform.position + new Vector3(1, 0), Direction.EAST);
+                ConnectSingleNeighbor(Direction.EAST);
             }
 
             block_fell = false;
@@ -137,45 +137,12 @@ public class Block : MonoBehaviour {
                 break;
         }
 
-        FixedJoint2D joint = gameObject.AddComponent<FixedJoint2D>();
-        joint.connectedBody = connected_block.GetComponent<Rigidbody2D>();
-        connected_neighbors[direction] = joint;
-        joint = connected_block.AddComponent<FixedJoint2D>();
-        joint.connectedBody = gameObject.GetComponent<Rigidbody2D>();
-        connected_block.GetComponent<Block>().connected_neighbors[GetOppositeDirection(direction)] = joint;
+        ConnectSingleNeighbor(Direction.NORTH);
+        ConnectSingleNeighbor(Direction.SOUTH);
+        ConnectSingleNeighbor(Direction.EAST);
+        ConnectSingleNeighbor(Direction.WEST);
 
-
-        // Connect the rest of the neighbor blocks
-        Collider2D[] neighbors;
-        Vector2 overlap_area_topleft = new Vector2(transform.position.x - 0.75f, transform.position.y + 0.25f);
-        Vector2 overlap_area_bottomright = new Vector2(transform.position.x + 0.75f, transform.position.y - 0.25f);
-
-        // first change the recently attached block layer to ignore it
-        connected_block.layer = LayerMask.NameToLayer("Items");
-        // get left and right neighbors by making a short and wide overlap area
-        Collider2D[] horizontal_neighbors = Physics2D.OverlapAreaAll(overlap_area_topleft, overlap_area_bottomright, mask);
-        overlap_area_topleft += new Vector2(0.5f, 0.5f);
-        overlap_area_bottomright -= new Vector2(0.5f, 0.5f);
-        // get top and bottom neighbors by making a tall and narrow overlap area
-        Collider2D[] vertical_neighbors = Physics2D.OverlapAreaAll(overlap_area_topleft, overlap_area_bottomright, mask);
-        // combine these arrays
-        neighbors = new Collider2D[horizontal_neighbors.Length + vertical_neighbors.Length];
-        horizontal_neighbors.CopyTo(neighbors, 0);
-        vertical_neighbors.CopyTo(neighbors, horizontal_neighbors.Length);
-        // for each neighbor, create joint on new block and neighbor block
-        for (int i = 0; i < neighbors.Length; i++) {
-            Direction dir = GetRelativeSide(neighbors[i].transform.position);
-            joint = gameObject.AddComponent<FixedJoint2D>();
-            joint.connectedBody = neighbors[i].GetComponent<Rigidbody2D>();
-            connected_neighbors[dir] = joint;
-
-            joint = neighbors[i].gameObject.AddComponent<FixedJoint2D>();
-            joint.connectedBody = gameObject.GetComponent<Rigidbody2D>();
-            neighbors[i].GetComponent<Block>().connected_neighbors[GetOppositeDirection(dir)] = joint;
-        }
-
-        // reset block layers
-        connected_block.layer = LayerMask.NameToLayer("Blocks");
+        // reset block layer
         gameObject.layer = LayerMask.NameToLayer("Blocks");
     }
 
@@ -198,9 +165,25 @@ public class Block : MonoBehaviour {
         }
     }
 
-    // Connects a single neighbor if a block exists at the point
-    public void ConnectSingleNeighbor(Vector2 point, Direction dir) {
-        Collider2D neighbor = Physics2D.OverlapPoint(point, mask);
+    // Connects a single neighbor if a block exists in that direction
+    public void ConnectSingleNeighbor(Direction dir) {
+        Vector2 pt;
+        switch (dir) {
+            case Direction.NORTH:
+                pt = transform.position + new Vector3(0, 1);
+                break;
+            case Direction.SOUTH:
+                pt = transform.position + new Vector3(0, -1);
+                break;
+            case Direction.EAST:
+                pt = transform.position + new Vector3(1, 0);
+                break;
+            default:
+                pt = transform.position + new Vector3(-1, 0);
+                break;
+        }
+
+        Collider2D neighbor = Physics2D.OverlapPoint(pt, mask);
         if (neighbor != null) {
             FixedJoint2D joint = gameObject.AddComponent<FixedJoint2D>();
             joint.connectedBody = neighbor.GetComponent<Rigidbody2D>();
