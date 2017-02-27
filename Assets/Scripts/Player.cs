@@ -103,7 +103,7 @@ public class Player : MonoBehaviour {
 		// Switch to either throwing or setting
 		if (Input.GetAxis ("Throw_P1") > 0f) {
 			form = PlayerForm.Throwing;
-		} else if (Input.GetAxis ("Set_P1") > 0f) {
+		} else if (heldItem.IsSettable() && Input.GetAxis ("Set_P1") > 0f) {
 			form = PlayerForm.Setting;
 		}
 	}
@@ -147,7 +147,7 @@ public class Player : MonoBehaviour {
 		}
 
 		if (Input.GetAxis ("Set_P1") == 0f) {
-			
+			heldItem.Set (setPos);
 			form = PlayerForm.Normal;
 		} else if (Input.GetButtonDown ("Cancel_P1")) {
 			// Setting was cancelled
