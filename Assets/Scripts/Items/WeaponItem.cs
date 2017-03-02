@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Weapon : Item {
+public class WeaponItem : Item {
 
 	public override bool IsWeapon() {
 		return true;
