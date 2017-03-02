@@ -8,14 +8,14 @@ public class ClickToPlaceBlocks : MonoBehaviour {
     GameObject created_block;
     bool holding_block;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
         holding_block = false;
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		if(!holding_block && Input.GetMouseButtonDown(0)) {
+    }
+
+    // Update is called once per frame
+    void Update () {
+        if (!holding_block && Input.GetMouseButtonDown(Utils.LEFT_CLICK_BTN)) {
             created_block = Instantiate(blockPrefab);
             created_block.layer = LayerMask.NameToLayer("Items");
             holding_block = true;
@@ -24,10 +24,12 @@ public class ClickToPlaceBlocks : MonoBehaviour {
             block_pos.z = 0;
             created_block.transform.position = block_pos;
         }
-        if(Input.GetMouseButton(0)) {
+
+        if (Input.GetMouseButton(Utils.LEFT_CLICK_BTN)) {
             created_block.GetComponent<Block>().being_manipulated = true;
         }
-        if(Input.GetMouseButtonUp(0)) {
+
+        if (Input.GetMouseButtonUp(Utils.LEFT_CLICK_BTN)) {
             if (created_block.GetComponent<Block>().in_placeable_spot) {
                 created_block.GetComponent<Block>().being_manipulated = false;
                 holding_block = false;
@@ -38,5 +40,5 @@ public class ClickToPlaceBlocks : MonoBehaviour {
                 holding_block = false;
             }
         }
-	}
+    }
 }

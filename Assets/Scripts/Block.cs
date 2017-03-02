@@ -19,21 +19,25 @@ public class Block : MonoBehaviour {
     public bool in_placeable_spot = false;
     public bool block_fell = false;
 
+    // GameObject components & child objects
+    private Rigidbody2D                   rigid;
+
     // Neighbor joints
     public Dictionary<Direction, FixedJoint2D> connected_neighbors;
 
     // Use this for initialization
     void Start () {
+        rigid = GetComponent<Rigidbody2D> ();
         connected_neighbors = new Dictionary<Direction, FixedJoint2D>();
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		if(being_manipulated) {
+    }
+
+    // Update is called once per frame
+    void Update () {
+        if(being_manipulated) {
             Vector3 block_pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             block_pos.z = 0;
             transform.position = block_pos;
-            GetComponent<Rigidbody2D>().velocity = Vector3.zero;
+            rigid.velocity = Vector3.zero;
 
             // gets array of gameobjects within a circle of radius 1
             // nearby_blocks[0] is this block so we ignore it
@@ -46,11 +50,11 @@ public class Block : MonoBehaviour {
             }
         }
 
-        if(!being_manipulated && GetComponent<Rigidbody2D>().velocity.magnitude >= 1f) {
+        if (!being_manipulated && !rigid.IsSleeping() ){
             block_fell = true;
         }
 
-        if(block_fell && GetComponent<Rigidbody2D>().velocity.magnitude <= 0.05f) {
+        if (block_fell && rigid.IsSleeping() ){
             // Jump block to closest half position
             //transform.position = new Vector3(Mathf.Round(transform.position.x * 2f) * 0.5f, Mathf.Round(transform.position.y * 2f) * 0.5f);
 
@@ -121,7 +125,7 @@ public class Block : MonoBehaviour {
         Direction direction = GetRelativeSide(connected_block.transform.position);
         //print(direction);
         transform.position = connected_block.transform.position;
-        
+
         switch(direction) {
             case Direction.NORTH:
                 transform.position += new Vector3(0, -1f);
@@ -150,7 +154,7 @@ public class Block : MonoBehaviour {
     // (If the neighbor is to the left, it will return WEST, etc)
     public Direction GetRelativeSide(Vector3 neighbor_pos) {
         float angle = Vector2.Angle(Vector2.right, neighbor_pos - gameObject.transform.position);
-        
+
         if (angle >= 315 || angle <= 45) {
             return Direction.EAST;
         }
@@ -168,20 +172,7 @@ public class Block : MonoBehaviour {
     // Connects a single neighbor if a block exists in that direction
     public void ConnectSingleNeighbor(Direction dir) {
         Vector2 pt;
-        switch (dir) {
-            case Direction.NORTH:
-                pt = transform.position + new Vector3(0, 1);
-                break;
-            case Direction.SOUTH:
-                pt = transform.position + new Vector3(0, -1);
-                break;
-            case Direction.EAST:
-                pt = transform.position + new Vector3(1, 0);
-                break;
-            default:
-                pt = transform.position + new Vector3(-1, 0);
-                break;
-        }
+        pt = transform.position + Utils.DirToVec (dir);
 
         Collider2D neighbor = Physics2D.OverlapPoint(pt, mask);
         if (neighbor != null) {
@@ -190,26 +181,8 @@ public class Block : MonoBehaviour {
             connected_neighbors[dir] = joint;
 
             joint = neighbor.gameObject.AddComponent<FixedJoint2D>();
-            joint.connectedBody = gameObject.GetComponent<Rigidbody2D>();
-            neighbor.GetComponent<Block>().connected_neighbors[GetOppositeDirection(dir)] = joint;
+            joint.connectedBody = rigid;
+            neighbor.GetComponent<Block>().connected_neighbors.Add(Utils.GetOppositeDirection(dir), joint);
         }
-    }
-
-    // Returns the opposite direction
-    // North -> South, East -> West
-    public Direction GetOppositeDirection(Direction dir) {
-        switch(dir) {
-            case Direction.NORTH:
-                return Direction.SOUTH;
-            case Direction.SOUTH:
-                return Direction.NORTH;
-            case Direction.EAST:
-                return Direction.WEST;
-            case Direction.WEST:
-                return Direction.EAST;
-        }
-
-        Debug.Log("Something went wrong with GetOppositeDirection");
-        return Direction.NORTH;
     }
 }
