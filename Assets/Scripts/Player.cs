@@ -36,7 +36,7 @@ public class Player : MonoBehaviour {
     // Detection parameters
     private float                           groundCastLength;
     private Vector3                         groundCastOffset;
-    private int                             blockLayer;
+    private int                             groundMask;
     private int                             itemLayer;
 
     // Function maps
@@ -53,8 +53,8 @@ public class Player : MonoBehaviour {
         // Raycast parameters
         groundCastLength = 0.6f*coll.size.y;
         groundCastOffset = new Vector3 (0.5f*coll.size.x, 0f, 0f);
-        blockLayer = LayerMask.GetMask ("Blocks");
         itemLayer = LayerMask.GetMask ("Items");
+        groundMask = LayerMask.GetMask ("Ground") | LayerMask.GetMask("Blocks");
 
 
         // Filling the function behavior map
@@ -90,6 +90,7 @@ public class Player : MonoBehaviour {
                 held.Attach (this);
                 heldItem = held;
                 form = PlayerForm.Holding;
+                print ("holding");
             }
         }
     }
@@ -103,7 +104,7 @@ public class Player : MonoBehaviour {
         // Switch to either throwing or setting
         if (Input.GetButtonDown ("Throw_P1")) {
             form = PlayerForm.Throwing;
-        } else if (heldItem.IsSettable() && Input.GetButtonDown ("Set_P1")) {
+        } else if (heldItem.IsSettable() && Input.GetButtonDown ("Pickup_P1")) {
             form = PlayerForm.Setting;
         }
     }
@@ -142,12 +143,15 @@ public class Player : MonoBehaviour {
         CalculateMovement ();
 
         Vector3 setPos = GetGridPosition ();
+
         if (debugMode) {
+            Debug.Log ("Drawing line");
             Debug.DrawLine (transform.position, setPos, Color.red);
         }
 
-        if (Input.GetButtonUp ("Set_P1")) {
+        if (Input.GetButtonUp ("Pickup_P1")) {
             heldItem.Set (setPos);
+            heldItem = null;
             form = PlayerForm.Normal;
         } else if (Input.GetButtonDown ("Cancel_P1")) {
             // Setting was cancelled
@@ -192,7 +196,7 @@ public class Player : MonoBehaviour {
     // Retrieve and apply any changes to the players movement
     void CalculateMovement() {
         Vector3 vel = rigid.velocity;
-        vel.x = GetXInputSpeed (0);//vel.x);
+        vel.x = GetXInputSpeed (0);
         vel.y = GetYInputSpeed (vel.y);
         rigid.velocity = vel;
     }
@@ -226,10 +230,9 @@ public class Player : MonoBehaviour {
     // Rounded to nearest 0.5 (e.g. 1.2 rounds to 1.5, 0.8 rounds to 0.5, etc.)
     Vector3 GetGridPosition() {
         Vector3 gridPos = transform.position + GetAimDirection ();
-        gridPos.x = Mathf.Floor (gridPos.x) + 0.5f;
-        gridPos.y = Mathf.Floor (gridPos.y) + 0.5f;
+        gridPos.x = Mathf.Floor (gridPos.x);// + 0.5f;
+        gridPos.y = Mathf.Floor (gridPos.y);// + 0.5f;
         return gridPos;
-
     }
 
     // Return a bool checking if player object is standing on top of a block or ground
@@ -238,7 +241,7 @@ public class Player : MonoBehaviour {
             Debug.DrawRay (transform.position + groundCastOffset, Vector3.down * groundCastLength, Color.red);
             Debug.DrawRay (transform.position - groundCastOffset, Vector3.down * groundCastLength, Color.red);
         }
-        return Physics2D.Raycast (transform.position + groundCastOffset, Vector3.down, groundCastLength, blockLayer)
-            || Physics2D.Raycast (transform.position + groundCastOffset, Vector3.down, groundCastLength, blockLayer);
+        return Physics2D.Raycast (transform.position + groundCastOffset, Vector3.down, groundCastLength, groundMask)
+            || Physics2D.Raycast (transform.position + groundCastOffset, Vector3.down, groundCastLength, groundMask);
     }
 }
