@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 251462951745763928}
   m_Layer: 11
   m_Name: Platform
-  m_TagString: Block
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -142,6 +142,7 @@ MonoBehaviour:
   being_manipulated: 0
   in_placeable_spot: 0
   block_fell: 0
+  state: 0
 --- !u!212 &212019697935995300
 SpriteRenderer:
   m_ObjectHideFlags: 1
