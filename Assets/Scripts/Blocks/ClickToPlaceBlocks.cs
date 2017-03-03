@@ -33,7 +33,7 @@ public class ClickToPlaceBlocks : MonoBehaviour {
             if (created_block.GetComponent<Block>().in_placeable_spot) {
                 created_block.GetComponent<Block>().being_manipulated = false;
                 holding_block = false;
-                created_block.GetComponent<Block>().ConnectBlock();
+                //created_block.GetComponent<Block>().ConnectBlock();
             }
             else {
                 Destroy(created_block);
