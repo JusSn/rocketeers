@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 212019697935995300}
   - component: {fileID: 61431347864820268}
   - component: {fileID: 50767454852522626}
-  - component: {fileID: 114913708709914378}
+  - component: {fileID: 114986671082341470}
   m_Layer: 8
   m_Name: WeaponItem
   m_TagString: WeaponItem
@@ -62,7 +62,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 5
+  m_Constraints: 4
 --- !u!61 &61431347864820268
 BoxCollider2D:
   m_ObjectHideFlags: 1
@@ -77,7 +77,7 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 0.5, y: 0.5}
---- !u!114 &114913708709914378
+--- !u!114 &114986671082341470
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -85,13 +85,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1480987293945216}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 665b7a714f052e8468c11218d205aa8e, type: 3}
+  m_Script: {fileID: 11500000, guid: 8b862a82cbd5cf44c8e78b1741427848, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   heldPos: {x: 0, y: 0, z: 0}
   ________________: 0
   held: 0
-  setObject: {fileID: 1480987293945216, guid: 3645635b9800a3f4188e309d502e26d9, type: 2}
+  setObject: {fileID: 1329692370226356, guid: 9730dde27d7ae4d5d8a9af81cf87fd19, type: 2}
 --- !u!212 &212019697935995300
 SpriteRenderer:
   m_ObjectHideFlags: 1
