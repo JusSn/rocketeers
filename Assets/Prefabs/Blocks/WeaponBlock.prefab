@@ -23,9 +23,10 @@ GameObject:
   - component: {fileID: 61183130701069528}
   - component: {fileID: 50328971055556674}
   - component: {fileID: 114365050868308048}
+  - component: {fileID: 114511309734554066}
   m_Layer: 9
   m_Name: WeaponBlock
-  m_TagString: Block
+  m_TagString: WeaponBlock
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -89,7 +90,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 6ca66d7f16b0b91499caaa038441e49d, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
@@ -143,6 +144,17 @@ MonoBehaviour:
   in_placeable_spot: 0
   block_fell: 0
   state: 0
+--- !u!114 &114511309734554066
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1329692370226356}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 054b59a72cb9544e782edd64fd4012b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!212 &212438897120900910
 SpriteRenderer:
   m_ObjectHideFlags: 1
