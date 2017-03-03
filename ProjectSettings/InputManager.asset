@@ -133,3 +133,19 @@ InputManager:
     type: 0
     axis: 27
     joyNum: 1
+  - serializedVersion: 3
+    m_Name: Restart_P1
+    descriptiveName: P1 restarts the game
+    descriptiveNegativeName: 
+    negativeButton: 
+    positiveButton: joystick 1 button 7
+    altNegativeButton: 
+    altPositiveButton: joystick 1 button 9
+    gravity: 0
+    dead: 0
+    sensitivity: 0
+    snap: 0
+    invert: 0
+    type: 0
+    axis: 0
+    joyNum: 1
