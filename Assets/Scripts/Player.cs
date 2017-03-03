@@ -7,13 +7,14 @@ public enum PlayerForm {
     Normal,        // Running, Jumping, Idle
     Holding,       // Holding an item
     Throwing,      // Charging up object to throw
-    Setting        // Finding location to set item
+    Setting,       // Finding location to set item
+    Sitting        // Used when manning a weapon
 }
 
 public class Player : MonoBehaviour {
     // Insepctor manipulated attributes
     public float                            xSpeed = 7f;
-    public float                            ySpeed = 7f;
+    public float                            ySpeed = 5f;
     public float                            itemDetectRadius = 0.5f;
     public float                            throwChargeMax = 2.5f;
     public float                            throwChargeRatio = 10f;
@@ -23,6 +24,7 @@ public class Player : MonoBehaviour {
     public PlayerForm                       _form = PlayerForm.Normal;
     public bool                             grounded;
     public Item                             heldItem;
+    public WeaponBlock                      weapon;
 
     // Counters
     public float                            throwChargeCount = 0f;
@@ -37,6 +39,7 @@ public class Player : MonoBehaviour {
     private float                           groundCastLength;
     private Vector3                         groundCastOffset;
     private int                             groundMask;
+    private int                             blockMask;
     private int                             itemLayer;
 
     // Function maps
@@ -54,8 +57,8 @@ public class Player : MonoBehaviour {
         groundCastLength = 0.6f*coll.size.y;
         groundCastOffset = new Vector3 (0.5f*coll.size.x, 0f, 0f);
         itemLayer = LayerMask.GetMask ("Items");
-        groundMask = LayerMask.GetMask ("Ground") | LayerMask.GetMask("Blocks");
-
+        groundMask = LayerMask.GetMask ("Ground");
+        blockMask = LayerMask.GetMask ("Blocks");
 
         // Filling the function behavior map
         stateUpdateMap = new Dictionary<PlayerForm, Action> ();
@@ -63,6 +66,7 @@ public class Player : MonoBehaviour {
         stateUpdateMap.Add (PlayerForm.Holding, HoldingUpdate);
         stateUpdateMap.Add (PlayerForm.Throwing, ThrowingUpdate);
         stateUpdateMap.Add (PlayerForm.Setting, SettingUpdate);
+        stateUpdateMap.Add (PlayerForm.Sitting, SittingUpdate);
     }
 
     // Update is called once per frame
@@ -90,9 +94,11 @@ public class Player : MonoBehaviour {
                 held.Attach (this);
                 heldItem = held;
                 form = PlayerForm.Holding;
-                print ("holding");
             }
+        } else if (Input.GetButtonDown("Pickup_P1") && TryToSitInWeapon()) {
+            // there's a weapon underneath us, so sit in it
         }
+
     }
 
     // Behavior when holding an item; Transitions to either throw or set
@@ -106,6 +112,13 @@ public class Player : MonoBehaviour {
             form = PlayerForm.Throwing;
         } else if (heldItem.IsSettable() && Input.GetButtonDown ("Pickup_P1")) {
             form = PlayerForm.Setting;
+
+        // TODO: This else if statement will probably never be called because
+        //       the user will always put down the block before they attempt to
+        //       sit in a weapon. If we want the weapon to take priority, then
+        //       move this check above the IsSettable() check.
+        } else if (Input.GetButtonDown("Pickup_P1") && TryToSitInWeapon()) {
+            heldItem.Thrown (this, Vector3.left + Vector3.up);
         }
     }
 
@@ -145,7 +158,6 @@ public class Player : MonoBehaviour {
         Vector3 setPos = GetGridPosition ();
 
         if (debugMode) {
-            Debug.Log ("Drawing line");
             Debug.DrawLine (transform.position, setPos, Color.red);
         }
 
@@ -159,6 +171,25 @@ public class Player : MonoBehaviour {
         }
     }
 
+    // Behavior when sitting in a weapon;
+    // Entered from: Holding(set button), Normal(set button)
+    // Exit to: Normal(set)
+    void SittingUpdate() {
+
+        // if the user uses the "use" button while in the weapon, it will
+        // detach them from the weapon
+        if (Input.GetButtonDown("Pickup_P1")){
+            DetachFromWeapon ();
+            return;
+        }
+
+        if (Input.GetButtonDown ("Throw_P1")) {
+            weapon.Fire ();
+        }
+    }
+
+
+
     // Getting/Setting form property. Modify statespecific values here
     // e.g. Variables, Animations, etc.
     public PlayerForm form {
@@ -167,8 +198,10 @@ public class Player : MonoBehaviour {
             if (_form == value) {
                 return;
             }
+
             switch (value) {
             case PlayerForm.Normal:
+
                 _form = value;
                 break;
             case PlayerForm.Holding:
@@ -188,9 +221,14 @@ public class Player : MonoBehaviour {
                     Debug.LogError ("Transition to Holding state from " + gameObject.name + " from " + _form);
                 }
                 break;
+            case PlayerForm.Sitting:
+                sprend.color = Color.red;
+                _form = value;
+                break;
             }
         }
     }
+
 
     /******************** Utility ********************/
     // Retrieve and apply any changes to the players movement
@@ -230,8 +268,8 @@ public class Player : MonoBehaviour {
     // Rounded to nearest 0.5 (e.g. 1.2 rounds to 1.5, 0.8 rounds to 0.5, etc.)
     Vector3 GetGridPosition() {
         Vector3 gridPos = transform.position + GetAimDirection ();
-        gridPos.x = Mathf.Floor (gridPos.x);// + 0.5f;
-        gridPos.y = Mathf.Floor (gridPos.y);// + 0.5f;
+        gridPos.x = Mathf.Floor (gridPos.x);
+        gridPos.y = Mathf.Floor (gridPos.y);
         return gridPos;
     }
 
@@ -243,5 +281,41 @@ public class Player : MonoBehaviour {
         }
         return Physics2D.Raycast (transform.position + groundCastOffset, Vector3.down, groundCastLength, groundMask)
             || Physics2D.Raycast (transform.position + groundCastOffset, Vector3.down, groundCastLength, groundMask);
+    }
+
+    bool TryToSitInWeapon(){
+        // check if there's a weapon in front of us
+        Collider2D potential_weapon = Physics2D.OverlapCircle (transform.position, itemDetectRadius, blockMask);
+        if (potential_weapon != null && potential_weapon.gameObject.CompareTag ("WeaponBlock")) {
+            // returns whether or not we successfully attached to the weapon
+            return AttachToWeapon (potential_weapon);
+        }
+
+        return false;
+    }
+
+
+    // used when attaching to a weapon if one is below us
+    bool AttachToWeapon(Collider2D potential_weapon){
+        weapon = potential_weapon.gameObject.GetComponent<WeaponBlock>();
+        // check if someone is already in the weapon
+        if (weapon.IsOccupied()) {
+            return false;
+        }
+
+        weapon.AttachUser(this);
+        rigid.velocity = Vector3.zero;
+        form = PlayerForm.Sitting;
+
+        // successfully attached!
+        return true;
+    }
+
+    // used to release from a weapon and update the correct attributes
+    void DetachFromWeapon(){
+        sprend.color = Color.white;
+        weapon.DetachUser ();
+        weapon = null;
+        form = PlayerForm.Normal;
     }
 }
