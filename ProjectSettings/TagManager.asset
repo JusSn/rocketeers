@@ -4,9 +4,10 @@
 TagManager:
   serializedVersion: 2
   tags:
+  - Ground
   - Block
-  - WeaponItem
   - WeaponBlock
+  - Bullet
   layers:
   - Default
   - TransparentFX
@@ -16,10 +17,10 @@ TagManager:
   - UI
   - 
   - 
-  - Items
-  - Blocks
-  - Players
-  - Platform
+  - 
+  - 
+  - 
+  - 
   - 
   - 
   - 
@@ -43,13 +44,4 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
-    locked: 0
-  - name: Blocks
-    uniqueID: 4001887935
-    locked: 0
-  - name: Players
-    uniqueID: 2116931259
-    locked: 0
-  - name: Items
-    uniqueID: 4068744359
     locked: 0

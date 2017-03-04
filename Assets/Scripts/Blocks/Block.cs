@@ -25,6 +25,7 @@ public class Block : MonoBehaviour {
     public bool                                 being_manipulated;
     public bool                                 in_placeable_spot = false;
     public bool                                 block_fell = false;
+    protected Health                            health;
 
     // GameObject components & child objects
     private Rigidbody2D                         rigid;
@@ -42,12 +43,14 @@ public class Block : MonoBehaviour {
     // Use this for initialization
     void Start () {
         rigid = GetComponent<Rigidbody2D> ();
+        health = GetComponent<Health> ();
+        health.SetParent (this);
         states.Add (BlockStates.FALLING, Falling);
         states.Add (BlockStates.FALLING_TO_STILL, FallingToStill);
         states.Add (BlockStates.STILL, Still);
     }
 
-    void Update(){
+    protected virtual void Update(){
         // run the correct state function each update
         states [state] ();
     }
@@ -121,13 +124,20 @@ public class Block : MonoBehaviour {
 
     // Calling condition: Whenever the gameObject is destroyed
     //                    (probably when the block's health is <= 0)
-    // Called by: incoming projectile
-    void OnDestroy(){
+    protected virtual void OnDestroy(){
         // for each neighbor around us
         foreach (KeyValuePair<Direction, Block> dir in connected_neighbors) {
-            // remove ourselves from their neighbors... RIP us :'(
-            dir.Value.DeleteNeighboringConnection (dir.Key);
+            // remove ourselves from our neighbors... RIP us :'(
+            // since we're removing ourself from our neighbors, the directions
+            // are reversed
+            dir.Value.DeleteNeighboringConnection (Utils.GetOppositeDirection(dir.Key));
         }
+    }
+
+    // Calling condition: when a projectile collides with a block
+    // Called by: Projectile.OnTriggerEnter2D()
+    public virtual void TakeDamage(float dmg_amt){
+        health.TakeDamage(dmg_amt);
     }
 
 
