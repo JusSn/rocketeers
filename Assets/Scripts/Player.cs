@@ -113,10 +113,10 @@ public class Player : MonoBehaviour {
         } else if (heldItem.IsSettable() && Input.GetButtonDown ("Pickup_P1")) {
             form = PlayerForm.Setting;
 
-        // TODO: This else if statement will probably never be called because
+        // TODO: This if statement will probably never be called because
         //       the user will always put down the block before they attempt to
         //       sit in a weapon. If we want the weapon to take priority, then
-        //       move this check above the IsSettable() check.
+        //       move this check above the heldItem.IsSettable() check.
         } else if (Input.GetButtonDown("Pickup_P1") && TryToSitInWeapon()) {
             heldItem.Thrown (this, Vector3.left + Vector3.up);
         }
@@ -155,13 +155,14 @@ public class Player : MonoBehaviour {
     void SettingUpdate() {
         CalculateMovement ();
 
-        Vector3 setPos = GetGridPosition ();
-
-        if (debugMode) {
-            Debug.DrawLine (transform.position, setPos, Color.red);
-        }
 
         if (Input.GetButtonUp ("Pickup_P1")) {
+            Vector3 setPos = GetGridPosition ();
+
+            if (debugMode) {
+                Debug.DrawLine (transform.position, setPos, Color.red);
+            }
+
             heldItem.Set (setPos);
             heldItem = null;
             form = PlayerForm.Normal;
@@ -184,7 +185,7 @@ public class Player : MonoBehaviour {
         }
 
         if (Input.GetButtonDown ("Throw_P1")) {
-            weapon.Fire ();
+            weapon.Fire (GetAimDirection());
         }
     }
 
@@ -222,7 +223,7 @@ public class Player : MonoBehaviour {
                 }
                 break;
             case PlayerForm.Sitting:
-                sprend.color = Color.red;
+                sprend.color = Color.blue;
                 _form = value;
                 break;
             }
@@ -312,7 +313,9 @@ public class Player : MonoBehaviour {
     }
 
     // used to release from a weapon and update the correct attributes
-    void DetachFromWeapon(){
+    // Calling condition: user presses button to leave weapon or weapon is destroyed
+    // called by: this.SittingUpdate(release btn), WeaponBlock.OnDestroy()
+    public void DetachFromWeapon(){
         sprend.color = Color.white;
         weapon.DetachUser ();
         weapon = null;

@@ -8,6 +8,7 @@ TagManager:
   - WeaponItem
   - WeaponBlock
   - Ground
+  - Bullet
   layers:
   - Default
   - TransparentFX
@@ -21,7 +22,7 @@ TagManager:
   - Blocks
   - Players
   - Ground
-  - 
+  - Projectiles
   - 
   - 
   - 
