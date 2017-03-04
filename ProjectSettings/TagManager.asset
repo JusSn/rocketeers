@@ -7,7 +7,6 @@ TagManager:
   - Block
   - WeaponItem
   - WeaponBlock
-  - Ground
   layers:
   - Default
   - TransparentFX
@@ -20,7 +19,7 @@ TagManager:
   - Items
   - Blocks
   - Players
-  - Ground
+  - Platform
   - 
   - 
   - 
