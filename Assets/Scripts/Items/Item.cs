@@ -7,6 +7,7 @@ public class Item : MonoBehaviour {
 
 	// JF: assigned after instantiate by spawner script
 	public Spawner 					spawnerScript = null;
+	public float					repoolTime;
 	public bool 					________________;
 	public bool 					held = false;
 	private Rigidbody2D 			rigid;
@@ -14,9 +15,6 @@ public class Item : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		rigid =	GetComponent<Rigidbody2D>();
-
-		// JF: Disappears after 10 s if not picked up 
-		Invoke ("PoolDestroy", 10f);
 	}
 
 	// Set this object as the child of _player at local position heldPos
@@ -36,7 +34,7 @@ public class Item : MonoBehaviour {
 		transform.parent = _player.transform.parent;
 
 		// JF: Disappears after 10 s if not picked up 
-		Invoke ("PoolDestroy", 10f);
+		ScheduleRepool (repoolTime);
 	}
 
 	// Detach item from parent and add velocity throwVel to this object
@@ -45,7 +43,7 @@ public class Item : MonoBehaviour {
 		rigid.velocity = throwVel;
 
 		// JF: Disappears after 10 s if not picked up 
-		Invoke ("PoolDestroy", 10f);
+		ScheduleRepool (repoolTime);
 	}
 
 	/******************** Fat Interface for Derived Classes ********************/
@@ -66,8 +64,13 @@ public class Item : MonoBehaviour {
 	}
 
 	// JF: Repools object if required, else destroys it
+	public void ScheduleRepool (float time) {
+		CancelInvoke ();
+		Invoke ("PoolDestroy", time);
+	}
 	public void PoolDestroy () {
 		if (spawnerScript != null) {
+			print ("repooling");
 			spawnerScript.Repool(gameObject);
 		}
 		else {

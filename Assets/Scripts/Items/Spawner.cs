@@ -14,6 +14,8 @@ public class Spawner : MonoBehaviour {
 	public Vector3 outputDir;
 	// Maximum number of items in pool
 	public int maxCount;
+	public float spawnInt;
+	public float repoolTime;
 
 	public bool __________________;
 
@@ -33,7 +35,7 @@ public class Spawner : MonoBehaviour {
 			poolStack.Push(item);
 		}
 		// Invoke repeating spawns of prefab
-		InvokeRepeating ("SpawnItem", 0f, 2f);
+		InvokeRepeating ("SpawnItem", 0f, spawnInt);
 	}
 	
 	// Update is called once per frame
@@ -42,6 +44,7 @@ public class Spawner : MonoBehaviour {
 	}
 
 	void SpawnItem () {
+		print (poolStack.Count);
 		if (poolStack.Count == 0) {
 			return;
 		}
@@ -49,8 +52,10 @@ public class Spawner : MonoBehaviour {
 		GameObject item = poolStack.Pop();
 
 		item.SetActive(true);
+		item.GetComponent<Item> ().ScheduleRepool(repoolTime);
 		item.transform.position = transform.position;
-		item.GetComponent<Rigidbody> ().velocity = outputDir;
+		item.GetComponent<Rigidbody2D> ().velocity = outputDir;
+		item.GetComponent<Rigidbody2D> ().bodyType = RigidbodyType2D.Kinematic;
 	}
 
 	public void Repool (GameObject go) {

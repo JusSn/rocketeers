@@ -50,7 +50,7 @@ Rigidbody2D:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1403720562659648}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -89,6 +89,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   heldPos: {x: 0, y: 0, z: 0}
+  spawnerScript: {fileID: 0}
   ________________: 0
   held: 0
   setObject: {fileID: 1480987293945216, guid: 3645635b9800a3f4188e309d502e26d9, type: 2}

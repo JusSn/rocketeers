@@ -112,6 +112,7 @@ public class Player : MonoBehaviour {
             form = PlayerForm.Throwing;
         } else if (heldItem.IsSettable() && Input.GetButtonDown ("Pickup_P1")) {
             form = PlayerForm.Setting;
+            heldItem.Detach (this);
 
         // TODO: This if statement will probably never be called because
         //       the user will always put down the block before they attempt to
@@ -280,8 +281,10 @@ public class Player : MonoBehaviour {
             Debug.DrawRay (transform.position + groundCastOffset, Vector3.down * groundCastLength, Color.red);
             Debug.DrawRay (transform.position - groundCastOffset, Vector3.down * groundCastLength, Color.red);
         }
-        return Physics2D.Raycast (transform.position + groundCastOffset, Vector3.down, groundCastLength, groundMask)
-            || Physics2D.Raycast (transform.position + groundCastOffset, Vector3.down, groundCastLength, groundMask);
+        // return Physics2D.Raycast (transform.position + groundCastOffset, Vector3.down, groundCastLength, groundMask) 
+        // || Physics2D.Raycast (transform.position + groundCastOffset, Vector3.down, groundCastLength, groundMask);
+
+        return rigid.IsTouchingLayers(groundMask);
     }
 
     bool TryToSitInWeapon(){
