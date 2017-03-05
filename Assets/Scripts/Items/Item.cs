@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Item : MonoBehaviour {
 	public Vector3 					heldPos = new Vector3 (0f, 0f, 0f);
+
+	// JF: assigned after instantiate by spawner script
+	public Spawner 					spawnerScript = null;
 	public bool 					________________;
 	public bool 					held = false;
 	private Rigidbody2D 			rigid;
@@ -11,6 +14,9 @@ public class Item : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		rigid =	GetComponent<Rigidbody2D>();
+
+		// JF: Disappears after 10 s if not picked up 
+		Invoke ("PoolDestroy", 10f);
 	}
 
 	// Set this object as the child of _player at local position heldPos
@@ -19,6 +25,8 @@ public class Item : MonoBehaviour {
 		rigid.isKinematic = true;
 		transform.parent = _player.transform;
 		transform.localPosition = heldPos;
+
+		CancelInvoke ();
 	}
 
 	// Assumes _player is the parent of this object
@@ -26,12 +34,18 @@ public class Item : MonoBehaviour {
 	public void Detach(Player _player) {
 		rigid.isKinematic = false;
 		transform.parent = _player.transform.parent;
+
+		// JF: Disappears after 10 s if not picked up 
+		Invoke ("PoolDestroy", 10f);
 	}
 
 	// Detach item from parent and add velocity throwVel to this object
 	public void Thrown(Player _player, Vector3 throwVel) {
 		Detach (_player);
 		rigid.velocity = throwVel;
+
+		// JF: Disappears after 10 s if not picked up 
+		Invoke ("PoolDestroy", 10f);
 	}
 
 	/******************** Fat Interface for Derived Classes ********************/
@@ -49,5 +63,15 @@ public class Item : MonoBehaviour {
 	// Item can be used as a weapon
 	public virtual bool IsWeapon() {
 		return false;
+	}
+
+	// JF: Repools object if required, else destroys it
+	public void PoolDestroy () {
+		if (spawnerScript != null) {
+			spawnerScript.Repool(gameObject);
+		}
+		else {
+			Destroy (gameObject);
+		}
 	}
 }

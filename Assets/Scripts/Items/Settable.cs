@@ -11,6 +11,7 @@ public class Settable : Item {
 
 	public override void Set(Vector3 setPos) {
 		Instantiate<GameObject> (setObject, setPos, Quaternion.identity);
-		Destroy (gameObject);
+		// JF: push back into pool
+		PoolDestroy ();
 	}
 }
