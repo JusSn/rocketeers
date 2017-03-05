@@ -9,6 +9,7 @@ TagManager:
   - WeaponBlock
   - Ground
   - Bullet
+  - Highlight
   layers:
   - Default
   - TransparentFX
@@ -23,7 +24,7 @@ TagManager:
   - Players
   - Ground
   - Projectiles
-  - 
+  - Highlight
   - 
   - 
   - 

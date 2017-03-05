@@ -23,7 +23,7 @@ public class Player : MonoBehaviour {
     // Encapsulated attributes
     public PlayerForm                       _form = PlayerForm.Normal;
     public bool                             grounded;
-    public Item                             heldItem;
+    public Item                             heldItem;                  
     public WeaponBlock                      weapon;
 
     // Counters
@@ -34,6 +34,9 @@ public class Player : MonoBehaviour {
     private Rigidbody2D                     rigid;
     private GameObject                      sprite;
     private SpriteRenderer                  sprend;
+
+    // JF: Highlight object
+    public GameObject                       highlightObject;
 
     // Detection parameters
     private float                           groundCastLength;
@@ -52,6 +55,10 @@ public class Player : MonoBehaviour {
         rigid = GetComponent<Rigidbody2D> ();
         sprite = transform.Find ("Sprite").gameObject;
         sprend = sprite.GetComponent<SpriteRenderer> ();
+
+        // JF: Get highlightObject and disable. Enable if item is held later
+        highlightObject = transform.Find ("Highlight").gameObject;
+        highlightObject.SetActive(false);
 
         // Raycast parameters
         groundCastLength = 0.6f*coll.size.y;
@@ -106,6 +113,10 @@ public class Player : MonoBehaviour {
     // Exit to: Throwing(throw button), Setting(set button)
     void HoldingUpdate() {
         CalculateMovement ();
+        
+        // JF: Change location of highlight guide
+        Vector3 highlightPos = GetGridPosition ();
+        highlightObject.transform.position = highlightPos;
 
         // Switch to either throwing or setting
         if (Input.GetButtonDown ("Throw_P1")) {
@@ -190,8 +201,6 @@ public class Player : MonoBehaviour {
         }
     }
 
-
-
     // Getting/Setting form property. Modify statespecific values here
     // e.g. Variables, Animations, etc.
     public PlayerForm form {
@@ -207,10 +216,14 @@ public class Player : MonoBehaviour {
                 _form = value;
                 break;
             case PlayerForm.Holding:
+                // JF: Enable highlight guide
+                highlightObject.SetActive(true);
                 _form = value;
                 break;
             case PlayerForm.Throwing:
                 if (_form == PlayerForm.Holding) {
+                    // JF: Toggle highlight guide
+                    highlightObject.SetActive(false);
                     _form = value;
                 } else {
                     Debug.LogError ("Transition to Holding state from " + gameObject.name + " from " + _form);
@@ -218,6 +231,8 @@ public class Player : MonoBehaviour {
                 break;
             case PlayerForm.Setting:
                 if (_form == PlayerForm.Holding) {
+                    // JF: Toggle highlight guide
+                    highlightObject.SetActive(false);
                     _form = value;
                 } else {
                     Debug.LogError ("Transition to Holding state from " + gameObject.name + " from " + _form);

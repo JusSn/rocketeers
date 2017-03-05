@@ -43,6 +43,7 @@ public class Spawner : MonoBehaviour {
 		// Not much to do here?
 	}
 
+	// Use: Spawns an item from this spawner with velocity and rate set in editor
 	void SpawnItem () {
 		print (poolStack.Count);
 		if (poolStack.Count == 0) {
@@ -58,6 +59,8 @@ public class Spawner : MonoBehaviour {
 		item.GetComponent<Rigidbody2D> ().bodyType = RigidbodyType2D.Kinematic;
 	}
 
+	// Use: Resets GameObject and adds it to this spawner's pool stack for reuse.
+	// Called by: Object that destroys or removes the item.
 	public void Repool (GameObject go) {
 		go.SetActive(false);
 		poolStack.Push(go);

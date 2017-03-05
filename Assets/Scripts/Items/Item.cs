@@ -70,7 +70,6 @@ public class Item : MonoBehaviour {
 	}
 	public void PoolDestroy () {
 		if (spawnerScript != null) {
-			print ("repooling");
 			spawnerScript.Repool(gameObject);
 		}
 		else {
