@@ -497,7 +497,6 @@ MonoBehaviour:
   being_manipulated: 0
   in_placeable_spot: 0
   block_fell: 0
-  state: 0
 --- !u!50 &1096538315
 Rigidbody2D:
   serializedVersion: 4
@@ -598,11 +597,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4105321887940160, guid: 9730dde27d7ae4d5d8a9af81cf87fd19, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -2
+      value: -1.53
       objectReference: {fileID: 0}
     - target: {fileID: 4105321887940160, guid: 9730dde27d7ae4d5d8a9af81cf87fd19, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4105321887940160, guid: 9730dde27d7ae4d5d8a9af81cf87fd19, type: 2}
       propertyPath: m_LocalRotation.x

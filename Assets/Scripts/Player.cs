@@ -238,12 +238,11 @@ public class Player : MonoBehaviour {
         }
     }
 
-
     /******************** Utility ********************/
     // Retrieve and apply any changes to the players movement
     void CalculateMovement() {
         Vector3 vel = rigid.velocity;
-        vel.x = GetXInputSpeed (0);
+        vel.x = GetXInputSpeed (vel.x);
         vel.y = GetYInputSpeed (vel.y);
         rigid.velocity = vel;
     }
@@ -251,17 +250,28 @@ public class Player : MonoBehaviour {
     // Calculate and return magnitude of any changes to x velocity from player input
     float GetXInputSpeed(float currentX) {
         float direction = Input.GetAxis ("MoveX_P1");
-        if (0 < direction) {
-            currentX = xSpeed;
+        if (direction > 0) {
+            if (grounded) {
+                currentX = Mathf.Lerp(currentX, xSpeed, Time.deltaTime * 10);
+            }
+            else {
+                currentX = Mathf.Lerp(currentX, xSpeed, Time.deltaTime * 2);
+            }
         } else if (direction < 0) {
-            currentX = -xSpeed;
+            if (grounded) {
+                currentX = Mathf.Lerp(currentX, -xSpeed, Time.deltaTime * 10);
+            }
+            else {
+                currentX = Mathf.Lerp(currentX, -xSpeed, Time.deltaTime * 2);
+            }
         }
+        print (currentX);
         return currentX;
     }
 
     // Calculate and return magnitude of any changes to y velocity from player input
     float GetYInputSpeed(float currentY) {
-        if (Input.GetButtonDown ("Jump_P1") && grounded) {
+        if (grounded && Input.GetButtonDown ("Jump_P1")) {
             currentY = ySpeed;
         }
         return currentY;
@@ -297,7 +307,6 @@ public class Player : MonoBehaviour {
 
         return false;
     }
-
 
     // used when attaching to a weapon if one is below us
     bool AttachToWeapon(Collider2D potential_weapon){
