@@ -42,6 +42,7 @@ public class Block : MonoBehaviour {
     // Block states
     public Dictionary<BlockStates, Action>      states = new Dictionary<BlockStates, Action>();
     private BlockStates                         state = BlockStates.FALLING;
+    private LayerMask                           ground_mask;
 
     private float                               SLEEPING_THRESHOLD = 0.1f;
 
@@ -50,6 +51,7 @@ public class Block : MonoBehaviour {
     void Start () {
         rigid = GetComponent<Rigidbody2D> ();
         health = GetComponent<Health> ();
+        ground_mask = LayerMask.GetMask ("Ground");
         health.SetParent (this);
         states.Add (BlockStates.FALLING, Falling);
         states.Add (BlockStates.FALLING_TO_STILL, FallingToStill);
@@ -163,7 +165,25 @@ public class Block : MonoBehaviour {
             // connect the neighbor in the opposite direction, since that's the side
             // this block is on
             neighbor.ConnectToNeighbor (Utils.GetOppositeDirection (dir), this);
+        } else {
+            CheckForGround ();
         }
+    }
+
+    // Calling condition: when a block is placed, it could be on the
+    //                    ground and a rigid body attachment needs to be made
+    // Called by: this.CheckAndConnectToNeighbor()
+    void CheckForGround(){
+        Collider2D obj = CheckForObj (Vector3.down, ground_mask);
+        if (obj != null && obj.gameObject.CompareTag("Ground")) {
+            AddFixedJoint (obj.gameObject);
+        }
+    }
+
+    // Calling condition: checks for an object at the offset from the blocks location and returns that object if found.
+    // Called by: this.CheckForGround, this.CheckForNeighbor
+    Collider2D CheckForObj(Vector3 offset, LayerMask specific_mask){
+        return Physics2D.OverlapPoint(transform.position + offset, specific_mask);
     }
 
     // Calling condition: A neighboring block dies
@@ -180,9 +200,7 @@ public class Block : MonoBehaviour {
     //                    already present in the direction map
     // Called by: FallingToStill()
     public bool CheckForNeighbor(Direction dir, out Block neighbor_block) {
-        Vector2 pt_to_check = transform.position + Utils.DirToVec (dir);
-        Collider2D neighbor = Physics2D.OverlapPoint(pt_to_check, mask);
-
+        Collider2D neighbor = CheckForObj(Utils.DirToVec(dir), mask);
         if (neighbor != null && (neighbor.gameObject.layer == LayerMask.NameToLayer("Blocks") ||
                                  neighbor.gameObject.layer == LayerMask.NameToLayer("WeaponBlocks"))) {
             neighbor_block = neighbor.gameObject.GetComponent<Block>();
@@ -198,33 +216,12 @@ public class Block : MonoBehaviour {
     public void ConnectToNeighbor(Direction dir, Block other){
         // add the fixedjoints and update the direction map
         connected_neighbors.Add(dir, other);
-        AddFixedJoint (other);
+        AddFixedJoint (other.gameObject);
     }
 
+    // Calling condition: when needing to add a fixed joint from this gameObject to another gameObject
     // Called by: ConnectToNeighbor()
-    void AddFixedJoint(Block other){
-        gameObject.AddComponent<FixedJoint2D> ().connectedBody = other.gameObject.GetComponent<Rigidbody2D> ();
+    void AddFixedJoint(GameObject other_go){
+        gameObject.AddComponent<FixedJoint2D> ().connectedBody = other_go.GetComponent<Rigidbody2D> ();
     }
-
-    /* 
-     CODE THAT COULD BE USED TO DETERMINE WHERE VALID POSITIONS ARE AND HIGHLIGHT THEM. THIS WAS PREVIOUSLY USED WHEN CLICKING
-     AND PLACING A BLOCK, BUT SINCE WE DON'T NEED TO CLICK AND PLACE BLOCKS IN OUR GAME, THIS CODE COULD BE USEFUL IN ACHIEVING
-     THAT SIMILAR "GUIDING THE PLAYER" ABILITY.
-        if(being_manipulated) {
-            Vector3 block_pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            block_pos.z = 0;
-            transform.position = block_pos;
-            rigid.velocity = Vector3.zero;
-
-            // gets array of gameobjects within a circle of radius 1
-            // nearby_blocks[0] is this block so we ignore it
-            Collider2D[] nearby_blocks = Physics2D.OverlapCircleAll(transform.position, snap_radius, mask);
-            in_placeable_spot = false;
-            for (int i = 0; i < nearby_blocks.Length && !in_placeable_spot; i++) {
-                if (nearby_blocks[i].tag == "Block") {
-                    in_placeable_spot = true;
-                }
-            }
-        }
-        */
 }
