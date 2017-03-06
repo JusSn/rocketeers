@@ -12,6 +12,7 @@ public enum PlayerForm {
 
 public class Player : MonoBehaviour {
     // Insepctor manipulated attributes
+	public string							playerNum;
     public float                            xSpeed = 7f;
     public float                            ySpeed = 5f;
     public float                            itemDetectRadius = 0.5f;
@@ -28,10 +29,10 @@ public class Player : MonoBehaviour {
     public Item                             heldItem;                  
     public WeaponBlock                      weapon;
 
-    private bool                            left = false;
-
-    // Counters
-    public float                            throwChargeCount = 0f;
+    // Internal Support Variables
+	private string							playerNumStub;
+	private bool                            left = false;
+    private float                           throwChargeCount = 0f;
 
     // GameObject components & child objects
     private BoxCollider2D                   coll;
@@ -50,7 +51,7 @@ public class Player : MonoBehaviour {
     private int                             blockMask;
     private int                             itemLayer;
 
-    // Function maps
+    // Internal maps
     private Dictionary<PlayerForm, Action>  stateUpdateMap;
 
     // Use this for initialization
@@ -65,6 +66,9 @@ public class Player : MonoBehaviour {
         highlightObject = transform.Find ("Highlight").gameObject;
         highlightSprends = highlightObject.GetComponentsInChildren<SpriteRenderer> ();
         highlightObject.SetActive(false);
+
+		// Initializing internal
+		playerNumStub = "_P" + playerNum;
 
         // Raycast parameters
         groundCastLength = 0.6f*coll.size.y;
@@ -101,13 +105,13 @@ public class Player : MonoBehaviour {
         // Check if an item is within reach
         Collider2D itemCol;
         if (itemCol = Physics2D.OverlapCircle (transform.position, itemDetectRadius, itemLayer)) {
-            if (Input.GetButtonDown ("B_P1")) {
+            if (Input.GetButtonDown ("B" + playerNumStub)) {
                 Item held = itemCol.GetComponent<Item> ();
                 held.Attach (this);
                 heldItem = held;
                 form = PlayerForm.Holding;
             }
-        } else if (Input.GetButtonDown("B_P1") && TryToSitInWeapon()) {
+        } else if (Input.GetButtonDown("B" + playerNumStub) && TryToSitInWeapon()) {
             // there's a weapon underneath us, so sit in it
         }
 
@@ -120,7 +124,7 @@ public class Player : MonoBehaviour {
         CalculateMovement ();
 
         // Switch to either throwing or setting
-        if (Input.GetButtonDown ("RightBumper_P1")) {
+        if (Input.GetButtonDown ("RightBumper" + playerNumStub)) {
             form = PlayerForm.Throwing;
         } else if (heldItem.IsSettable()) {
             // JF: Change location of highlight guide
@@ -141,7 +145,7 @@ public class Player : MonoBehaviour {
                 foreach (SpriteRenderer sp in highlightSprends) {
                     sp.color = Color.white;
                 }
-                if (Input.GetButtonDown ("Pickup_P1")) {
+                if (Input.GetButtonDown ("LeftBumper" + playerNumStub)) {
                     if (debugMode) {
                         Debug.DrawLine (transform.position, setPos, Color.red);
                     }
@@ -156,7 +160,7 @@ public class Player : MonoBehaviour {
         //       the user will always put down the block before they attempt to
         //       sit in a weapon. If we want the weapon to take priority, then
         //       move this check above the heldItem.IsSettable() check.
-        } else if (Input.GetButtonDown("B_P1") && TryToSitInWeapon()) {
+        } else if (Input.GetButtonDown("B" + playerNumStub) && TryToSitInWeapon()) {
             heldItem.Thrown (this, Vector3.left + Vector3.up);
         }
     }
@@ -169,7 +173,7 @@ public class Player : MonoBehaviour {
         throwChargeCount += Time.deltaTime;
         sprend.color = Color.Lerp (Color.white, Color.red, throwChargeCount / throwChargeMax);
 
-        if (Input.GetButtonUp ("RightBumper_P1")) {
+        if (Input.GetButtonUp ("RightBumper" + playerNumStub)) {
             // Item is thrown
             if (throwChargeCount > throwChargeMax) {
                 throwChargeCount = throwChargeMax;
@@ -180,7 +184,7 @@ public class Player : MonoBehaviour {
             throwChargeCount = 0f;
             sprend.color = Color.white;
             form = PlayerForm.Normal;
-        } else if (Input.GetButtonDown ("RightJoyClick_P1")) {
+        } else if (Input.GetButtonDown ("RightJoyClick" + playerNumStub)) {
             // Throwing was cancelled
             throwChargeCount = 0f;
             sprend.color = Color.white;
@@ -195,12 +199,12 @@ public class Player : MonoBehaviour {
 
         // if the user uses the "use" button while in the weapon, it will
         // detach them from the weapon
-        if (Input.GetButtonDown("RightJoyClick_P1")){
+        if (Input.GetButtonDown("RightJoyClick" + playerNumStub)){
             DetachFromWeapon ();
             return;
         }
 
-        if (Input.GetButtonDown ("RightBumper_P1")) {
+        if (Input.GetButtonDown ("RightBumper" + playerNumStub)) {
             weapon.Fire (GetAimDirection());
         }
     }
@@ -241,6 +245,7 @@ public class Player : MonoBehaviour {
     }
 
     /******************** Utility ********************/
+
     // Retrieve and apply any changes to the players movement
     void CalculateMovement() {
         Vector3 vel = rigid.velocity;
@@ -258,7 +263,7 @@ public class Player : MonoBehaviour {
 
     // Calculate and return magnitude of any changes to x velocity from player input
     float GetXInputSpeed(float currentX) {
-        float direction = Input.GetAxis ("MoveX_P1");
+		float direction = Input.GetAxis ("LeftJoyX" + playerNumStub);
         if (direction > 0) {
             if (grounded) {
                 currentX = Mathf.Lerp(currentX, xSpeed, Time.deltaTime * 10);
@@ -279,7 +284,7 @@ public class Player : MonoBehaviour {
 
     // Calculate and return magnitude of any changes to y velocity from player input
     float GetYInputSpeed(float currentY) {
-        if (grounded && Input.GetButtonDown ("Jump_P1")) {
+		if (grounded && Input.GetButtonDown ("A" + playerNumStub)) {
             currentY = ySpeed;
         }
         return currentY;
@@ -287,7 +292,7 @@ public class Player : MonoBehaviour {
 
     // Returns a normalized vector pointed toward the direction of the aiming joystick
     Vector3 GetAimDirection() {
-        Vector3 inputDir = new Vector3 (Input.GetAxisRaw ("RightJoyX_P1"), Input.GetAxisRaw ("RightJoyY_P1"));
+        Vector3 inputDir = new Vector3 (Input.GetAxisRaw ("RightJoyX" + playerNumStub), Input.GetAxisRaw ("RightJoyY" + playerNumStub));
         return inputDir.normalized;
     }
 
