@@ -7,7 +7,6 @@ public enum PlayerForm {
     Normal,        // Running, Jumping, Idle
     Holding,       // Holding an item
     Throwing,      // Charging up object to throw
-    Setting,       // Finding location to set item
     Sitting        // Used when manning a weapon
 }
 
@@ -77,7 +76,6 @@ public class Player : MonoBehaviour {
         stateUpdateMap.Add (PlayerForm.Normal, NormalUpdate);
         stateUpdateMap.Add (PlayerForm.Holding, HoldingUpdate);
         stateUpdateMap.Add (PlayerForm.Throwing, ThrowingUpdate);
-        stateUpdateMap.Add (PlayerForm.Setting, SettingUpdate);
         stateUpdateMap.Add (PlayerForm.Sitting, SittingUpdate);
     }
 
@@ -93,7 +91,7 @@ public class Player : MonoBehaviour {
     /******************** State Modifiers & Behaviors ********************/
 
     // General behavior of the player when not holding anything
-    // Entered from: Throwing(thrown), Setting(set)
+    // Entered from: Throwing(thrown)
     // Exit to: Holding(pickup)
     void NormalUpdate() {
         CalculateMovement ();
@@ -114,17 +112,44 @@ public class Player : MonoBehaviour {
     }
 
     // Behavior when holding an item; Transitions to either throw or set
-    // Entered from: Normal(pickup), Throwing(cancel), Setting(cancel)
-    // Exit to: Throwing(throw button), Setting(set button)
+    // Entered from: Normal(pickup), Throwing(cancel)
+    // Exit to: Throwing(throw button)
     void HoldingUpdate() {
         CalculateMovement ();
 
         // Switch to either throwing or setting
         if (Input.GetButtonDown ("Throw_P1")) {
             form = PlayerForm.Throwing;
-        } else if (heldItem.IsSettable() && Input.GetButtonDown ("Pickup_P1")) {
-            form = PlayerForm.Setting;
+        } else if (heldItem.IsSettable()) {
+            // JF: Change location of highlight guide
+            Vector3 setPos = GetGridPosition ();
+            highlightObject.transform.position = setPos;
 
+            // Check if highlighted position is valid for placement
+            Collider2D blocker = Physics2D.OverlapCircle (setPos, placementDetectRadius, placementMask);
+            // Obstruction here 
+            if (blocker) {
+                foreach (SpriteRenderer sp in highlightSprends) {
+                    sp.color = Color.red;
+                }
+
+                // TODO: Play buzzer sound if player attempts to set item here
+            }
+            else {
+                foreach (SpriteRenderer sp in highlightSprends) {
+                    sp.color = Color.white;
+                }
+                if (Input.GetButtonDown ("Pickup_P1")) {
+                    if (debugMode) {
+                        Debug.DrawLine (transform.position, setPos, Color.red);
+                    }
+
+                    heldItem.Set (setPos);
+                    heldItem.Detach (this);
+                    heldItem = null;
+                    form = PlayerForm.Normal;
+                }
+            }
         // TODO: This if statement will probably never be called because
         //       the user will always put down the block before they attempt to
         //       sit in a weapon. If we want the weapon to take priority, then
@@ -157,45 +182,6 @@ public class Player : MonoBehaviour {
             // Throwing was cancelled
             throwChargeCount = 0f;
             sprend.color = Color.white;
-            form = PlayerForm.Holding;
-        }
-    }
-
-    // Behavior when preparing to set an item; let go of the set button to set
-    // Entered from: Holding(set button)
-    // Exit to: Holding(cancel), Normal(set)
-    void SettingUpdate() {
-        CalculateMovement ();
-
-        // JF: Change location of highlight guide
-        Vector3 setPos = GetGridPosition ();
-        highlightObject.transform.position = setPos;
-
-        // Check if highlighted position is valid for placement
-        Collider2D blocker = Physics2D.OverlapCircle (setPos, placementDetectRadius, placementMask);
-        // Obstruction here 
-        if (blocker) {
-            foreach (SpriteRenderer sp in highlightSprends) {
-                sp.color = Color.red;
-            }
-        }
-        else {
-            foreach (SpriteRenderer sp in highlightSprends) {
-                sp.color = Color.white;
-            }
-            if (Input.GetButtonUp ("Pickup_P1")) {
-                if (debugMode) {
-                    Debug.DrawLine (transform.position, setPos, Color.red);
-                }
-
-                heldItem.Set (setPos);
-                heldItem.Detach (this);
-                heldItem = null;
-                form = PlayerForm.Normal;
-            }
-        }
-        if (Input.GetButtonDown ("Cancel_P1")) {
-            // Setting was cancelled
             form = PlayerForm.Holding;
         }
     }
@@ -234,20 +220,11 @@ public class Player : MonoBehaviour {
                 break;
             case PlayerForm.Holding:
                 // JF: Toggle highlight guide
-                highlightObject.SetActive(false);
+                highlightObject.SetActive(true);
                 _form = value;
                 break;
             case PlayerForm.Throwing:
                 if (_form == PlayerForm.Holding) {
-                    _form = value;
-                } else {
-                    Debug.LogError ("Transition to Holding state from " + gameObject.name + " from " + _form);
-                }
-                break;
-            case PlayerForm.Setting:
-                if (_form == PlayerForm.Holding) {
-                    // JF: Toggle highlight guide
-                    highlightObject.SetActive(true);
                     _form = value;
                 } else {
                     Debug.LogError ("Transition to Holding state from " + gameObject.name + " from " + _form);
