@@ -6,7 +6,7 @@ InputManager:
   serializedVersion: 2
   m_Axes:
   - serializedVersion: 3
-    m_Name: MoveX_P1
+    m_Name: LeftJoyX_P1
     descriptiveName: Player One's horizontal movement
     descriptiveNegativeName: 
     negativeButton: 
@@ -22,7 +22,7 @@ InputManager:
     axis: 0
     joyNum: 1
   - serializedVersion: 3
-    m_Name: Jump_P1
+    m_Name: A_P1
     descriptiveName: Player One's jump button
     descriptiveNegativeName: 
     negativeButton: 
@@ -38,7 +38,7 @@ InputManager:
     axis: 0
     joyNum: 1
   - serializedVersion: 3
-    m_Name: Cancel_P1
+    m_Name: RightJoyClick_P1
     descriptiveName: Player one's throw/set cancel button
     descriptiveNegativeName: 
     negativeButton: 
@@ -54,7 +54,7 @@ InputManager:
     axis: 0
     joyNum: 1
   - serializedVersion: 3
-    m_Name: Pickup_P1
+    m_Name: B_P1
     descriptiveName: Player one's throw/set cancel button
     descriptiveNegativeName: 
     negativeButton: 
@@ -70,7 +70,7 @@ InputManager:
     axis: 0
     joyNum: 1
   - serializedVersion: 3
-    m_Name: AimX_P1
+    m_Name: RightJoyX_P1
     descriptiveName: Horizontal aiming axis for player one
     descriptiveNegativeName: 
     negativeButton: 
@@ -86,7 +86,7 @@ InputManager:
     axis: 3
     joyNum: 1
   - serializedVersion: 3
-    m_Name: AimY_P1
+    m_Name: RightJoyY_P1
     descriptiveName: Vertical aiming axis for player one
     descriptiveNegativeName: 
     negativeButton: 
@@ -102,7 +102,7 @@ InputManager:
     axis: 4
     joyNum: 1
   - serializedVersion: 3
-    m_Name: Throw_P1
+    m_Name: RightBumper_P1
     descriptiveName: Player one's throwing button
     descriptiveNegativeName: 
     negativeButton: 
@@ -118,7 +118,7 @@ InputManager:
     axis: 9
     joyNum: 1
   - serializedVersion: 3
-    m_Name: Set_P1
+    m_Name: LeftBumper_P1
     descriptiveName: Set objects for Player one
     descriptiveNegativeName: 
     negativeButton: 
@@ -140,7 +140,7 @@ InputManager:
     negativeButton: 
     positiveButton: joystick 1 button 7
     altNegativeButton: 
-    altPositiveButton: joystick 1 button 9
+    altPositiveButton: 
     gravity: 0
     dead: 0
     sensitivity: 0

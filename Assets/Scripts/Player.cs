@@ -101,13 +101,13 @@ public class Player : MonoBehaviour {
         // Check if an item is within reach
         Collider2D itemCol;
         if (itemCol = Physics2D.OverlapCircle (transform.position, itemDetectRadius, itemLayer)) {
-            if (Input.GetButtonDown ("Pickup_P1")) {
+            if (Input.GetButtonDown ("B_P1")) {
                 Item held = itemCol.GetComponent<Item> ();
                 held.Attach (this);
                 heldItem = held;
                 form = PlayerForm.Holding;
             }
-        } else if (Input.GetButtonDown("Pickup_P1") && TryToSitInWeapon()) {
+        } else if (Input.GetButtonDown("B_P1") && TryToSitInWeapon()) {
             // there's a weapon underneath us, so sit in it
         }
 
@@ -120,7 +120,7 @@ public class Player : MonoBehaviour {
         CalculateMovement ();
 
         // Switch to either throwing or setting
-        if (Input.GetButtonDown ("Throw_P1")) {
+        if (Input.GetButtonDown ("RightBumper_P1")) {
             form = PlayerForm.Throwing;
         } else if (heldItem.IsSettable()) {
             // JF: Change location of highlight guide
@@ -156,7 +156,7 @@ public class Player : MonoBehaviour {
         //       the user will always put down the block before they attempt to
         //       sit in a weapon. If we want the weapon to take priority, then
         //       move this check above the heldItem.IsSettable() check.
-        } else if (Input.GetButtonDown("Pickup_P1") && TryToSitInWeapon()) {
+        } else if (Input.GetButtonDown("B_P1") && TryToSitInWeapon()) {
             heldItem.Thrown (this, Vector3.left + Vector3.up);
         }
     }
@@ -169,7 +169,7 @@ public class Player : MonoBehaviour {
         throwChargeCount += Time.deltaTime;
         sprend.color = Color.Lerp (Color.white, Color.red, throwChargeCount / throwChargeMax);
 
-        if (Input.GetButtonUp ("Throw_P1")) {
+        if (Input.GetButtonUp ("RightBumper_P1")) {
             // Item is thrown
             if (throwChargeCount > throwChargeMax) {
                 throwChargeCount = throwChargeMax;
@@ -180,14 +180,14 @@ public class Player : MonoBehaviour {
             throwChargeCount = 0f;
             sprend.color = Color.white;
             form = PlayerForm.Normal;
-        } else if (Input.GetButtonDown ("Cancel_P1")) {
+        } else if (Input.GetButtonDown ("RightJoyClick_P1")) {
             // Throwing was cancelled
             throwChargeCount = 0f;
             sprend.color = Color.white;
             form = PlayerForm.Holding;
         }
     }
-
+		
     // Behavior when sitting in a weapon;
     // Entered from: Holding(set button), Normal(set button)
     // Exit to: Normal(set)
@@ -195,12 +195,12 @@ public class Player : MonoBehaviour {
 
         // if the user uses the "use" button while in the weapon, it will
         // detach them from the weapon
-        if (Input.GetButtonDown("Pickup_P1")){
+        if (Input.GetButtonDown("RightJoyClick_P1")){
             DetachFromWeapon ();
             return;
         }
 
-        if (Input.GetButtonDown ("Throw_P1")) {
+        if (Input.GetButtonDown ("RightBumper_P1")) {
             weapon.Fire (GetAimDirection());
         }
     }
@@ -287,7 +287,7 @@ public class Player : MonoBehaviour {
 
     // Returns a normalized vector pointed toward the direction of the aiming joystick
     Vector3 GetAimDirection() {
-        Vector3 inputDir = new Vector3 (Input.GetAxisRaw ("AimX_P1"), Input.GetAxisRaw ("AimY_P1"));
+        Vector3 inputDir = new Vector3 (Input.GetAxisRaw ("RightJoyX_P1"), Input.GetAxisRaw ("RightJoyY_P1"));
         return inputDir.normalized;
     }
 
