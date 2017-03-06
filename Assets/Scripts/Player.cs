@@ -79,7 +79,7 @@ public class Player : MonoBehaviour {
     // Update is called once per frame
     void Update () {
         // Update general attributes
-        grounded = GetGrounded ();
+        grounded = IsGrounded ();
 
         // Call the proper update function
         stateUpdateMap [form] ();
@@ -284,7 +284,6 @@ public class Player : MonoBehaviour {
     // Return a vector3 of the location pointed to by the aiming joystick
     // Rounded to nearest 0.5 (e.g. 1.2 rounds to 1.5, 0.8 rounds to 0.5, etc.)
     Vector3 GetGridPosition() {
-        print (sprend.transform.position);
         Vector3 gridPos = sprend.transform.position + GetAimDirection ();
         gridPos.x = Mathf.Round (gridPos.x);
         gridPos.y = Mathf.Round (gridPos.y);
@@ -292,14 +291,7 @@ public class Player : MonoBehaviour {
     }
 
     // Return a bool checking if player object is standing on top of a block or ground
-    bool GetGrounded() {
-        if (debugMode) {
-            Debug.DrawRay (transform.position + groundCastOffset, Vector3.down * groundCastLength, Color.red);
-            Debug.DrawRay (transform.position - groundCastOffset, Vector3.down * groundCastLength, Color.red);
-        }
-        // return Physics2D.Raycast (transform.position + groundCastOffset, Vector3.down, groundCastLength, groundMask) 
-        // || Physics2D.Raycast (transform.position + groundCastOffset, Vector3.down, groundCastLength, groundMask);
-
+    bool IsGrounded() {
         return rigid.IsTouchingLayers(groundMask);
     }
 

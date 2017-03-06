@@ -45,7 +45,6 @@ public class Spawner : MonoBehaviour {
 
 	// Use: Spawns an item from this spawner with velocity and rate set in editor
 	void SpawnItem () {
-		print (poolStack.Count);
 		if (poolStack.Count == 0) {
 			return;
 		}
