@@ -583,12 +583,12 @@ InputManager:
     joyNum: 4
   - serializedVersion: 3
     m_Name: Restart
-    descriptiveName: P1 restarts the game
+    descriptiveName: Player restarts the game
     descriptiveNegativeName: 
     negativeButton: 
-    positiveButton: joystick 1 button 7
+    positiveButton: joystick button 7
     altNegativeButton: 
-    altPositiveButton: 
+    altPositiveButton: joystick button 9
     gravity: 0
     dead: 0
     sensitivity: 0
