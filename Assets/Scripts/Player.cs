@@ -35,7 +35,6 @@ public class Player : MonoBehaviour {
     private float                           throwChargeCount = 0f;
 
     // GameObject components & child objects
-    private BoxCollider2D                   coll;
     private Rigidbody2D                     rigid;
     private GameObject                      sprite;
     private SpriteRenderer                  sprend;
@@ -45,8 +44,6 @@ public class Player : MonoBehaviour {
     private SpriteRenderer[]                highlightSprends;
 
     // Detection parameters
-    private float                           groundCastLength;
-    private Vector3                         groundCastOffset;
     private int                             groundMask;
     private int                             blockMask;
     private int                             itemLayer;
@@ -57,7 +54,6 @@ public class Player : MonoBehaviour {
     // Use this for initialization
     void Start () {
         // Get GameObject components & children
-        coll = GetComponent<BoxCollider2D> ();
         rigid = GetComponent<Rigidbody2D> ();
         sprite = transform.Find ("Sprite").gameObject;
         sprend = sprite.GetComponent<SpriteRenderer> ();
@@ -71,8 +67,6 @@ public class Player : MonoBehaviour {
 		playerNumStub = "_P" + playerNum;
 
         // Raycast parameters
-        groundCastLength = 0.6f*coll.size.y;
-        groundCastOffset = new Vector3 (0.5f*coll.size.x, 0f, 0f);
         itemLayer = LayerMask.GetMask ("Items");
         groundMask = LayerMask.GetMask ("Ground");
         blockMask = LayerMask.GetMask ("Blocks");
