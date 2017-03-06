@@ -28,6 +28,8 @@ public class Player : MonoBehaviour {
     public Item                             heldItem;                  
     public WeaponBlock                      weapon;
 
+    private bool                            left = false;
+
     // Counters
     public float                            throwChargeCount = 0f;
 
@@ -244,6 +246,13 @@ public class Player : MonoBehaviour {
         Vector3 vel = rigid.velocity;
         vel.x = GetXInputSpeed (vel.x);
         vel.y = GetYInputSpeed (vel.y);
+
+        // Flip Player 
+        if (vel.x < 0 && !left || vel.x > 0 && left) {
+            transform.RotateAround(sprend.transform.position, Vector3.up, 180);
+            left = !left;
+        }
+
         rigid.velocity = vel;
     }
 
@@ -265,7 +274,6 @@ public class Player : MonoBehaviour {
                 currentX = Mathf.Lerp(currentX, -xSpeed, Time.deltaTime * 2);
             }
         }
-        print (currentX);
         return currentX;
     }
 
