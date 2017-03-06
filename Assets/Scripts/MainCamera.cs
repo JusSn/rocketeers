@@ -16,7 +16,7 @@ public class MainCamera : MonoBehaviour {
 	}
 
     void CheckForRestart(){
-        if (Input.GetButtonDown ("Restart_P1")) {
+        if (Input.GetButtonDown ("Restart")) {
             SceneManager.LoadScene ("Main");
         }
     }
