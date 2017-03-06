@@ -248,7 +248,7 @@ public class Player : MonoBehaviour {
         vel.y = GetYInputSpeed (vel.y);
 
         // Flip Player 
-        if (vel.x < 0 && !left || vel.x > 0 && left) {
+        if (vel.x < -0.1f && !left || vel.x > 0.1f && left) {
             transform.RotateAround(sprend.transform.position, Vector3.up, 180);
             left = !left;
         }
