@@ -277,16 +277,17 @@ public class Player : MonoBehaviour {
 
     // Returns a normalized vector pointed toward the direction of the aiming joystick
     Vector3 GetAimDirection() {
-        Vector3 inputDir = new Vector3 (Input.GetAxis ("AimX_P1"), Input.GetAxis ("AimY_P1"), 0f);
+        Vector3 inputDir = new Vector3 (Input.GetAxisRaw ("AimX_P1"), Input.GetAxisRaw ("AimY_P1"));
         return inputDir.normalized;
     }
 
     // Return a vector3 of the location pointed to by the aiming joystick
     // Rounded to nearest 0.5 (e.g. 1.2 rounds to 1.5, 0.8 rounds to 0.5, etc.)
     Vector3 GetGridPosition() {
-        Vector3 gridPos = transform.position + GetAimDirection ();
-        gridPos.x = Mathf.Floor (gridPos.x);
-        gridPos.y = Mathf.Floor (gridPos.y);
+        print (sprend.transform.position);
+        Vector3 gridPos = sprend.transform.position + GetAimDirection ();
+        gridPos.x = Mathf.Round (gridPos.x);
+        gridPos.y = Mathf.Round (gridPos.y);
         return gridPos;
     }
 
