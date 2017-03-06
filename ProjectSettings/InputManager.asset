@@ -582,7 +582,7 @@ InputManager:
     axis: 27
     joyNum: 4
   - serializedVersion: 3
-    m_Name: Restart_P1
+    m_Name: Restart
     descriptiveName: P1 restarts the game
     descriptiveNegativeName: 
     negativeButton: 

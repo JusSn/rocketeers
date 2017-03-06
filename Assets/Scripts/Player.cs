@@ -265,6 +265,7 @@ public class Player : MonoBehaviour {
             else {
                 currentX = Mathf.Lerp(currentX, xSpeed, Time.deltaTime * 2);
             }
+			sprite.transform.rotation = Quaternion.identity;
         } else if (direction < 0) {
             if (grounded) {
                 currentX = Mathf.Lerp(currentX, -xSpeed, Time.deltaTime * 10);
@@ -272,6 +273,7 @@ public class Player : MonoBehaviour {
             else {
                 currentX = Mathf.Lerp(currentX, -xSpeed, Time.deltaTime * 2);
             }
+			sprite.transform.rotation = Quaternion.Euler(0f, 180f, 0f);
         }
         return currentX;
     }
