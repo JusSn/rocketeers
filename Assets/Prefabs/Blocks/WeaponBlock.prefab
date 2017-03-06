@@ -150,15 +150,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
   snap_radius: 0.75
   ______________________: 0
   being_manipulated: 0
   in_placeable_spot: 0
   block_fell: 0
-  state: 0
   bullet_prefab: {fileID: 1731158819494592, guid: ac86b70ecd10947e6aa9290fe4c88fad,
     type: 2}
+  __________________: 0
 --- !u!212 &212438897120900910
 SpriteRenderer:
   m_ObjectHideFlags: 1
