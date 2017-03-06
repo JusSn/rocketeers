@@ -16,9 +16,12 @@ public class Player : MonoBehaviour {
     public float                            xSpeed = 7f;
     public float                            ySpeed = 5f;
     public float                            itemDetectRadius = 0.5f;
+    public float                            placementDetectRadius = 0.3f;
     public float                            throwChargeMax = 2.5f;
     public float                            throwChargeRatio = 10f;
     public bool                             debugMode = false;
+
+    public LayerMask                        placementMask;
     public bool                             ________________;
     // Encapsulated attributes
     public PlayerForm                       _form = PlayerForm.Normal;
@@ -37,6 +40,7 @@ public class Player : MonoBehaviour {
 
     // JF: Highlight object
     public GameObject                       highlightObject;
+    private SpriteRenderer[]                highlightSprends;
 
     // Detection parameters
     private float                           groundCastLength;
@@ -58,6 +62,7 @@ public class Player : MonoBehaviour {
 
         // JF: Get highlightObject and disable. Enable if item is held later
         highlightObject = transform.Find ("Highlight").gameObject;
+        highlightSprends = highlightObject.GetComponentsInChildren<SpriteRenderer> ();
         highlightObject.SetActive(false);
 
         // Raycast parameters
@@ -113,17 +118,12 @@ public class Player : MonoBehaviour {
     // Exit to: Throwing(throw button), Setting(set button)
     void HoldingUpdate() {
         CalculateMovement ();
-        
-        // JF: Change location of highlight guide
-        Vector3 highlightPos = GetGridPosition ();
-        highlightObject.transform.position = highlightPos;
 
         // Switch to either throwing or setting
         if (Input.GetButtonDown ("Throw_P1")) {
             form = PlayerForm.Throwing;
         } else if (heldItem.IsSettable() && Input.GetButtonDown ("Pickup_P1")) {
             form = PlayerForm.Setting;
-            heldItem.Detach (this);
 
         // TODO: This if statement will probably never be called because
         //       the user will always put down the block before they attempt to
@@ -167,18 +167,34 @@ public class Player : MonoBehaviour {
     void SettingUpdate() {
         CalculateMovement ();
 
+        // JF: Change location of highlight guide
+        Vector3 setPos = GetGridPosition ();
+        highlightObject.transform.position = setPos;
 
-        if (Input.GetButtonUp ("Pickup_P1")) {
-            Vector3 setPos = GetGridPosition ();
-
-            if (debugMode) {
-                Debug.DrawLine (transform.position, setPos, Color.red);
+        // Check if highlighted position is valid for placement
+        Collider2D blocker = Physics2D.OverlapCircle (setPos, placementDetectRadius, placementMask);
+        // Obstruction here 
+        if (blocker) {
+            foreach (SpriteRenderer sp in highlightSprends) {
+                sp.color = Color.red;
             }
+        }
+        else {
+            foreach (SpriteRenderer sp in highlightSprends) {
+                sp.color = Color.white;
+            }
+            if (Input.GetButtonUp ("Pickup_P1")) {
+                if (debugMode) {
+                    Debug.DrawLine (transform.position, setPos, Color.red);
+                }
 
-            heldItem.Set (setPos);
-            heldItem = null;
-            form = PlayerForm.Normal;
-        } else if (Input.GetButtonDown ("Cancel_P1")) {
+                heldItem.Set (setPos);
+                heldItem.Detach (this);
+                heldItem = null;
+                form = PlayerForm.Normal;
+            }
+        }
+        if (Input.GetButtonDown ("Cancel_P1")) {
             // Setting was cancelled
             form = PlayerForm.Holding;
         }
@@ -212,18 +228,17 @@ public class Player : MonoBehaviour {
 
             switch (value) {
             case PlayerForm.Normal:
-
+                // JF: Toggle highlight guide
+                highlightObject.SetActive(false);
                 _form = value;
                 break;
             case PlayerForm.Holding:
-                // JF: Enable highlight guide
-                highlightObject.SetActive(true);
+                // JF: Toggle highlight guide
+                highlightObject.SetActive(false);
                 _form = value;
                 break;
             case PlayerForm.Throwing:
                 if (_form == PlayerForm.Holding) {
-                    // JF: Toggle highlight guide
-                    highlightObject.SetActive(false);
                     _form = value;
                 } else {
                     Debug.LogError ("Transition to Holding state from " + gameObject.name + " from " + _form);
@@ -232,7 +247,7 @@ public class Player : MonoBehaviour {
             case PlayerForm.Setting:
                 if (_form == PlayerForm.Holding) {
                     // JF: Toggle highlight guide
-                    highlightObject.SetActive(false);
+                    highlightObject.SetActive(true);
                     _form = value;
                 } else {
                     Debug.LogError ("Transition to Holding state from " + gameObject.name + " from " + _form);
