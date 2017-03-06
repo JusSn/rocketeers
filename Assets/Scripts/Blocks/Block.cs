@@ -1,4 +1,9 @@
-﻿using System;
+﻿/*  Author: SK && CG
+ *
+ *  Update (3/5/17): Make block stick to any neighbors it has on creation
+ */
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,6 +26,7 @@ public class Block : MonoBehaviour {
     public LayerMask                            mask;
     public float                                snap_radius = 0.75f;
     public bool                                 ______________________;
+
     // Encapsulated attributes
     public bool                                 being_manipulated;
     public bool                                 in_placeable_spot = false;
@@ -35,7 +41,7 @@ public class Block : MonoBehaviour {
 
     // Block states
     public Dictionary<BlockStates, Action>      states = new Dictionary<BlockStates, Action>();
-    public BlockStates                          state = BlockStates.FALLING;
+    private BlockStates                         state = BlockStates.FALLING;
 
     private float                               SLEEPING_THRESHOLD = 0.1f;
 
@@ -48,6 +54,7 @@ public class Block : MonoBehaviour {
         states.Add (BlockStates.FALLING, Falling);
         states.Add (BlockStates.FALLING_TO_STILL, FallingToStill);
         states.Add (BlockStates.STILL, Still);
+        CheckForAnyNeighbors ();
     }
 
     protected virtual void Update(){
@@ -96,14 +103,7 @@ public class Block : MonoBehaviour {
         // have connections to, so we know blocks weren't previously there, but now there might
         // be blocks there, so we check.
         foreach (Direction dir in dir_set) {
-            Block neighbor = null;
-            if (CheckForNeighbor (dir, out neighbor)) {
-                // we have a neighbor, so connect to it
-                ConnectToNeighbor (dir, neighbor);
-                // connect the neighbor in the opposite direction, since that's the side
-                // this block is on
-                neighbor.ConnectToNeighbor(Utils.GetOppositeDirection(dir), this);
-            }
+            CheckAndConnectToNeighbor (dir);
         }
 
         state = BlockStates.STILL;
@@ -142,6 +142,29 @@ public class Block : MonoBehaviour {
 
 
     /******************** Utility ********************/
+
+
+    // Calling condition: Checking for any block in all four directions to connect to
+    // Called by: this.Start()
+    void CheckForAnyNeighbors(){
+        HashSet<Direction> all_dirs = new HashSet<Direction>{ Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST };
+        foreach (Direction dir in all_dirs) {
+            CheckAndConnectToNeighbor (dir);
+        }
+    }
+
+    // Calling Condition: Check for a surrounding neighbor and connect to it
+    // Called by: this.FallingToStill()
+    void CheckAndConnectToNeighbor(Direction dir){
+        Block neighbor = null;
+        if (CheckForNeighbor (dir, out neighbor)) {
+            // we have a neighbor, so connect to it
+            ConnectToNeighbor (dir, neighbor);
+            // connect the neighbor in the opposite direction, since that's the side
+            // this block is on
+            neighbor.ConnectToNeighbor (Utils.GetOppositeDirection (dir), this);
+        }
+    }
 
     // Calling condition: A neighboring block dies
     // Called by: neighboring block - not invoked by this on itself.
