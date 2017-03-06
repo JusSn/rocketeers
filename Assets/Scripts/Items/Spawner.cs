@@ -19,6 +19,8 @@ public class Spawner : MonoBehaviour {
 
 	public bool __________________;
 
+	public bool on = true;
+
 	// Stack of itemPrefabs in pool	
 	Stack<GameObject> poolStack;
 
@@ -45,7 +47,7 @@ public class Spawner : MonoBehaviour {
 
 	// Use: Spawns an item from this spawner with velocity and rate set in editor
 	void SpawnItem () {
-		if (poolStack.Count == 0) {
+		if (poolStack.Count == 0 || !on) {
 			return;
 		}
 

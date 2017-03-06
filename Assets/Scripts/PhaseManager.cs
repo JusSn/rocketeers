@@ -13,6 +13,9 @@ public class PhaseManager : MonoBehaviour {
     public Text                         ui_phase;
     public Text                         ui_timeLeft;
     public LayerMask                    layerMask;
+    
+    // JF: Disable and reenable these depending on phase
+    public GameObject[]                 itemSpawners;
 
     // Encapsulated attributes
     public static PhaseManager          S;
@@ -64,6 +67,10 @@ public class PhaseManager : MonoBehaviour {
         divider.GetComponent<SpriteRenderer>().color = new Color(0f, 0f, 0f, .25f);
         divider.layer = LayerMask.NameToLayer("AllowOnlyProjectiles");
         ui_phase.text = "BATTLE";
+
+        foreach (GameObject obj in itemSpawners) {
+            obj.GetComponent<Spawner> ().on = false;
+        }
     }
 
     // Switches to build phase:
@@ -87,6 +94,10 @@ public class PhaseManager : MonoBehaviour {
         divider.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f);
         divider.layer = LayerMask.NameToLayer("Default");
         ui_phase.text = "BUILD";
+
+        foreach (GameObject obj in itemSpawners) {
+            obj.GetComponent<Spawner> ().on = true;
+        }
     }
 
     // Casts a raycast left and a raycast right at the desired height to see if a tower is at that height

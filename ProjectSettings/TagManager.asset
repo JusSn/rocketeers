@@ -10,6 +10,7 @@ TagManager:
   - Ground
   - Bullet
   - Highlight
+  - Spawner
   layers:
   - Default
   - TransparentFX

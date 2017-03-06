@@ -22,6 +22,7 @@ public class Player : MonoBehaviour {
     public bool                             debugMode = false;
 
     public LayerMask                        placementMask;
+    public LayerMask                        groundedMask;
     public bool                             ________________;
     // Encapsulated attributes
     public PlayerForm                       _form = PlayerForm.Normal;
@@ -44,7 +45,6 @@ public class Player : MonoBehaviour {
     private SpriteRenderer[]                highlightSprends;
 
     // Detection parameters
-    private int                             groundMask;
     private int                             blockMask;
     private int                             itemLayer;
 
@@ -68,7 +68,6 @@ public class Player : MonoBehaviour {
 
         // Raycast parameters
         itemLayer = LayerMask.GetMask ("Items");
-        groundMask = LayerMask.GetMask ("Ground");
         blockMask = LayerMask.GetMask ("Blocks");
 
         // Filling the function behavior map
@@ -303,7 +302,7 @@ public class Player : MonoBehaviour {
 
     // Return a bool checking if player object is standing on top of a block or ground
     bool IsGrounded() {
-        return rigid.IsTouchingLayers(groundMask);
+        return rigid.IsTouchingLayers(groundedMask);
     }
 
     bool TryToSitInWeapon(){
