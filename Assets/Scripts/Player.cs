@@ -41,6 +41,8 @@ public class Player : MonoBehaviour {
     private GameObject                      sprite;
     private SpriteRenderer                  sprend;
 
+    private BoxCollider2D                     bodyCollider;
+
     // JF: Highlight object
     public GameObject                       highlightObject;
     private SpriteRenderer[]                highlightSprends;
@@ -48,6 +50,8 @@ public class Player : MonoBehaviour {
     // Detection parameters
     private int                             blockMask;
     private int                             itemLayer;
+    private int                             platformLayer;
+    private int                             groundLayer;
 
     // Internal maps
     private Dictionary<PlayerForm, Action>  stateUpdateMap;
@@ -58,6 +62,7 @@ public class Player : MonoBehaviour {
         rigid = GetComponent<Rigidbody2D> ();
         sprite = transform.Find ("Sprite").gameObject;
         sprend = sprite.GetComponent<SpriteRenderer> ();
+        bodyCollider = GetComponent<BoxCollider2D> ();
 
         // JF: Get highlightObject and disable. Enable if item is held later
         highlightObject = transform.Find ("Highlight").gameObject;
@@ -70,6 +75,8 @@ public class Player : MonoBehaviour {
         // Raycast parameters
         itemLayer = LayerMask.GetMask ("Items");
         blockMask = LayerMask.GetMask ("Blocks");
+        platformLayer = LayerMask.GetMask ("Platform");
+        groundLayer = LayerMask.GetMask ("Ground");
 
         // Filling the function behavior map
         stateUpdateMap = new Dictionary<PlayerForm, Action> ();
@@ -285,32 +292,41 @@ public class Player : MonoBehaviour {
     // Calculate and return magnitude of any changes to x velocity from player input
     float GetXInputSpeed(float currentX) {
 		float direction = Input.GetAxis ("LeftJoyX" + playerNumStub);
-        if (direction > 0) {
-            if (grounded) {
-                currentX = Mathf.Lerp(currentX, xSpeed, Time.deltaTime * 10);
-            }
-            else {
-                currentX = Mathf.Lerp(currentX, xSpeed, Time.deltaTime * 2);
-            }
-			sprite.transform.rotation = Quaternion.identity;
-        } else if (direction < 0) {
-            if (grounded) {
-                currentX = Mathf.Lerp(currentX, -xSpeed, Time.deltaTime * 10);
-            }
-            else {
-                currentX = Mathf.Lerp(currentX, -xSpeed, Time.deltaTime * 2);
-            }
-			sprite.transform.rotation = Quaternion.Euler(0f, 180f, 0f);
+
+        float flip = (direction < 0) ? 180f : 0f;
+
+        if (grounded) {
+            currentX = Mathf.Lerp(currentX, direction * xSpeed, Time.deltaTime * 10);
         }
+        else {
+            currentX = Mathf.Lerp(currentX, direction * xSpeed, Time.deltaTime * 2);
+        }
+
+        sprite.transform.rotation = Quaternion.Euler(0f, flip, 0f);
+        
         return currentX;
     }
 
     // Calculate and return magnitude of any changes to y velocity from player input
+    // JF: Jump and down-jump
     float GetYInputSpeed(float currentY) {
 		if (grounded && Input.GetButtonDown ("A" + playerNumStub)) {
-            currentY = ySpeed;
+            // Down jump
+            if (-Input.GetAxisRaw ("LeftJoyY" + playerNumStub) < 0 
+                            && rigid.IsTouchingLayers(platformLayer) 
+                            && !rigid.IsTouchingLayers(groundLayer)) {
+                bodyCollider.isTrigger = true;
+                Invoke ("RestoreCollision", 0.2f);
+            }
+            else {
+                currentY = ySpeed;
+            }
         }
         return currentY;
+    }
+
+    void RestoreCollision () {
+        bodyCollider.isTrigger = false;
     }
 
     // Returns a normalized vector pointed toward the direction of the aiming joystick

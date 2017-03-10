@@ -195,8 +195,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerNum: 1
-  xSpeed: 7
-  ySpeed: 7
+  xSpeed: 8
+  ySpeed: 9.5
   itemDetectRadius: 0.5
   placementDetectRadius: 0.3
   throwChargeMax: 2.5
@@ -207,7 +207,7 @@ MonoBehaviour:
     m_Bits: 2560
   groundedMask:
     serializedVersion: 2
-    m_Bits: 3072
+    m_Bits: 34816
   ________________: 0
   _form: 0
   grounded: 0
