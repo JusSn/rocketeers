@@ -8,6 +8,10 @@ public class Health : MonoBehaviour {
     // then save it for use throughout the gameobjects lifetime (look to Block to
     // see how it is handled there)
 
+    // inspector tunables
+    public float                                MAX_HEALTH;
+
+
     public GameObject                           health_bar_prefab;
 
     // health_bar attributes
@@ -17,7 +21,6 @@ public class Health : MonoBehaviour {
 
     // health attributes
     private float                               cur_health;
-    private float                               MAX_HEALTH = 100f;
 
     void Start(){
         cur_health = MAX_HEALTH;
