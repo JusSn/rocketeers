@@ -64,5 +64,4 @@ public class Utils {
         Debug.Log ("Something went wrong with DirsAreOpposite");
         return false;
     }
-
 }

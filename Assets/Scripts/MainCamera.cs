@@ -4,10 +4,14 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class MainCamera : MonoBehaviour {
+   
+    public static MainCamera S;
+
+    private float RATIO_MULTIPLIER = 1.875f;
 
 	// Use this for initialization
 	void Start () {
-		
+        S = this;
 	}
 	
 	// Update is called once per frame
@@ -19,5 +23,58 @@ public class MainCamera : MonoBehaviour {
         if (Input.GetButtonDown ("Restart")) {
             SceneManager.LoadScene ("Main");
         }
+    }
+
+    /************************** CAMERA STUFF **************************/
+    // IMPORTANT NOTE: These values and calculations are based on a 16:9
+    // aspect ratio.
+
+    // returns true when the vector passed in is on screen
+    public bool IsOnScreen(Vector3 pos){
+        float x_val = pos.x;
+        float y_val = pos.y;
+
+        // if the position is out of bounds in the x-axis, return false
+        if (x_val < GetWestCameraBound () || x_val > GetEastCameraBound ()) {
+            return false;
+        }
+
+        // if the position is out of bounds in the y-axis, return false
+        if (y_val < GetSouthCameraBound () || y_val > GetNorthCameraBound ()) {
+            return false;
+        }
+
+        // otherwise, the position is within the screen!
+        return true;
+    }
+
+    // returns the west bound of the camera
+    float GetWestCameraBound(){
+        return -GetHalfWidthOfCamera ();
+    }
+
+    // returns the east bound of the camera
+    float GetEastCameraBound(){
+        return GetHalfWidthOfCamera ();
+    }
+
+    // returns the north bound of the camera
+    float GetNorthCameraBound(){
+        return GetHalfHeightOfCamera ();
+    }
+
+    // returns the south bound of the camera
+    float GetSouthCameraBound(){
+        return -GetHalfHeightOfCamera ();
+    }
+
+    // returns the width of the camera view
+    float GetHalfWidthOfCamera(){
+        float height = GetHalfHeightOfCamera ();
+        return height * RATIO_MULTIPLIER;
+    }
+
+    float GetHalfHeightOfCamera(){
+        return GetComponent<Camera> ().orthographicSize;
     }
 }
