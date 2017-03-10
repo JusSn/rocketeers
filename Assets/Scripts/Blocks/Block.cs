@@ -18,7 +18,22 @@ public enum Direction {
 public enum BlockStates {
     FALLING,
     FALLING_TO_STILL,
-    STILL
+    STILL,
+    UNHINGED,
+}
+
+// This is to encapsulate the FixedJoint2D of a 'hinge' and the block that it is connected to.
+// This is the value of the connected_neighbors map used for connecting and disconnecting from
+// blocks
+public struct FixedJointContainer {
+
+    public FixedJoint2D fixed_joint;
+    public Block block;
+
+    public FixedJointContainer(FixedJoint2D in_fixed_joint, Block in_block){
+        this.fixed_joint = in_fixed_joint;
+        this.block = in_block;
+    }
 }
 
 public class Block : MonoBehaviour {
@@ -37,7 +52,7 @@ public class Block : MonoBehaviour {
     private Rigidbody2D                         rigid;
 
     // Neighbor joints
-    public Dictionary<Direction, Block>         connected_neighbors = new Dictionary<Direction, Block>();
+    public Dictionary<Direction, FixedJointContainer>         connected_neighbors = new Dictionary<Direction, FixedJointContainer>();
 
     // Block states
     public Dictionary<BlockStates, Action>      states = new Dictionary<BlockStates, Action>();
@@ -56,13 +71,13 @@ public class Block : MonoBehaviour {
         states.Add (BlockStates.FALLING, Falling);
         states.Add (BlockStates.FALLING_TO_STILL, FallingToStill);
         states.Add (BlockStates.STILL, Still);
+        states.Add (BlockStates.UNHINGED, Unhinged);
         CheckForAnyNeighbors ();
     }
 
     protected virtual void Update(){
         // run the correct state function each update
         states [state] ();
-        DestroyIfOffScreen ();
     }
 
     /******************** State Modifiers & Behaviors ********************/
@@ -96,7 +111,7 @@ public class Block : MonoBehaviour {
         HashSet<Direction> dir_set = new HashSet<Direction>{ Direction.NORTH, Direction.SOUTH,
                                                              Direction.EAST, Direction.NORTH };
         // remove each direction that is already in our Direction Map
-        foreach(KeyValuePair<Direction, Block> dir in connected_neighbors){
+        foreach(KeyValuePair<Direction, FixedJointContainer> dir in connected_neighbors){
             if (dir_set.Contains (dir.Key)) {
                 dir_set.Remove (dir.Key);
             }
@@ -116,24 +131,29 @@ public class Block : MonoBehaviour {
     // Entered from: FallingToStill()
     // Exits to: Falling(), OnDestroy() (indirectly)
     void Still(){
-
         // the block is moving again, so transition to the falling state
         if (rigid.velocity.magnitude > SLEEPING_THRESHOLD) {
             state = BlockStates.FALLING;
             return;
         }
-
     }
 
-    // Calling condition: Whenever the gameObject is destroyed
-    protected virtual void OnDestroy(){
-        // for each neighbor around us
-        foreach (KeyValuePair<Direction, Block> dir in connected_neighbors) {
-            // remove ourselves from our neighbors... RIP us :'(
-            // since we're removing ourself from our neighbors, the directions
-            // are reversed
-            dir.Value.DeleteNeighboringConnection (Utils.GetOppositeDirection(dir.Key));
-        }
+    // unhinges the block from neighbors
+    // Called by: Health.CheckToDestroy()
+    // Entered from: Falling(), Still()
+    // Exits to: Unhinged()
+    public virtual void UnhingeAndFall(){
+        Unhinge ();
+        Fall ();
+        state = BlockStates.UNHINGED;
+    }
+
+    // this is run once a block has no health and falls down
+    // Entered from: UnhingeAndFall()
+    // Exits to: nothing
+    void Unhinged(){
+        // check and destroy us if we're offscreen
+        DestroyIfOffScreen ();
     }
 
     // Calling condition: when a projectile collides with a block
@@ -173,7 +193,7 @@ public class Block : MonoBehaviour {
             // connect the neighbor in the opposite direction, since that's the side
             // this block is on
             neighbor.ConnectToNeighbor (Utils.GetOppositeDirection (dir), this);
-        } else {
+        } else if (dir == Direction.SOUTH){
             CheckForGround ();
         }
     }
@@ -184,7 +204,7 @@ public class Block : MonoBehaviour {
     void CheckForGround(){
         Collider2D obj = CheckForObj (Vector3.down, ground_mask);
         if (obj != null && obj.gameObject.CompareTag("Ground")) {
-            AddFixedJoint (obj.gameObject);
+            ConnectToGround (Direction.SOUTH, obj.gameObject);
         }
     }
 
@@ -200,7 +220,9 @@ public class Block : MonoBehaviour {
         // delete our connection to a now deceased neighbor
         // RIP our neighbor :'(
         Debug.Assert(connected_neighbors.ContainsKey(dir), "Trying to remove a direction from a map that doesn't contain the direction");
-        connected_neighbors.Remove(dir);
+        // need to remove the fixedjoint in this direction, not just the direction from the map
+        Destroy(connected_neighbors[dir].fixed_joint);
+        connected_neighbors.Remove (dir);
     }
 
 
@@ -223,13 +245,60 @@ public class Block : MonoBehaviour {
     // Called by: this and neighboring block simultaneously
     public void ConnectToNeighbor(Direction dir, Block other){
         // add the fixedjoints and update the direction map
-        connected_neighbors.Add(dir, other);
-        AddFixedJoint (other.gameObject);
+        FixedJoint2D fj = AddFixedJoint (other.gameObject);
+        connected_neighbors.Add(dir, new FixedJointContainer(fj, other));
+    }
+
+    void ConnectToGround(Direction dir, GameObject ground){
+        // add the fixedjoints and update the direction map
+        FixedJoint2D fj = AddFixedJoint (ground);
+        connected_neighbors.Add(dir, new FixedJointContainer(fj, null));
     }
 
     // Calling condition: when needing to add a fixed joint from this gameObject to another gameObject
     // Called by: ConnectToNeighbor()
-    void AddFixedJoint(GameObject other_go){
-        gameObject.AddComponent<FixedJoint2D> ().connectedBody = other_go.GetComponent<Rigidbody2D> ();
+    FixedJoint2D AddFixedJoint(GameObject other_go){
+        FixedJoint2D fj = gameObject.AddComponent<FixedJoint2D> ();
+        fj.connectedBody = other_go.GetComponent<Rigidbody2D> ();
+        return fj;
+    }
+
+    // removes all FixedJoints
+    void Unhinge(){
+        // for each neighbor around us
+        foreach (KeyValuePair<Direction, FixedJointContainer> dir in connected_neighbors) {
+
+            // when the ground is removed, the 'block' value is null
+            if (dir.Value.block) {
+                // since we're removing ourself from our neighbors, the directions
+                // are reversed
+                dir.Value.block.DeleteNeighboringConnection (Utils.GetOppositeDirection (dir.Key));
+            }
+            // Destroy our own FixedJoint2D
+            Destroy (dir.Value.fixed_joint);
+        }
+    }
+
+    // causes the block to lose it's constraints and fall through other layers
+    void Fall(){
+        gameObject.layer = LayerMask.NameToLayer ("TransparentFX");
+        GetComponent<BoxCollider2D> ().enabled = false;
+        // remove our children so they don't interfere with collisions
+        RemoveChildren ();
+        RemoveConstraints ();
+    }
+
+    // removes our rotation and position constraints
+    void RemoveConstraints(){
+        // allow some rotation to make it more juicy
+        rigid.constraints = RigidbodyConstraints2D.None;
+        rigid.angularVelocity = UnityEngine.Random.Range(-50f, 50f);
+    }
+
+    // destroys all the blocks children
+    void RemoveChildren(){
+        var children = new List<GameObject>();
+        foreach (Transform child in transform) children.Add(child.gameObject);
+        children.ForEach(child => Destroy(child));
     }
 }

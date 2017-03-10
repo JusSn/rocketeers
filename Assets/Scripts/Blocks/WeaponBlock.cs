@@ -57,12 +57,12 @@ public class WeaponBlock : Block {
         controller = user;
     }
 
-    protected override void OnDestroy(){
+    public override void UnhingeAndFall(){
         // if someone is in the weapon when it is destroyed
         // detach the user from the weapon
         if (controller != null) {
             controller.DetachFromWeapon ();
         }
-        base.OnDestroy ();
+        base.UnhingeAndFall ();
     }
 }

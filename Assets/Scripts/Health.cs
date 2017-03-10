@@ -47,7 +47,8 @@ public class Health : MonoBehaviour {
 
     void CheckToDestroy(){
         if (cur_health <= 0f) {
-            Destroy (gameObject);
+            // remove all the hinges on the block to let it fall offscreen
+            GetComponent<Block> ().UnhingeAndFall ();
         }
     }
 
