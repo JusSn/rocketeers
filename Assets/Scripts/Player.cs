@@ -7,6 +7,7 @@ public enum PlayerForm {
     Normal,        // Running, Jumping, Idle
     Holding,       // Holding an item
     Throwing,      // Charging up object to throw
+    Setting,       // Placing settable object
     Sitting        // Used when manning a weapon
 }
 
@@ -14,7 +15,7 @@ public class Player : MonoBehaviour {
     // Insepctor manipulated attributes
 	public string							playerNum;
     public float                            xSpeed = 7f;
-    public float                            ySpeed = 5f;
+    public float                            ySpeed = 10f;
     public float                            itemDetectRadius = 0.5f;
     public float                            placementDetectRadius = 0.3f;
     public float                            throwChargeMax = 2.5f;
@@ -75,6 +76,7 @@ public class Player : MonoBehaviour {
         stateUpdateMap.Add (PlayerForm.Normal, NormalUpdate);
         stateUpdateMap.Add (PlayerForm.Holding, HoldingUpdate);
         stateUpdateMap.Add (PlayerForm.Throwing, ThrowingUpdate);
+        stateUpdateMap.Add (PlayerForm.Setting, SettingUpdate);
         stateUpdateMap.Add (PlayerForm.Sitting, SittingUpdate);
     }
 
@@ -98,13 +100,13 @@ public class Player : MonoBehaviour {
         // Check if an item is within reach
         Collider2D itemCol;
         if (itemCol = Physics2D.OverlapCircle (transform.position, itemDetectRadius, itemLayer)) {
-            if (Input.GetButtonDown ("B" + playerNumStub)) {
+            if (Input.GetButtonDown ("X" + playerNumStub)) {
                 Item held = itemCol.GetComponent<Item> ();
                 held.Attach (this);
                 heldItem = held;
                 form = PlayerForm.Holding;
             }
-        } else if (Input.GetButtonDown("B" + playerNumStub) && TryToSitInWeapon()) {
+        } else if (Input.GetButtonDown("X" + playerNumStub) && TryToSitInWeapon()) {
             // there's a weapon underneath us, so sit in it
         }
 
@@ -117,44 +119,63 @@ public class Player : MonoBehaviour {
         CalculateMovement ();
 
         // Switch to either throwing or setting
-        if (Input.GetButtonDown ("RightBumper" + playerNumStub)) {
+        if (Input.GetAxis ("Trig" + playerNumStub) < 0) {
             form = PlayerForm.Throwing;
-        } else if (heldItem.IsSettable()) {
-            // JF: Change location of highlight guide
-            Vector3 setPos = GetGridPosition ();
-            highlightObject.transform.position = setPos;
-
-            // Check if highlighted position is valid for placement
-            Collider2D blocker = Physics2D.OverlapCircle (setPos, placementDetectRadius, placementMask);
-            // Obstruction here 
-            if (blocker) {
-                foreach (SpriteRenderer sp in highlightSprends) {
-                    sp.color = Color.red;
-                }
-
-                // TODO: Play buzzer sound if player attempts to set item here
-            }
-            else {
-                foreach (SpriteRenderer sp in highlightSprends) {
-                    sp.color = Color.white;
-                }
-                if (Input.GetButtonDown ("LeftBumper" + playerNumStub)) {
-                    if (debugMode) {
-                        Debug.DrawLine (transform.position, setPos, Color.red);
-                    }
-
-                    heldItem.Set (setPos);
-                    heldItem.Detach (this);
-                    heldItem = null;
-                    form = PlayerForm.Normal;
-                }
-            }
+        } else if (heldItem.IsSettable() && Input.GetButtonDown ("X" + playerNumStub)) {
+            form = PlayerForm.Setting;
+        }
         // TODO: This if statement will probably never be called because
         //       the user will always put down the block before they attempt to
         //       sit in a weapon. If we want the weapon to take priority, then
         //       move this check above the heldItem.IsSettable() check.
-        } else if (Input.GetButtonDown("B" + playerNumStub) && TryToSitInWeapon()) {
+        // else if (Input.GetButtonDown("B" + playerNumStub) && TryToSitInWeapon()) {
+        //     heldItem.Thrown (this, Vector3.left + Vector3.up);
+        // }
+
+        // JF: Release held item
+        else if (Input.GetButtonDown("B" + playerNumStub)) {
             heldItem.Thrown (this, Vector3.left + Vector3.up);
+            form = PlayerForm.Normal;
+        }
+    }
+
+    void SettingUpdate() {
+        // CalculateMovement ();
+
+        // JF: Change location of highlight guide
+        Vector3 setPos = GetGridPosition ();
+        highlightObject.transform.position = setPos;
+
+        // JF: Check if highlighted position is valid for placement
+        Collider2D blocker = Physics2D.OverlapCircle (setPos, placementDetectRadius, placementMask);
+        // Obstruction here 
+        if (blocker) {
+            foreach (SpriteRenderer sp in highlightSprends) {
+                sp.color = Color.red;
+            }
+        }
+        else {
+            foreach (SpriteRenderer sp in highlightSprends) {
+                sp.color = Color.white;
+            }
+        }
+
+        // JF: Attempt to place block
+        if (Input.GetButtonUp ("X" + playerNumStub)) {
+            if (debugMode) {
+                Debug.DrawLine (transform.position, setPos, Color.red);
+            }
+
+            if (blocker) { // Cannot place here
+                form = PlayerForm.Holding;
+                // TODO: JF: Play buzzer sound if player attempts to set item here
+            }
+            else {
+                heldItem.Set (setPos);
+                heldItem.Detach (this);
+                heldItem = null;
+                form = PlayerForm.Normal;
+            }
         }
     }
 
@@ -166,7 +187,7 @@ public class Player : MonoBehaviour {
         throwChargeCount += Time.deltaTime;
         sprend.color = Color.Lerp (Color.white, Color.red, throwChargeCount / throwChargeMax);
 
-        if (Input.GetButtonUp ("RightBumper" + playerNumStub)) {
+        if (Input.GetAxis ("Trig" + playerNumStub) == 0) {
             // Item is thrown
             if (throwChargeCount > throwChargeMax) {
                 throwChargeCount = throwChargeMax;
@@ -177,7 +198,7 @@ public class Player : MonoBehaviour {
             throwChargeCount = 0f;
             sprend.color = Color.white;
             form = PlayerForm.Normal;
-        } else if (Input.GetButtonDown ("RightJoyClick" + playerNumStub)) {
+        } else if (Input.GetButtonDown ("B" + playerNumStub)) {
             // Throwing was cancelled
             throwChargeCount = 0f;
             sprend.color = Color.white;
@@ -192,12 +213,12 @@ public class Player : MonoBehaviour {
 
         // if the user uses the "use" button while in the weapon, it will
         // detach them from the weapon
-        if (Input.GetButtonDown("RightJoyClick" + playerNumStub)){
+        if (Input.GetButtonDown("X" + playerNumStub)){
             DetachFromWeapon ();
             return;
         }
 
-        if (Input.GetButtonDown ("RightBumper" + playerNumStub)) {
+        if (Input.GetAxis ("Trig" + playerNumStub) < 0) {
             weapon.Fire (GetAimDirection());
         }
     }
@@ -219,7 +240,7 @@ public class Player : MonoBehaviour {
                 break;
             case PlayerForm.Holding:
                 // JF: Toggle highlight guide
-                highlightObject.SetActive(true);
+                highlightObject.SetActive(false);
                 _form = value;
                 break;
             case PlayerForm.Throwing:
@@ -227,6 +248,13 @@ public class Player : MonoBehaviour {
                     _form = value;
                 } else {
                     Debug.LogError ("Transition to Holding state from " + gameObject.name + " from " + _form);
+                }
+                break;
+            case PlayerForm.Setting:
+                // JF: Toggle highlight guide
+                highlightObject.SetActive(true);
+                if (_form == PlayerForm.Holding) {
+                    _form = value;
                 }
                 break;
             case PlayerForm.Sitting:
@@ -287,7 +315,7 @@ public class Player : MonoBehaviour {
 
     // Returns a normalized vector pointed toward the direction of the aiming joystick
     Vector3 GetAimDirection() {
-        Vector3 inputDir = new Vector3 (Input.GetAxisRaw ("RightJoyX" + playerNumStub), Input.GetAxisRaw ("RightJoyY" + playerNumStub));
+        Vector3 inputDir = new Vector3 (Input.GetAxisRaw ("LeftJoyX" + playerNumStub), -Input.GetAxisRaw ("LeftJoyY" + playerNumStub));
         return inputDir.normalized;
     }
 

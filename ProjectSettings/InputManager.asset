@@ -151,7 +151,7 @@ InputManager:
     joyNum: 1
   - serializedVersion: 3
     m_Name: A_P2
-    descriptiveName: Player One's jump button
+    descriptiveName: Player Two's jump button
     descriptiveNegativeName: 
     negativeButton: 
     positiveButton: joystick 2 button 0
@@ -167,7 +167,7 @@ InputManager:
     joyNum: 2
   - serializedVersion: 3
     m_Name: A_P3
-    descriptiveName: Player One's jump button
+    descriptiveName: Player Three's jump button
     descriptiveNegativeName: 
     negativeButton: 
     positiveButton: joystick 3 button 0
@@ -183,7 +183,7 @@ InputManager:
     joyNum: 3
   - serializedVersion: 3
     m_Name: A_P4
-    descriptiveName: Player One's jump button
+    descriptiveName: Player Four's jump button
     descriptiveNegativeName: 
     negativeButton: 
     positiveButton: joystick 4 button 0
@@ -198,72 +198,8 @@ InputManager:
     axis: 0
     joyNum: 4
   - serializedVersion: 3
-    m_Name: RightJoyClick_P1
-    descriptiveName: Player one's throw/set cancel button
-    descriptiveNegativeName: 
-    negativeButton: 
-    positiveButton: joystick 1 button 9
-    altNegativeButton: 
-    altPositiveButton: joystick 1 button 12
-    gravity: 0
-    dead: 0
-    sensitivity: 0
-    snap: 0
-    invert: 0
-    type: 0
-    axis: 0
-    joyNum: 1
-  - serializedVersion: 3
-    m_Name: RightJoyClick_P2
-    descriptiveName: Player one's throw/set cancel button
-    descriptiveNegativeName: 
-    negativeButton: 
-    positiveButton: joystick 2 button 9
-    altNegativeButton: 
-    altPositiveButton: joystick 2 button 12
-    gravity: 0
-    dead: 0
-    sensitivity: 0
-    snap: 0
-    invert: 0
-    type: 0
-    axis: 0
-    joyNum: 2
-  - serializedVersion: 3
-    m_Name: RightJoyClick_P3
-    descriptiveName: Player one's throw/set cancel button
-    descriptiveNegativeName: 
-    negativeButton: 
-    positiveButton: joystick 3 button 9
-    altNegativeButton: 
-    altPositiveButton: joystick 3 button 12
-    gravity: 0
-    dead: 0
-    sensitivity: 0
-    snap: 0
-    invert: 0
-    type: 0
-    axis: 0
-    joyNum: 3
-  - serializedVersion: 3
-    m_Name: RightJoyClick_P4
-    descriptiveName: Player one's throw/set cancel button
-    descriptiveNegativeName: 
-    negativeButton: 
-    positiveButton: joystick 4 button 9
-    altNegativeButton: 
-    altPositiveButton: joystick 4 button 12
-    gravity: 0
-    dead: 0
-    sensitivity: 0
-    snap: 0
-    invert: 0
-    type: 0
-    axis: 0
-    joyNum: 4
-  - serializedVersion: 3
     m_Name: B_P1
-    descriptiveName: Player one's throw/set cancel button
+    descriptiveName: Player one's set cancel button
     descriptiveNegativeName: 
     negativeButton: 
     positiveButton: joystick 1 button 1
@@ -279,7 +215,7 @@ InputManager:
     joyNum: 1
   - serializedVersion: 3
     m_Name: B_P2
-    descriptiveName: Player one's throw/set cancel button
+    descriptiveName: Player two's set cancel button
     descriptiveNegativeName: 
     negativeButton: 
     positiveButton: joystick 2 button 1
@@ -295,7 +231,7 @@ InputManager:
     joyNum: 2
   - serializedVersion: 3
     m_Name: B_P3
-    descriptiveName: Player one's throw/set cancel button
+    descriptiveName: Player three's set cancel button
     descriptiveNegativeName: 
     negativeButton: 
     positiveButton: joystick 3 button 1
@@ -311,7 +247,7 @@ InputManager:
     joyNum: 3
   - serializedVersion: 3
     m_Name: B_P4
-    descriptiveName: Player one's throw/set cancel button
+    descriptiveName: Player four's set cancel button
     descriptiveNegativeName: 
     negativeButton: 
     positiveButton: joystick 4 button 1
@@ -326,260 +262,132 @@ InputManager:
     axis: 0
     joyNum: 4
   - serializedVersion: 3
-    m_Name: RightJoyX_P1
-    descriptiveName: Horizontal aiming axis for player one
+    m_Name: X_P1
+    descriptiveName: Player one's action
     descriptiveNegativeName: 
     negativeButton: 
-    positiveButton: 
+    positiveButton: joystick 1 button 2
     altNegativeButton: 
-    altPositiveButton: 
+    altPositiveButton: joystick 1 button 18
     gravity: 0
-    dead: 0.2
-    sensitivity: 1
+    dead: 0
+    sensitivity: 0
     snap: 0
     invert: 0
-    type: 2
-    axis: 3
+    type: 0
+    axis: 0
     joyNum: 1
   - serializedVersion: 3
-    m_Name: RightJoyX_P2
-    descriptiveName: Horizontal aiming axis for player one
+    m_Name: X_P2
+    descriptiveName: Player two's action
     descriptiveNegativeName: 
     negativeButton: 
-    positiveButton: 
+    positiveButton: joystick 2 button 2
     altNegativeButton: 
-    altPositiveButton: 
+    altPositiveButton: joystick 2 button 18
     gravity: 0
-    dead: 0.2
-    sensitivity: 1
+    dead: 0
+    sensitivity: 0
     snap: 0
     invert: 0
-    type: 2
-    axis: 3
+    type: 0
+    axis: 0
     joyNum: 2
   - serializedVersion: 3
-    m_Name: RightJoyX_P3
-    descriptiveName: Horizontal aiming axis for player one
+    m_Name: X_P3
+    descriptiveName: Player three's action
     descriptiveNegativeName: 
     negativeButton: 
-    positiveButton: 
+    positiveButton: joystick 3 button 2
     altNegativeButton: 
-    altPositiveButton: 
+    altPositiveButton: joystick 3 button 18
     gravity: 0
-    dead: 0.2
-    sensitivity: 1
+    dead: 0
+    sensitivity: 0
     snap: 0
     invert: 0
-    type: 2
-    axis: 3
+    type: 0
+    axis: 0
     joyNum: 3
   - serializedVersion: 3
-    m_Name: RightJoyX_P4
-    descriptiveName: Horizontal aiming axis for player one
+    m_Name: X_P4
+    descriptiveName: Player four's action
     descriptiveNegativeName: 
     negativeButton: 
-    positiveButton: 
+    positiveButton: joystick 4 button 2
     altNegativeButton: 
-    altPositiveButton: 
+    altPositiveButton: joystick 4 button 18
     gravity: 0
-    dead: 0.2
-    sensitivity: 1
+    dead: 0
+    sensitivity: 0
     snap: 0
     invert: 0
-    type: 2
-    axis: 3
+    type: 0
+    axis: 0
     joyNum: 4
   - serializedVersion: 3
-    m_Name: RightJoyY_P1
-    descriptiveName: Vertical aiming axis for player one
+    m_Name: Trig_P1
+    descriptiveName: Player one's triggers
     descriptiveNegativeName: 
     negativeButton: 
     positiveButton: 
     altNegativeButton: 
     altPositiveButton: 
-    gravity: 0
-    dead: 0.2
+    gravity: 1000
+    dead: 0.19
     sensitivity: 1
-    snap: 0
-    invert: 1
+    snap: 1
+    invert: 0
     type: 2
-    axis: 4
+    axis: 2
     joyNum: 1
   - serializedVersion: 3
-    m_Name: RightJoyY_P2
-    descriptiveName: Vertical aiming axis for player one
+    m_Name: Trig_P2
+    descriptiveName: Player two's triggers
     descriptiveNegativeName: 
     negativeButton: 
     positiveButton: 
     altNegativeButton: 
     altPositiveButton: 
-    gravity: 0
-    dead: 0.2
+    gravity: 1000
+    dead: 0.19
     sensitivity: 1
-    snap: 0
-    invert: 1
+    snap: 1
+    invert: 0
     type: 2
-    axis: 4
+    axis: 2
     joyNum: 2
   - serializedVersion: 3
-    m_Name: RightJoyY_P3
-    descriptiveName: Vertical aiming axis for player one
+    m_Name: Trig_P3
+    descriptiveName: Player three's triggers
     descriptiveNegativeName: 
     negativeButton: 
     positiveButton: 
     altNegativeButton: 
     altPositiveButton: 
-    gravity: 0
-    dead: 0.2
+    gravity: 1000
+    dead: 0.19
     sensitivity: 1
-    snap: 0
-    invert: 1
+    snap: 1
+    invert: 0
     type: 2
-    axis: 4
+    axis: 2
     joyNum: 3
   - serializedVersion: 3
-    m_Name: RightJoyY_P4
-    descriptiveName: Vertical aiming axis for player one
+    m_Name: Trig_P4
+    descriptiveName: Player four's triggers
     descriptiveNegativeName: 
     negativeButton: 
     positiveButton: 
     altNegativeButton: 
     altPositiveButton: 
-    gravity: 0
-    dead: 0.2
+    gravity: 1000
+    dead: 0.19
     sensitivity: 1
-    snap: 0
-    invert: 1
+    snap: 1
+    invert: 0
     type: 2
-    axis: 4
-    joyNum: 4
-  - serializedVersion: 3
-    m_Name: RightBumper_P1
-    descriptiveName: Player one's throwing button
-    descriptiveNegativeName: 
-    negativeButton: 
-    positiveButton: joystick 1 button 5
-    altNegativeButton: 
-    altPositiveButton: joystick 1 button 14
-    gravity: 0
-    dead: 0
-    sensitivity: 0
-    snap: 0
-    invert: 0
-    type: 0
-    axis: 9
-    joyNum: 1
-  - serializedVersion: 3
-    m_Name: RightBumper_P2
-    descriptiveName: Player one's throwing button
-    descriptiveNegativeName: 
-    negativeButton: 
-    positiveButton: joystick 2 button 5
-    altNegativeButton: 
-    altPositiveButton: joystick 2 button 14
-    gravity: 0
-    dead: 0
-    sensitivity: 0
-    snap: 0
-    invert: 0
-    type: 0
-    axis: 9
-    joyNum: 2
-  - serializedVersion: 3
-    m_Name: RightBumper_P3
-    descriptiveName: Player one's throwing button
-    descriptiveNegativeName: 
-    negativeButton: 
-    positiveButton: joystick 3 button 5
-    altNegativeButton: 
-    altPositiveButton: joystick 3 button 14
-    gravity: 0
-    dead: 0
-    sensitivity: 0
-    snap: 0
-    invert: 0
-    type: 0
-    axis: 9
-    joyNum: 3
-  - serializedVersion: 3
-    m_Name: RightBumper_P4
-    descriptiveName: Player one's throwing button
-    descriptiveNegativeName: 
-    negativeButton: 
-    positiveButton: joystick 4 button 5
-    altNegativeButton: 
-    altPositiveButton: joystick 4 button 14
-    gravity: 0
-    dead: 0
-    sensitivity: 0
-    snap: 0
-    invert: 0
-    type: 0
-    axis: 9
-    joyNum: 4
-  - serializedVersion: 3
-    m_Name: LeftBumper_P1
-    descriptiveName: Set objects for Player one
-    descriptiveNegativeName: 
-    negativeButton: 
-    positiveButton: joystick 1 button 4
-    altNegativeButton: 
-    altPositiveButton: joystick 1 button 13
-    gravity: 0
-    dead: 0
-    sensitivity: 0
-    snap: 0
-    invert: 0
-    type: 0
-    axis: 27
-    joyNum: 1
-  - serializedVersion: 3
-    m_Name: LeftBumper_P2
-    descriptiveName: Set objects for Player one
-    descriptiveNegativeName: 
-    negativeButton: 
-    positiveButton: joystick 2 button 4
-    altNegativeButton: 
-    altPositiveButton: joystick 2 button 13
-    gravity: 0
-    dead: 0
-    sensitivity: 0
-    snap: 0
-    invert: 0
-    type: 0
-    axis: 27
-    joyNum: 2
-  - serializedVersion: 3
-    m_Name: LeftBumper_P3
-    descriptiveName: Set objects for Player one
-    descriptiveNegativeName: 
-    negativeButton: 
-    positiveButton: joystick 3 button 4
-    altNegativeButton: 
-    altPositiveButton: joystick 3 button 13
-    gravity: 0
-    dead: 0
-    sensitivity: 0
-    snap: 0
-    invert: 0
-    type: 0
-    axis: 27
-    joyNum: 3
-  - serializedVersion: 3
-    m_Name: LeftBumper_P4
-    descriptiveName: Set objects for Player one
-    descriptiveNegativeName: 
-    negativeButton: 
-    positiveButton: joystick 4 button 4
-    altNegativeButton: 
-    altPositiveButton: joystick 4 button 13
-    gravity: 0
-    dead: 0
-    sensitivity: 0
-    snap: 0
-    invert: 0
-    type: 0
-    axis: 27
+    axis: 2
     joyNum: 4
   - serializedVersion: 3
     m_Name: Restart

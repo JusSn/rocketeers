@@ -234,6 +234,11 @@ Prefab:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: dbe9a6f7b5aba38489836595ad3b2c86, type: 2}
+    - target: {fileID: 114199607879326764, guid: d5f3f8a3bac4ba4479ce70f034a940ec,
+        type: 2}
+      propertyPath: ySpeed
+      value: 9.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d5f3f8a3bac4ba4479ce70f034a940ec, type: 2}
   m_IsPrefabParent: 0
@@ -279,6 +284,11 @@ Prefab:
     - target: {fileID: 1749041598868772, guid: d5f3f8a3bac4ba4479ce70f034a940ec, type: 2}
       propertyPath: m_Name
       value: Player1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114199607879326764, guid: d5f3f8a3bac4ba4479ce70f034a940ec,
+        type: 2}
+      propertyPath: ySpeed
+      value: 9.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d5f3f8a3bac4ba4479ce70f034a940ec, type: 2}
@@ -1121,6 +1131,11 @@ Prefab:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 36c4d13ddd3dbd241812f00ed83d5835, type: 2}
+    - target: {fileID: 114199607879326764, guid: d5f3f8a3bac4ba4479ce70f034a940ec,
+        type: 2}
+      propertyPath: ySpeed
+      value: 9.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d5f3f8a3bac4ba4479ce70f034a940ec, type: 2}
   m_IsPrefabParent: 0
@@ -1397,6 +1412,11 @@ Prefab:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 3ad5a2ce62dd09a46bc9144b5f3f4f51, type: 2}
+    - target: {fileID: 114199607879326764, guid: d5f3f8a3bac4ba4479ce70f034a940ec,
+        type: 2}
+      propertyPath: ySpeed
+      value: 9.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d5f3f8a3bac4ba4479ce70f034a940ec, type: 2}
   m_IsPrefabParent: 0
