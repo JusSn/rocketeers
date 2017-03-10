@@ -62,6 +62,7 @@ public class Block : MonoBehaviour {
     protected virtual void Update(){
         // run the correct state function each update
         states [state] ();
+        DestroyIfOffScreen ();
     }
 
     /******************** State Modifiers & Behaviors ********************/
@@ -125,7 +126,6 @@ public class Block : MonoBehaviour {
     }
 
     // Calling condition: Whenever the gameObject is destroyed
-    //                    (probably when the block's health is <= 0)
     protected virtual void OnDestroy(){
         // for each neighbor around us
         foreach (KeyValuePair<Direction, Block> dir in connected_neighbors) {
@@ -145,6 +145,14 @@ public class Block : MonoBehaviour {
 
     /******************** Utility ********************/
 
+
+    // Calling condition: check and destroy this block if it's offscreen
+    // Called by: this.Update()
+    void DestroyIfOffScreen(){
+        if (!MainCamera.S.IsOnScreen (transform.position)) {
+            Destroy (gameObject);
+        }
+    }
 
     // Calling condition: Checking for any block in all four directions to connect to
     // Called by: this.Start()

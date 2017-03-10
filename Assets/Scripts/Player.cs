@@ -91,7 +91,6 @@ public class Player : MonoBehaviour {
     void Update () {
         // Update general attributes
         grounded = IsGrounded ();
-
         // Call the proper update function
         stateUpdateMap [form] ();
     }
