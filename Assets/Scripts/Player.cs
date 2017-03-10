@@ -40,6 +40,7 @@ public class Player : MonoBehaviour {
     private Rigidbody2D                     rigid;
     private GameObject                      sprite;
     private SpriteRenderer                  sprend;
+    private PointManager                    point_manager;
 
     private BoxCollider2D                     bodyCollider;
 
@@ -63,6 +64,8 @@ public class Player : MonoBehaviour {
         sprite = transform.Find ("Sprite").gameObject;
         sprend = sprite.GetComponent<SpriteRenderer> ();
         bodyCollider = GetComponent<BoxCollider2D> ();
+        point_manager = GetComponent<PointManager> ();
+
 
         // JF: Get highlightObject and disable. Enable if item is held later
         highlightObject = transform.Find ("Highlight").gameObject;
@@ -107,10 +110,7 @@ public class Player : MonoBehaviour {
         Collider2D itemCol;
         if (itemCol = Physics2D.OverlapCircle (transform.position, itemDetectRadius, itemLayer)) {
             if (Input.GetButtonDown ("X" + playerNumStub)) {
-                Item held = itemCol.GetComponent<Item> ();
-                held.Attach (this);
-                heldItem = held;
-                form = PlayerForm.Holding;
+                TryToHoldWeapon (itemCol);
             }
         } else if (Input.GetButtonDown("X" + playerNumStub) && TryToSitInWeapon()) {
             // there's a weapon underneath us, so sit in it
@@ -346,6 +346,18 @@ public class Player : MonoBehaviour {
     // Return a bool checking if player object is standing on top of a block or ground
     bool IsGrounded() {
         return rigid.IsTouchingLayers(groundedMask);
+    }
+
+    // when picking up an item, check to see if we have enough points to be able to 
+    // pick up the item in the first place
+    void TryToHoldWeapon(Collider2D itemCol){
+        Item held = itemCol.GetComponent<Item> ();
+
+        if (point_manager.UsePoints (held.GetCost ())) {
+            held.Attach (this);
+            heldItem = held;
+            form = PlayerForm.Holding;
+        }
     }
 
     bool TryToSitInWeapon(){

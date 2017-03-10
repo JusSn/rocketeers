@@ -70,6 +70,7 @@ GameObject:
   - component: {fileID: 61442603706597014}
   - component: {fileID: 50443768207237478}
   - component: {fileID: 114199607879326764}
+  - component: {fileID: 114239489246610058}
   m_Layer: 10
   m_Name: Player
   m_TagString: Player
@@ -214,6 +215,20 @@ MonoBehaviour:
   heldItem: {fileID: 0}
   weapon: {fileID: 0}
   highlightObject: {fileID: 0}
+--- !u!114 &114239489246610058
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1749041598868772}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5794580317b2a441aace9439a7d99aec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ui_pts_left: {fileID: 0}
+  starting_pts: 10000
+  _____________: 0
 --- !u!212 &212149055532778132
 SpriteRenderer:
   m_ObjectHideFlags: 1

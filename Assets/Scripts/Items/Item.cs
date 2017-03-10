@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Item : MonoBehaviour {
 	public Vector3 					heldPos = new Vector3 (0f, 0f, 0f);
+    // how much this resource costs to pickup/use
+    public int                      resource_cost;
 
 	// JF: assigned after instantiate by spawner script
 	public Spawner 					spawnerScript = null;
@@ -45,6 +47,10 @@ public class Item : MonoBehaviour {
 		// JF: Disappears after 10 s if not picked up 
 		ScheduleRepool (repoolTime);
 	}
+
+    public int GetCost(){
+        return resource_cost;
+    }
 
 	/******************** Fat Interface for Derived Classes ********************/
 

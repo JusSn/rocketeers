@@ -89,6 +89,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   heldPos: {x: 0, y: 0, z: 0}
+  resource_cost: 150
   spawnerScript: {fileID: 0}
   repoolTime: 10
   ________________: 0
