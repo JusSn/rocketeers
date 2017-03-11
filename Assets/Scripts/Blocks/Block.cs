@@ -72,6 +72,11 @@ public class Block : MonoBehaviour {
         states.Add (BlockStates.FALLING_TO_STILL, FallingToStill);
         states.Add (BlockStates.STILL, Still);
         states.Add (BlockStates.UNHINGED, Unhinged);
+        // SK: Don't want rockets and core to add joints
+        if(tag == "Rockets" || tag == "Core") {
+            state = BlockStates.STILL;
+            return;
+        }
         CheckForAnyNeighbors ();
     }
 

@@ -11,6 +11,8 @@ TagManager:
   - Bullet
   - Highlight
   - Spawner
+  - Core
+  - Rockets
   layers:
   - Default
   - TransparentFX

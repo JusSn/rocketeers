@@ -6,13 +6,12 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class PhaseManager : MonoBehaviour {
-    // Insepctor manipulated attributes
-    public GameObject                   divider;
-    public GameObject                   team1GoalLine;
-    public GameObject                   team2GoalLine;
+    // Inspector manipulated attributes
+    //public GameObject                   divider;
     public Text                         ui_phase;
     public Text                         ui_timeLeft;
     public LayerMask                    layerMask;
+    public GameObject                   ground;
     
     // JF: Disable and reenable these depending on phase
     public GameObject[]                 itemSpawners;
@@ -22,6 +21,11 @@ public class PhaseManager : MonoBehaviour {
     public bool                         inBuildPhase = true;
     public int                          currentRound = 0;
     public bool                         gameOver = false;
+    public List<GameObject>             placedBlocks;
+    private bool                        groundGone;
+    private Vector3                     groundDestination;
+    public float                        flyingSpeed = 2f;
+    private Vector3                     groundStartPosition;
 
     // Timer
     private float                       timeLeft;
@@ -35,7 +39,10 @@ public class PhaseManager : MonoBehaviour {
     // Use this for initialization
     void Start () {
         S = this;
+        placedBlocks = new List<GameObject>();
         timeLeft = build_time;
+        groundDestination = new Vector2(0, -25f);
+        groundStartPosition = new Vector2(0, -7f);
     }
 	
 	// Update is called once per frame
@@ -63,16 +70,45 @@ public class PhaseManager : MonoBehaviour {
     // Resets timer, makes divider more transparent and allows projectiles through
     public void SwitchToBattlePhase() {
         inBuildPhase = false;
+        StartCoroutine(moveGround(Vector3.down, groundDestination));
         timeLeft = battle_time;
-        divider.GetComponent<SpriteRenderer>().color = new Color(0f, 0f, 0f, .25f);
-        divider.layer = LayerMask.NameToLayer("AllowOnlyProjectiles");
+        //divider.GetComponent<SpriteRenderer>().color = new Color(0f, 0f, 0f, .25f);
+        //divider.layer = LayerMask.NameToLayer("AllowOnlyProjectiles");
         ui_phase.text = "BATTLE";
 
         foreach (GameObject obj in itemSpawners) {
             obj.GetComponent<Spawner> ().on = false;
         }
+
+        foreach(GameObject go in placedBlocks) {
+            go.GetComponent<Rigidbody2D>().gravityScale = 0;
+        }
     }
 
+    public void SwitchToBuildPhase() {
+        inBuildPhase = true;
+        timeLeft = build_time;
+        StartCoroutine(moveGround(Vector3.up, groundStartPosition));
+        ui_phase.text = "BUILD";
+
+        foreach (GameObject obj in itemSpawners) {
+            obj.GetComponent<Spawner>().on = true;
+        }
+
+    }
+
+    IEnumerator moveGround(Vector3 direction, Vector3 destination) {
+        float starttime = Time.time;
+        while(ground.transform.position != destination) {
+            ground.transform.position = Vector3.MoveTowards(ground.transform.position, destination, (Time.time - starttime) * flyingSpeed);
+            yield return null;
+            }
+        }
+
+
+    // Functions used in "build-to-height" game mode
+
+    /*    
     // Switches to build phase:
     // Checks if either team is above the goal line (if yes, end game)
     // Checks if the number of rounds have reached the total selected (if yes, end game)
@@ -145,4 +181,5 @@ public class PhaseManager : MonoBehaviour {
             ui_phase.text = "TEAM " + winner + " WINS!";
         }
     }
+    */
 }
