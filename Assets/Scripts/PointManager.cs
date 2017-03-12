@@ -18,6 +18,9 @@ public class PointManager : MonoBehaviour {
 
     public bool                         _____________;
 
+    // used to control how long the main points text blinks red and black
+    private float                       blink_length = 2f;
+
     void Start () {
         InitializePoints ();
 	}
@@ -34,6 +37,7 @@ public class PointManager : MonoBehaviour {
             SubtractPts (pts_to_be_used);
             return true;
         }
+        NotEnoughPoints ();
         // otherwise return false
         return false;
     }
@@ -48,5 +52,24 @@ public class PointManager : MonoBehaviour {
 
     void InitializePoints(){
         ui_pts_left.text = (starting_pts).ToString();
+    }
+
+    // starts a coroutine that flashes the main points text red and black
+    public void NotEnoughPoints(){
+        StartCoroutine(FlashPoints());
+    }
+
+    // flashes the main points text from red to black for blink_length
+    IEnumerator FlashPoints(){
+        float start_time = Time.time;
+        while (Time.time - start_time < blink_length) {
+            // sets the text to be red for 0.5 seconds
+            ui_pts_left.color = Color.red;
+            yield return new WaitForSeconds (0.25f);
+
+            // sets the text to be black for 0.5 seconds
+            ui_pts_left.color = Color.black;
+            yield return new WaitForSeconds (0.25f);
+        }
     }
 }

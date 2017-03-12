@@ -41,8 +41,9 @@ public class Player : MonoBehaviour {
     private GameObject                      sprite;
     private SpriteRenderer                  sprend;
     private PointManager                    point_manager;
+    private ToolTipManager                  tt_manager;
 
-    private BoxCollider2D                     bodyCollider;
+    private BoxCollider2D                   bodyCollider;
 
     // JF: Highlight object
     public GameObject                       highlightObject;
@@ -65,6 +66,8 @@ public class Player : MonoBehaviour {
         sprend = sprite.GetComponent<SpriteRenderer> ();
         bodyCollider = GetComponent<BoxCollider2D> ();
         point_manager = GetComponent<PointManager> ();
+        tt_manager = GetComponent<ToolTipManager> ();
+        tt_manager.SetPlayer (gameObject);
 
 
         // JF: Get highlightObject and disable. Enable if item is held later
@@ -354,6 +357,8 @@ public class Player : MonoBehaviour {
         Item held = itemCol.GetComponent<Item> ();
 
         if (point_manager.UsePoints (held.GetCost ())) {
+            // show the tooltip of the player spending points on picking up the block
+            tt_manager.SpendPoints(held.GetCost());
             held.Attach (this);
             heldItem = held;
             form = PlayerForm.Holding;
