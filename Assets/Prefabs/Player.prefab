@@ -253,9 +253,9 @@ BoxCollider2D:
   m_Material: {fileID: 6200000, guid: 6ca66d7f16b0b91499caaa038441e49d, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: -0.02}
   serializedVersion: 2
-  m_Size: {x: 0.55, y: 0.99}
+  m_Size: {x: 0.55, y: 0.95}
 --- !u!95 &95762634013600294
 Animator:
   serializedVersion: 3
@@ -265,7 +265,7 @@ Animator:
   m_GameObject: {fileID: 1435525207588860}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 9b742e854e540364e9ab45e19a3035f8, type: 2}
+  m_Controller: {fileID: 9100000, guid: c965c31543cca144a9ae6f3189ac7994, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -366,7 +366,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 2116931259
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 200b4af2443305c40b39e15a9e79aec6, type: 3}
+  m_Sprite: {fileID: 21300000, guid: db1043a930a91ea41bf8e8d24bb1471a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -399,7 +399,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
+  m_SortingLayerID: 2116931259
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 8dd02d7bc54081b43a2d89ff5e094483, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -436,7 +436,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 2116931259
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: e4c0d339e2e19f740a41377c6098f813, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7d62fdc6717ba4346bef91c4242d8b6c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
