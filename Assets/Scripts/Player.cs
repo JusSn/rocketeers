@@ -32,6 +32,7 @@ public class Player : MonoBehaviour {
     // Encapsulated attributes
     public PlayerForm                       _form = PlayerForm.Normal;
     public bool                             grounded;
+    private bool                            ducking;
     public Item                             heldItem;                  
     public WeaponBlock                      weapon;
 
@@ -44,6 +45,7 @@ public class Player : MonoBehaviour {
     private Rigidbody2D                     rigid;
     private GameObject                      sprite;
     private SpriteRenderer                  sprend;
+    private Animator                        animator;
     private PointManager                    point_manager;
     private ToolTipManager                  tt_manager;
 
@@ -71,12 +73,12 @@ public class Player : MonoBehaviour {
         // Get GameObject components & children
         rigid = GetComponent<Rigidbody2D> ();
         sprite = transform.Find ("Sprite").gameObject;
+        animator = sprite.GetComponent<Animator> ();
         sprend = sprite.GetComponent<SpriteRenderer> ();
         bodyCollider = GetComponent<BoxCollider2D> ();
         point_manager = GetComponent<PointManager> ();
         tt_manager = GetComponent<ToolTipManager> ();
         tt_manager.SetPlayer (gameObject);
-
 
         // JF: Get highlightObject and disable. Enable if item is held later
         highlightObject = transform.Find ("Highlight").gameObject;
@@ -111,6 +113,7 @@ public class Player : MonoBehaviour {
     void Update () {
         // Update general attributes
         grounded = IsGrounded ();
+        ducking = IsDucking ();
         // Call the proper update function
 		stateUpdateMap [form] ();
     }
@@ -354,9 +357,19 @@ public class Player : MonoBehaviour {
         float flip = (direction < 0) ? 180f : 0f;
 
         if (grounded) {
+            // JF: Provide acceleration to allow finer movement
             currentX = Mathf.Lerp(currentX, direction * xSpeed, Time.deltaTime * 10);
+
+            // JF: enable walking Animation
+            if (Mathf.Abs(currentX) > 0.1f) {
+                animator.SetBool("walking", true);
+            }
+            else {
+                animator.SetBool("walking", false);
+            }
         }
         else {
+            // JF: Decrease maneuverability while in the air
             currentX = Mathf.Lerp(currentX, direction * xSpeed, Time.deltaTime * 2);
         }
 
@@ -370,11 +383,11 @@ public class Player : MonoBehaviour {
     float GetYInputSpeed(float currentY) {
 		if (grounded && Input.GetButtonDown ("A" + playerNumStub)) {
             // Down jump
-            if (-Input.GetAxisRaw ("LeftJoyY" + playerNumStub) < 0 
-                            && rigid.IsTouchingLayers(platformLayer) 
-                            && !rigid.IsTouchingLayers(groundLayer)) {
+            if (ducking
+                    && rigid.IsTouchingLayers(platformLayer) 
+                    && !rigid.IsTouchingLayers(groundLayer)) {
                 bodyCollider.isTrigger = true;
-                Invoke ("RestoreCollision", 0.2f);
+                Invoke ("RestoreCollision", 0.3f);
             }
             else {
                 currentY = ySpeed;
@@ -404,7 +417,15 @@ public class Player : MonoBehaviour {
 
     // Return a bool checking if player object is standing on top of a block or ground
     bool IsGrounded() {
-        return rigid.IsTouchingLayers(groundedMask);
+        bool val = rigid.IsTouchingLayers(groundedMask);
+        animator.SetBool("grounded", val);
+        return val;
+    }
+
+    bool IsDucking() {
+        bool val = -Input.GetAxisRaw ("LeftJoyY" + playerNumStub) < 0;
+        animator.SetBool("ducking", val);
+        return val;
     }
 
     // when picking up an item, check to see if we have enough points to be able to 
