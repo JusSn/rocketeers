@@ -84,6 +84,14 @@ public class PhaseManager : MonoBehaviour {
                 seconds = (timeLeft % 60).ToString("00");
                 ui_timeLeft.text = seconds;
             }
+            // JF: If in battle phase, kill players that fall out of camera
+            else {
+                foreach (GameObject player in players) {
+                    if (player != null) {
+                        DestroyPlayerIfOffScreen (player);
+                    }
+                }
+            }
         }
 	}
 
@@ -173,10 +181,10 @@ public class PhaseManager : MonoBehaviour {
         LaunchCautionUI.SetActive(!LaunchCautionUI.activeInHierarchy);
     }
 
-    // Calling condition: check and destroy this player if it's offscreen
+    // JF: Calling condition: check and destroy this player if it's offscreen
     // Called by: this.Update()
     private void DestroyPlayerIfOffScreen(GameObject obj){
-        if (!MainCamera.S.IsOnScreen (transform.position)) {
+        if (!MainCamera.S.IsOnScreen (obj.transform.position)) {
             // Get TeamNum and decrement lives
             int teamNum = obj.GetComponent<Player> ().teamNum;
             TeamLives[teamNum - 1]--;
@@ -184,7 +192,8 @@ public class PhaseManager : MonoBehaviour {
 
             // If out of lives, destroy team's core
             if (TeamLives[teamNum - 1] <= 0) {
-                EndGame(cores[teamNum]);
+                float damage = cores[teamNum - 1].gameObject.GetComponent<Health> ().MAX_HEALTH;
+                cores[teamNum - 1].gameObject.GetComponent<Block> ().TakeDamage (damage);
             }
 
         }
