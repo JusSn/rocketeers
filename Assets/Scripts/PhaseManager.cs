@@ -15,6 +15,7 @@ public class PhaseManager : MonoBehaviour {
     public GameObject[]                 backgroundObjects;
 	public AudioClip					buildBgm;
 	public AudioClip 					battleBgm;
+    public AudioClip                    countdownAudio;
     public GameObject[]                 rockets;
     public GameObject                   explosion;
 
@@ -24,6 +25,7 @@ public class PhaseManager : MonoBehaviour {
     // Encapsulated attributes
     public static PhaseManager          S;
     public bool                         inBuildPhase = true;
+    public bool                         countdownNotStarted = true;
     public int                          currentRound = 0;
     public bool                         gameOver = false;
     public List<GameObject>             placedBlocks;
@@ -64,19 +66,30 @@ public class PhaseManager : MonoBehaviour {
         }
 
         timeLeft -= Time.deltaTime;
-        if (timeLeft <= 0) {
-            if (inBuildPhase) {
-                SwitchToBattlePhase();
-            }
-            else {
-                SwitchToBuildPhase();
-            }
+        if (timeLeft % 60 < 11 && countdownNotStarted) {
+            SwitchToCountdownPhase();
+            // else {
+            //     SwitchToBuildPhase();
+            // }
         }
         else {
-            seconds = (timeLeft % 60).ToString("00");
-            ui_timeLeft.text = seconds;
+            if (inBuildPhase) {
+                seconds = (timeLeft % 60).ToString("00");
+                ui_timeLeft.text = seconds;
+            }
         }
 	}
+
+    public void SwitchToCountdownPhase() {
+        countdownNotStarted = false;
+        audioSource.PlayOneShot(countdownAudio, 2.0f);
+        Invoke ("SwitchToBattlePhase", 10);
+        ui_timeLeft.fontSize = 50;
+
+        foreach (GameObject obj in itemSpawners) {
+            obj.GetComponent<Spawner> ().on = false;
+        }
+    }
 
     // Switches to battle phase:
     // Resets timer, makes divider more transparent and allows projectiles through
@@ -85,6 +98,7 @@ public class PhaseManager : MonoBehaviour {
         StartCoroutine(moveGround(Vector3.down, groundDestination));
         timeLeft = battle_time;
         ui_phase.text = "BATTLE";
+        ui_timeLeft.text = "";
 		audioSource.clip = battleBgm;
 		audioSource.Play ();
 
@@ -93,10 +107,6 @@ public class PhaseManager : MonoBehaviour {
             if(obj.GetComponent<SpaceBackground>() != null) {
                 obj.GetComponent<SpaceBackground>().StartFlying();
             }
-        }
-
-        foreach (GameObject obj in itemSpawners) {
-            obj.GetComponent<Spawner> ().on = false;
         }
 
         foreach (GameObject obj in rockets) {
