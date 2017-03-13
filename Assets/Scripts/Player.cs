@@ -5,6 +5,7 @@ using UnityEngine;
 
 public enum PlayerForm {
     Normal,        // Running, Jumping, Idle
+	Shooting,	   // Aiming to shoot held weapon
     Holding,       // Holding an item
     Throwing,      // Charging up object to throw
     Setting,       // Placing settable object
@@ -20,6 +21,8 @@ public class Player : MonoBehaviour {
     public float                            placementDetectRadius = 0.3f;
     public float                            throwChargeMax = 2.5f;
     public float                            throwChargeRatio = 10f;
+	public GameObject 						projectilePrefab;
+	public float							projSpeed = 10f;
     public bool                             debugMode = false;
 
     public LayerMask                        placementMask;
@@ -49,6 +52,10 @@ public class Player : MonoBehaviour {
     public GameObject                       highlightObject;
     private SpriteRenderer[]                highlightSprends;
 
+	// AW: Aim arrow
+	private GameObject						aimArrowObject;
+	private GameObject 						projSource;
+
     // Detection parameters
     private int                             blockMask;
     private int                             itemLayer;
@@ -56,7 +63,8 @@ public class Player : MonoBehaviour {
     private int                             groundLayer;
 
     // Internal maps
-    private Dictionary<PlayerForm, Action>  stateUpdateMap;
+    private Dictionary<PlayerForm, Action>  buildUpdateMap;
+	private Dictionary<PlayerForm, Action>  battleUpdateMap;
 
     // Use this for initialization
     void Start () {
@@ -75,6 +83,11 @@ public class Player : MonoBehaviour {
         highlightSprends = highlightObject.GetComponentsInChildren<SpriteRenderer> ();
         highlightObject.SetActive(false);
 
+		// AW: Get arrow sprite for aiming shots and proj source
+		aimArrowObject = transform.Find("AimArrow").gameObject;
+		aimArrowObject.SetActive (false);
+		projSource = aimArrowObject.transform.Find ("ProjectileSource").gameObject;
+
 		// Initializing internal
 		playerNumStub = "_P" + playerNum;
 
@@ -85,12 +98,16 @@ public class Player : MonoBehaviour {
         groundLayer = LayerMask.GetMask ("Ground");
 
         // Filling the function behavior map
-        stateUpdateMap = new Dictionary<PlayerForm, Action> ();
-        stateUpdateMap.Add (PlayerForm.Normal, NormalUpdate);
-        stateUpdateMap.Add (PlayerForm.Holding, HoldingUpdate);
-        stateUpdateMap.Add (PlayerForm.Throwing, ThrowingUpdate);
-        stateUpdateMap.Add (PlayerForm.Setting, SettingUpdate);
-        stateUpdateMap.Add (PlayerForm.Sitting, SittingUpdate);
+		buildUpdateMap = new Dictionary<PlayerForm, Action> ();
+		buildUpdateMap.Add (PlayerForm.Normal, NormalBuildUpdate);
+		buildUpdateMap.Add (PlayerForm.Holding, HoldingUpdate);
+		buildUpdateMap.Add (PlayerForm.Throwing, ThrowingUpdate);
+		buildUpdateMap.Add (PlayerForm.Setting, SettingUpdate);
+		buildUpdateMap.Add (PlayerForm.Sitting, SittingUpdate);
+
+		battleUpdateMap = new Dictionary<PlayerForm, Action> ();
+		battleUpdateMap.Add (PlayerForm.Normal, NormalBattleUpdate);
+		battleUpdateMap.Add (PlayerForm.Shooting, ShootingUpdate);
     }
 
     // Update is called once per frame
@@ -98,15 +115,19 @@ public class Player : MonoBehaviour {
         // Update general attributes
         grounded = IsGrounded ();
         // Call the proper update function
-        stateUpdateMap [form] ();
+		if (PhaseManager.S.inBuildPhase) {
+			buildUpdateMap [form] ();
+		} else {
+			battleUpdateMap [form] ();
+		}
     }
 
     /******************** State Modifiers & Behaviors ********************/
 
-    // General behavior of the player when not holding anything
+    // General behavior of the player when not holding anything during the building phase
     // Entered from: Throwing(thrown)
     // Exit to: Holding(pickup)
-    void NormalUpdate() {
+    void NormalBuildUpdate() {
         CalculateMovement ();
 
         // Check if an item is within reach
@@ -121,6 +142,45 @@ public class Player : MonoBehaviour {
         }
 
     }
+
+	// General behavior of the player during the battle phase
+	// Entered from: Shooting(shot/cancel)
+	// Exit to: Shooting(shoot)
+	void NormalBattleUpdate() {
+		CalculateMovement ();
+
+		if (Input.GetButtonDown ("X" + playerNumStub)) {
+			form = PlayerForm.Shooting;
+			aimArrowObject.SetActive (true);
+		}
+	}
+
+	// Aiming the projectile; Let go of the shoot button to fire
+	// Entered from: Normal(shoot)
+	// Exit to: Normal(shoot)
+	void ShootingUpdate() {
+
+		if (Input.GetAxis ("LeftJoyX" + playerNumStub) != 0 || Input.GetAxis ("LeftJoyX" + playerNumStub) != 0) {
+			Vector3 trajectory = GetAimDirection ();
+			float angle = Vector3.Angle (Vector3.right, trajectory);
+			if (trajectory.y < 0) {
+				angle *= -1;
+			}
+			aimArrowObject.transform.rotation = Quaternion.AngleAxis (angle, Vector3.forward);
+		}
+
+		// JF: Attempt to place block
+		if (Input.GetButtonUp ("X" + playerNumStub)) {	
+			GameObject proj = Instantiate<GameObject> (projectilePrefab);
+			proj.transform.position = projSource.transform.position;
+			proj.transform.rotation = projSource.transform.rotation;
+			proj.GetComponent<Rigidbody2D> ().velocity = projSource.transform.right * projSpeed;
+			form = PlayerForm.Normal;
+		} else if (Input.GetButtonDown ("A" + playerNumStub)) {
+			CalculateMovement ();
+			form = PlayerForm.Normal;
+		}
+	}
 
     // Behavior when holding an item; Transitions to either throw or set
     // Entered from: Normal(pickup), Throwing(cancel)
@@ -246,8 +306,13 @@ public class Player : MonoBehaviour {
             case PlayerForm.Normal:
                 // JF: Toggle highlight guide
                 highlightObject.SetActive(false);
+				aimArrowObject.SetActive(false);
                 _form = value;
                 break;
+			case PlayerForm.Shooting:
+				aimArrowObject.SetActive(true);
+				_form = value;
+				break;
             case PlayerForm.Holding:
                 // JF: Toggle highlight guide
                 highlightObject.SetActive(false);
