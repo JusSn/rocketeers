@@ -17,7 +17,13 @@ public class LoopingAnimation : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(Time.time - startTime >= animationSpeed) {
+        // Hides sprite while in build phase
+        if(PhaseManager.S.inBuildPhase) {
+            GetComponent<SpriteRenderer>().enabled = false;
+            return;
+        }
+        GetComponent<SpriteRenderer>().enabled = true;
+        if (Time.time - startTime >= animationSpeed) {
             startTime = Time.time;
             current++;
             if(current == sprites.Length) {
