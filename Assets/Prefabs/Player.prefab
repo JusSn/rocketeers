@@ -255,7 +255,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Size: {x: 0.65, y: 0.65}
+  m_Size: {x: 0.55, y: 0.99}
 --- !u!95 &95762634013600294
 Animator:
   serializedVersion: 3
@@ -265,7 +265,7 @@ Animator:
   m_GameObject: {fileID: 1435525207588860}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 0f4edb0860a16d54aa0290be09551479, type: 2}
+  m_Controller: {fileID: 9100000, guid: 9b742e854e540364e9ab45e19a3035f8, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -284,7 +284,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: babb6c0b8657a4f47b25ecfebbe8d8f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerNum: 1
+  playerNumStr: 1
+  teamNum: 1
   xSpeed: 8
   ySpeed: 9.5
   itemDetectRadius: 0.5
@@ -435,7 +436,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 2116931259
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 690be0faae841eb478c727cd1ef13e42, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e4c0d339e2e19f740a41377c6098f813, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

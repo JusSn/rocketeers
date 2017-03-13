@@ -521,13 +521,13 @@ Prefab:
         type: 2}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 2814191fd34245f4a86dc696658314e7,
+      objectReference: {fileID: 21300000, guid: af360509dfdbe224fa658d5261bd4885,
         type: 3}
     - target: {fileID: 95762634013600294, guid: d5f3f8a3bac4ba4479ce70f034a940ec,
         type: 2}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: dbe9a6f7b5aba38489836595ad3b2c86, type: 2}
+      objectReference: {fileID: 9100000, guid: 6aa9afab4ce65954ea7bd297201c8971, type: 2}
     - target: {fileID: 114199607879326764, guid: d5f3f8a3bac4ba4479ce70f034a940ec,
         type: 2}
       propertyPath: ySpeed
@@ -764,37 +764,17 @@ Prefab:
       propertyPath: m_Name
       value: Player1
       objectReference: {fileID: 0}
-    - target: {fileID: 114199607879326764, guid: d5f3f8a3bac4ba4479ce70f034a940ec,
-        type: 2}
-      propertyPath: playerNumStr
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114199607879326764, guid: d5f3f8a3bac4ba4479ce70f034a940ec,
-        type: 2}
-      propertyPath: teamNum
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 212537581966050700, guid: d5f3f8a3bac4ba4479ce70f034a940ec,
         type: 2}
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: e4c0d339e2e19f740a41377c6098f813,
         type: 3}
-    - target: {fileID: 61442603706597014, guid: d5f3f8a3bac4ba4479ce70f034a940ec,
-        type: 2}
-      propertyPath: m_Size.y
-      value: 0.99
-      objectReference: {fileID: 0}
-    - target: {fileID: 61442603706597014, guid: d5f3f8a3bac4ba4479ce70f034a940ec,
-        type: 2}
-      propertyPath: m_Size.x
-      value: 0.55
-      objectReference: {fileID: 0}
     - target: {fileID: 95762634013600294, guid: d5f3f8a3bac4ba4479ce70f034a940ec,
         type: 2}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 9b742e854e540364e9ab45e19a3035f8, type: 2}
+      objectReference: {fileID: 9100000, guid: c965c31543cca144a9ae6f3189ac7994, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d5f3f8a3bac4ba4479ce70f034a940ec, type: 2}
   m_IsPrefabParent: 0
@@ -5492,13 +5472,13 @@ Prefab:
         type: 2}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 54da7be51d9c2154db48d897773b2b66,
+      objectReference: {fileID: 21300000, guid: 3b337bcd29b42a548a756e89cb04aa5f,
         type: 3}
     - target: {fileID: 95762634013600294, guid: d5f3f8a3bac4ba4479ce70f034a940ec,
         type: 2}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 36c4d13ddd3dbd241812f00ed83d5835, type: 2}
+      objectReference: {fileID: 9100000, guid: 9b742e854e540364e9ab45e19a3035f8, type: 2}
     - target: {fileID: 114199607879326764, guid: d5f3f8a3bac4ba4479ce70f034a940ec,
         type: 2}
       propertyPath: ySpeed
