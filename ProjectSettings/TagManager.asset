@@ -13,6 +13,7 @@ TagManager:
   - Spawner
   - Core
   - Rockets
+  - ConvertProjectile
   layers:
   - Default
   - TransparentFX
@@ -28,7 +29,7 @@ TagManager:
   - Ground
   - Projectiles
   - Highlight
-  - AllowOnlyProjectiles
+  - ConvertProjectiles
   - Platform
   - 
   - 
