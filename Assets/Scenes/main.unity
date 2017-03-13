@@ -5248,8 +5248,8 @@ MonoBehaviour:
   - {fileID: 1943180531}
   - {fileID: 173399321}
   - {fileID: 586016300}
-  buildBgm: {fileID: 0}
-  battleBgm: {fileID: 0}
+  buildBgm: {fileID: 8300000, guid: 47947567e53940f46ab1e09cc3af2350, type: 3}
+  battleBgm: {fileID: 8300000, guid: b6bf1b86025b95e4eae19f0035a9e704, type: 3}
   rockets:
   - {fileID: 1207423709}
   - {fileID: 1782790854}
