@@ -24,6 +24,11 @@ public class PhaseManager : MonoBehaviour {
     // JF: Disable and reenable these depending on phase
     public GameObject[]                 itemSpawners;
 
+    // JF: References to core and player objects
+    public GameObject[]                 players;
+    public int[]                        TeamLives;
+    public GameObject[]                 cores;
+
     // Encapsulated attributes
     public static PhaseManager          S;
     public bool                         inBuildPhase = true;
@@ -166,6 +171,23 @@ public class PhaseManager : MonoBehaviour {
 
     private void FlashCautionUI () {
         LaunchCautionUI.SetActive(!LaunchCautionUI.activeInHierarchy);
+    }
+
+    // Calling condition: check and destroy this player if it's offscreen
+    // Called by: this.Update()
+    private void DestroyPlayerIfOffScreen(GameObject obj){
+        if (!MainCamera.S.IsOnScreen (transform.position)) {
+            // Get TeamNum and decrement lives
+            int teamNum = obj.GetComponent<Player> ().teamNum;
+            TeamLives[teamNum - 1]--;
+            Destroy (obj);
+
+            // If out of lives, destroy team's core
+            if (TeamLives[teamNum - 1] <= 0) {
+                EndGame(cores[teamNum]);
+            }
+
+        }
     }
 
     // Functions used in "build-to-height" game mode

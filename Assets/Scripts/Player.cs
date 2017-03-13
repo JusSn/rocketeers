@@ -14,7 +14,8 @@ public enum PlayerForm {
 
 public class Player : MonoBehaviour {
     // Insepctor manipulated attributes
-	public string							playerNum;
+	public string							playerNumStr;
+    public int                              teamNum;
     public float                            xSpeed = 7f;
     public float                            ySpeed = 10f;
     public float                            itemDetectRadius = 0.5f;
@@ -88,7 +89,7 @@ public class Player : MonoBehaviour {
 		projSource = aimArrowObject.transform.Find ("ProjectileSource").gameObject;
 
 		// Initializing internal
-		playerNumStub = "_P" + playerNum;
+		playerNumStub = "_P" + playerNumStr;
 
         // Raycast parameters
         itemLayer = LayerMask.GetMask ("Items");

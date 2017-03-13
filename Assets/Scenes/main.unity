@@ -542,6 +542,16 @@ Prefab:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 114199607879326764, guid: d5f3f8a3bac4ba4479ce70f034a940ec,
+        type: 2}
+      propertyPath: playerNumStr
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 114199607879326764, guid: d5f3f8a3bac4ba4479ce70f034a940ec,
+        type: 2}
+      propertyPath: teamNum
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d5f3f8a3bac4ba4479ce70f034a940ec, type: 2}
   m_IsPrefabParent: 0
@@ -754,9 +764,24 @@ Prefab:
       propertyPath: m_Name
       value: Player1
       objectReference: {fileID: 0}
+    - target: {fileID: 114199607879326764, guid: d5f3f8a3bac4ba4479ce70f034a940ec,
+        type: 2}
+      propertyPath: playerNumStr
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114199607879326764, guid: d5f3f8a3bac4ba4479ce70f034a940ec,
+        type: 2}
+      propertyPath: teamNum
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d5f3f8a3bac4ba4479ce70f034a940ec, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &196719826 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1390623067759426, guid: 6655be76da9d7e34a865e223296a99ec,
+    type: 2}
+  m_PrefabInternal: {fileID: 1277740640}
 --- !u!1 &206946474
 GameObject:
   m_ObjectHideFlags: 0
@@ -854,6 +879,11 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 1
   m_TargetDisplay: 0
+--- !u!1 &208663216 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1749041598868772, guid: d5f3f8a3bac4ba4479ce70f034a940ec,
+    type: 2}
+  m_PrefabInternal: {fileID: 169790575}
 --- !u!1 &214962448
 GameObject:
   m_ObjectHideFlags: 0
@@ -2402,6 +2432,11 @@ SpriteRenderer:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
+--- !u!1 &617133070 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1749041598868772, guid: d5f3f8a3bac4ba4479ce70f034a940ec,
+    type: 2}
+  m_PrefabInternal: {fileID: 193845234}
 --- !u!1 &664036819
 GameObject:
   m_ObjectHideFlags: 0
@@ -2885,6 +2920,11 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 758492955}
+--- !u!1 &799084272 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1390623067759426, guid: 6655be76da9d7e34a865e223296a99ec,
+    type: 2}
+  m_PrefabInternal: {fileID: 1485854937}
 --- !u!1 &840174667
 GameObject:
   m_ObjectHideFlags: 0
@@ -4489,6 +4529,11 @@ SpriteRenderer:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
+--- !u!1 &1358647554 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1749041598868772, guid: d5f3f8a3bac4ba4479ce70f034a940ec,
+    type: 2}
+  m_PrefabInternal: {fileID: 1522014930}
 --- !u!1 &1359883237
 GameObject:
   m_ObjectHideFlags: 0
@@ -5451,6 +5496,16 @@ Prefab:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114199607879326764, guid: d5f3f8a3bac4ba4479ce70f034a940ec,
+        type: 2}
+      propertyPath: playerNumStr
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114199607879326764, guid: d5f3f8a3bac4ba4479ce70f034a940ec,
+        type: 2}
+      propertyPath: teamNum
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d5f3f8a3bac4ba4479ce70f034a940ec, type: 2}
   m_IsPrefabParent: 0
@@ -5509,6 +5564,15 @@ MonoBehaviour:
   itemSpawners:
   - {fileID: 146844149}
   - {fileID: 885044364}
+  players:
+  - {fileID: 617133070}
+  - {fileID: 1358647554}
+  - {fileID: 208663216}
+  - {fileID: 2005171176}
+  TeamLives: 0200000002000000
+  cores:
+  - {fileID: 799084272}
+  - {fileID: 196719826}
   inBuildPhase: 1
   countdownNotStarted: 1
   currentRound: 0
@@ -6518,6 +6582,16 @@ Prefab:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 114199607879326764, guid: d5f3f8a3bac4ba4479ce70f034a940ec,
+        type: 2}
+      propertyPath: playerNumStr
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 114199607879326764, guid: d5f3f8a3bac4ba4479ce70f034a940ec,
+        type: 2}
+      propertyPath: teamNum
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d5f3f8a3bac4ba4479ce70f034a940ec, type: 2}
   m_IsPrefabParent: 0
@@ -7418,6 +7492,11 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &2005171176 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1749041598868772, guid: d5f3f8a3bac4ba4479ce70f034a940ec,
+    type: 2}
+  m_PrefabInternal: {fileID: 1709765865}
 --- !u!1 &2087646628
 GameObject:
   m_ObjectHideFlags: 0
