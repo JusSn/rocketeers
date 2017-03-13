@@ -404,6 +404,10 @@ Prefab:
       propertyPath: ui_pts_left
       value: 
       objectReference: {fileID: 1580109953}
+    - target: {fileID: 4926628978617950, guid: d5f3f8a3bac4ba4479ce70f034a940ec, type: 2}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d5f3f8a3bac4ba4479ce70f034a940ec, type: 2}
   m_IsPrefabParent: 0
@@ -2446,6 +2450,14 @@ Prefab:
       propertyPath: ui_pts_left
       value: 
       objectReference: {fileID: 217195791}
+    - target: {fileID: 4926628978617950, guid: d5f3f8a3bac4ba4479ce70f034a940ec, type: 2}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1841985001227670, guid: d5f3f8a3bac4ba4479ce70f034a940ec, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d5f3f8a3bac4ba4479ce70f034a940ec, type: 2}
   m_IsPrefabParent: 0
@@ -2496,7 +2508,7 @@ MonoBehaviour:
   gameOver: 0
   placedBlocks: []
   flyingSpeed: 0.2
-  build_time: 45
+  build_time: 5
   battle_time: 30
   rounds_to_play: 3
 --- !u!114 &1523096696
@@ -3012,6 +3024,10 @@ Prefab:
       propertyPath: ui_pts_left
       value: 
       objectReference: {fileID: 1580109953}
+    - target: {fileID: 4926628978617950, guid: d5f3f8a3bac4ba4479ce70f034a940ec, type: 2}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d5f3f8a3bac4ba4479ce70f034a940ec, type: 2}
   m_IsPrefabParent: 0
