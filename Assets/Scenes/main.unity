@@ -6562,13 +6562,13 @@ Prefab:
         type: 2}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 95b1475b40d06c74aa9dbfb91b58fb4f,
+      objectReference: {fileID: 21300000, guid: 496999f4e989a5349b7b7a3bb7e87214,
         type: 3}
     - target: {fileID: 95762634013600294, guid: d5f3f8a3bac4ba4479ce70f034a940ec,
         type: 2}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 3ad5a2ce62dd09a46bc9144b5f3f4f51, type: 2}
+      objectReference: {fileID: 9100000, guid: 7efa412cfbecf7645bfcab390b5f644d, type: 2}
     - target: {fileID: 114199607879326764, guid: d5f3f8a3bac4ba4479ce70f034a940ec,
         type: 2}
       propertyPath: ySpeed
