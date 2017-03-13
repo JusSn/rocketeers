@@ -28,7 +28,7 @@ public class Projectile : MonoBehaviour {
 
     protected virtual void OnCollisionEnter2D(Collision2D other){
         // check if we came in contact with another block/weaponblock
-        if (other.gameObject.CompareTag ("Block") || other.gameObject.CompareTag ("WeaponBlock")) {
+        if (other.gameObject.CompareTag ("Block") || other.gameObject.CompareTag ("WeaponBlock") || other.gameObject.CompareTag("Core")) {
             other.gameObject.GetComponent<Block> ().TakeDamage (damage_amount);
         }
         Destroy(gameObject);

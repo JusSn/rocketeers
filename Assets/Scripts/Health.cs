@@ -10,6 +10,7 @@ public class Health : MonoBehaviour {
 
     // inspector tunables
     public float                                MAX_HEALTH;
+    public bool                                 is_core;
 
 
     public GameObject                           health_bar_prefab;

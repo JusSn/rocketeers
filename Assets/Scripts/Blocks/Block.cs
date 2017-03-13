@@ -193,11 +193,13 @@ public class Block : MonoBehaviour {
     void CheckAndConnectToNeighbor(Direction dir){
         Block neighbor = null;
         if (CheckForNeighbor (dir, out neighbor)) {
-            // we have a neighbor, so connect to it
-            ConnectToNeighbor (dir, neighbor);
-            // connect the neighbor in the opposite direction, since that's the side
-            // this block is on
-            neighbor.ConnectToNeighbor (Utils.GetOppositeDirection (dir), this);
+            if (!connected_neighbors.ContainsKey(dir)) {
+                // we have a neighbor, so connect to it
+                ConnectToNeighbor(dir, neighbor);
+                // connect the neighbor in the opposite direction, since that's the side
+                // this block is on
+                neighbor.ConnectToNeighbor(Utils.GetOppositeDirection(dir), this);
+            }
         } else if (dir == Direction.SOUTH){
             CheckForGround ();
         }

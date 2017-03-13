@@ -2,23 +2,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Created by SK on 3/13/17
+
 public class LoopingAnimation : MonoBehaviour {
 
     public  Sprite[]        sprites;
     public int              current = 0;
-    float            animationSpeed = .07f;
-    float startTime;
+    public bool             loop;
+    float                   animationSpeed = .07f;
+    float                   startTime;
+    public bool            animating;
     
 
 	// Use this for initialization
 	void Start () {
-        startTime = Time.time;
+        
 	}
 	
 	// Update is called once per frame
 	void Update () {
         // Hides sprite while in build phase
-        if(PhaseManager.S.inBuildPhase) {
+        if(!animating) {
             GetComponent<SpriteRenderer>().enabled = false;
             return;
         }
@@ -27,9 +31,20 @@ public class LoopingAnimation : MonoBehaviour {
             startTime = Time.time;
             current++;
             if(current == sprites.Length) {
-                current = 0;
+                if (loop) {
+                    current = 0;
+                }
+                else {
+                    Destroy(gameObject);
+                    return;
+                }
             }
             GetComponent<SpriteRenderer>().sprite = sprites[current];
         }
 	}
+
+    public void StartAnimation() {
+        startTime = Time.time;
+        animating = true;
+    }
 }

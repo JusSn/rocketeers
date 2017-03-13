@@ -15,7 +15,9 @@ public class PhaseManager : MonoBehaviour {
     public GameObject[]                 backgroundObjects;
 	public AudioClip					buildBgm;
 	public AudioClip 					battleBgm;
-    
+    public GameObject[]                 rockets;
+    public GameObject                   explosion;
+
     // JF: Disable and reenable these depending on phase
     public GameObject[]                 itemSpawners;
 
@@ -97,8 +99,12 @@ public class PhaseManager : MonoBehaviour {
             obj.GetComponent<Spawner> ().on = false;
         }
 
-        foreach(GameObject go in placedBlocks) {
-            go.GetComponent<Rigidbody2D>().gravityScale = 0;
+        foreach (GameObject obj in rockets) {
+            obj.GetComponent<LoopingAnimation>().StartAnimation();
+        }
+
+        foreach (GameObject go in placedBlocks) {
+            go.GetComponent<Rigidbody2D>().gravityScale = 1;
         }
     }
 
@@ -128,6 +134,17 @@ public class PhaseManager : MonoBehaviour {
             }
         }
 
+    // Sets gameOver to true and creates an explosion at the losing team's core
+    public void EndGame(GameObject destroyedCore) {
+        int winner = 1;
+        if (destroyedCore.transform.position.x < 0) {
+            winner = 2;
+        }
+        GameObject boom = Instantiate(explosion, destroyedCore.transform.position, Quaternion.identity);
+        boom.GetComponent<LoopingAnimation>().StartAnimation();
+        gameOver = true;
+        ui_phase.text = "Team " + winner + " wins!";
+    }
 
     // Functions used in "build-to-height" game mode
 
