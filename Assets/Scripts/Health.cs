@@ -48,6 +48,10 @@ public class Health : MonoBehaviour {
 
     void CheckToDestroy(){
         if (cur_health <= 0f) {
+            // SK: add logic for core ending the game
+            if (is_core) {
+                PhaseManager.S.EndGame(gameObject);
+            }
             // remove all the hinges on the block to let it fall offscreen
             GetComponent<Block> ().UnhingeAndFall ();
         }
