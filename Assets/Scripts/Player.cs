@@ -127,11 +127,11 @@ public class Player : MonoBehaviour {
 			Collider2D itemCol;
 			if (itemCol = Physics2D.OverlapCircle (transform.position, itemDetectRadius, itemLayer)) {
 				tt_manager.DisplayPrice (itemCol.gameObject);
-				if (Input.GetButtonDown ("X" + playerNumStub)) {
+				if (Input.GetButtonDown ("Y" + playerNumStub)) {
 					TryToHoldWeapon (itemCol);
 				}
-			} else if (Input.GetButtonDown ("X" + playerNumStub) && TryToSitInWeapon ()) {
-				// there's a weapon underneath us, so sit in it
+			// } else if (Input.GetButtonDown ("X" + playerNumStub) && TryToSitInWeapon ()) {
+			// 	// there's a weapon underneath us, so sit in it
 			}
 		} else {
 			if (Input.GetButtonDown ("X" + playerNumStub)) {
@@ -155,7 +155,6 @@ public class Player : MonoBehaviour {
 			aimArrowObject.transform.rotation = Quaternion.AngleAxis (angle, Vector3.forward);
 		}
 
-		// JF: Attempt to place block
 		if (Input.GetButtonUp ("X" + playerNumStub)) {	
 			GameObject proj = Instantiate<GameObject> (projectilePrefab);
 			proj.transform.position = projSource.transform.position;
@@ -177,7 +176,7 @@ public class Player : MonoBehaviour {
         // Switch to either throwing or setting
         if (Input.GetAxis ("Trig" + playerNumStub) < 0) {
             form = PlayerForm.Throwing;
-        } else if (heldItem.IsSettable() && Input.GetButtonDown ("X" + playerNumStub)) {
+        } else if (heldItem.IsSettable() && Input.GetButtonDown ("Y" + playerNumStub)) {
             form = PlayerForm.Setting;
         }
         // TODO: This if statement will probably never be called because
@@ -217,7 +216,7 @@ public class Player : MonoBehaviour {
         }
 
         // JF: Attempt to place block
-        if (Input.GetButtonUp ("X" + playerNumStub)) {
+        if (Input.GetButtonUp ("Y" + playerNumStub)) {
             if (debugMode) {
                 Debug.DrawLine (transform.position, setPos, Color.red);
             }
@@ -232,6 +231,10 @@ public class Player : MonoBehaviour {
                 heldItem = null;
                 form = PlayerForm.Normal;
             }
+        }
+        // JF: Cancel setting
+        else if (Input.GetButtonDown("B" + playerNumStub)) {
+            form = PlayerForm.Holding;
         }
     }
 
