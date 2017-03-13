@@ -330,6 +330,11 @@ SpriteRenderer:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
+--- !u!50 &144671261 stripped
+Rigidbody2D:
+  m_PrefabParentObject: {fileID: 50752930843160082, guid: 6655be76da9d7e34a865e223296a99ec,
+    type: 2}
+  m_PrefabInternal: {fileID: 1277740640}
 --- !u!1001 &169790575
 Prefab:
   m_ObjectHideFlags: 0
@@ -1198,6 +1203,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MAX_HEALTH: Infinity
+  is_core: 0
   health_bar_prefab: {fileID: 1344433025396718, guid: 7ce92948e3d8941b4805e1c164364c13,
     type: 2}
 --- !u!114 &561749788
@@ -1279,6 +1285,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 736773777}
+  - {fileID: 1782790857}
   m_Father: {fileID: 0}
   m_RootOrder: 19
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1899,6 +1906,7 @@ GameObject:
   - component: {fileID: 1101279490}
   - component: {fileID: 1101279489}
   - component: {fileID: 1101279488}
+  - component: {fileID: 1101279496}
   m_Layer: 9
   m_Name: rocketEngines_1 (1)
   m_TagString: Rockets
@@ -1952,6 +1960,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MAX_HEALTH: Infinity
+  is_core: 0
   health_bar_prefab: {fileID: 1344433025396718, guid: 7ce92948e3d8941b4805e1c164364c13,
     type: 2}
 --- !u!114 &1101279491
@@ -2056,6 +2065,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 20
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!255 &1101279496
+FixedJoint2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1101279487}
+  m_Enabled: 1
+  serializedVersion: 4
+  m_EnableCollision: 0
+  m_ConnectedRigidBody: {fileID: 144671261}
+  m_BreakForce: Infinity
+  m_BreakTorque: Infinity
+  m_AutoConfigureConnectedAnchor: 1
+  m_Anchor: {x: 0, y: 0}
+  m_ConnectedAnchor: {x: -0.5, y: -1}
+  m_DampingRatio: 0
+  m_Frequency: 0
 --- !u!1 &1101777454
 GameObject:
   m_ObjectHideFlags: 0
@@ -2180,6 +2206,8 @@ MonoBehaviour:
   - {fileID: 21300008, guid: 66dc04c2c77b64b4b8fc78c4537fd736, type: 3}
   - {fileID: 21300010, guid: 66dc04c2c77b64b4b8fc78c4537fd736, type: 3}
   current: 0
+  loop: 1
+  animating: 0
 --- !u!212 &1207423711
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2221,12 +2249,12 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1207423709}
-  m_LocalRotation: {x: 1, y: 0, z: 0, w: 0}
-  m_LocalPosition: {x: -8, y: -7.85, z: 0}
+  m_LocalRotation: {x: 1, y: -0, z: -0, w: 0}
+  m_LocalPosition: {x: 0.5, y: -1.8499999, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 25
+  m_Father: {fileID: 1475100071}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 180, y: 0, z: 0}
 --- !u!1 &1261025498
 GameObject:
@@ -2280,6 +2308,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MAX_HEALTH: Infinity
+  is_core: 0
   health_bar_prefab: {fileID: 1344433025396718, guid: 7ce92948e3d8941b4805e1c164364c13,
     type: 2}
 --- !u!114 &1261025501
@@ -2421,6 +2450,21 @@ Prefab:
     - target: {fileID: 1390623067759426, guid: 6655be76da9d7e34a865e223296a99ec, type: 2}
       propertyPath: m_Name
       value: Core (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 114182506631606390, guid: 6655be76da9d7e34a865e223296a99ec,
+        type: 2}
+      propertyPath: MAX_HEALTH
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 50752930843160082, guid: 6655be76da9d7e34a865e223296a99ec,
+        type: 2}
+      propertyPath: m_Simulated
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114182506631606390, guid: 6655be76da9d7e34a865e223296a99ec,
+        type: 2}
+      propertyPath: is_core
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6655be76da9d7e34a865e223296a99ec, type: 2}
@@ -2788,6 +2832,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MAX_HEALTH: Infinity
+  is_core: 0
   health_bar_prefab: {fileID: 1344433025396718, guid: 7ce92948e3d8941b4805e1c164364c13,
     type: 2}
 --- !u!114 &1475100065
@@ -2923,6 +2968,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1306232853}
+  - {fileID: 1207423712}
   m_Father: {fileID: 0}
   m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2970,6 +3016,11 @@ Prefab:
       propertyPath: m_ConnectedRigidBody
       value: 
       objectReference: {fileID: 1475100068}
+    - target: {fileID: 114182506631606390, guid: 6655be76da9d7e34a865e223296a99ec,
+        type: 2}
+      propertyPath: is_core
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6655be76da9d7e34a865e223296a99ec, type: 2}
   m_IsPrefabParent: 0
@@ -3256,8 +3307,12 @@ MonoBehaviour:
   - {fileID: 1943180531}
   - {fileID: 173399321}
   - {fileID: 586016300}
-  buildBgm: {fileID: 8300000, guid: 47947567e53940f46ab1e09cc3af2350, type: 3}
-  battleBgm: {fileID: 8300000, guid: b6bf1b86025b95e4eae19f0035a9e704, type: 3}
+  buildBgm: {fileID: 0}
+  battleBgm: {fileID: 0}
+  rockets:
+  - {fileID: 1207423709}
+  - {fileID: 1782790854}
+  explosion: {fileID: 1593478875652032, guid: a28e92fadf2d42848976be3c82b3d5ac, type: 2}
   itemSpawners:
   - {fileID: 1109914464}
   - {fileID: 48262872}
@@ -3267,7 +3322,7 @@ MonoBehaviour:
   placedBlocks: []
   flyingSpeed: 0.2
   gravityScale: 1
-  build_time: 60
+  build_time: 45
   battle_time: 60
   rounds_to_play: 3
 --- !u!114 &1523096696
@@ -3698,6 +3753,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MAX_HEALTH: Infinity
+  is_core: 0
   health_bar_prefab: {fileID: 1344433025396718, guid: 7ce92948e3d8941b4805e1c164364c13,
     type: 2}
 --- !u!114 &1673770268
@@ -4055,6 +4111,8 @@ MonoBehaviour:
   - {fileID: 21300008, guid: 66dc04c2c77b64b4b8fc78c4537fd736, type: 3}
   - {fileID: 21300010, guid: 66dc04c2c77b64b4b8fc78c4537fd736, type: 3}
   current: 0
+  loop: 1
+  animating: 0
 --- !u!212 &1782790856
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -4096,12 +4154,12 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1782790854}
-  m_LocalRotation: {x: 1, y: 0, z: 0, w: 0}
-  m_LocalPosition: {x: 8, y: -7.85, z: 0}
+  m_LocalRotation: {x: 1, y: -0, z: -0, w: 0}
+  m_LocalPosition: {x: 1.5, y: -1.8499999, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 26
+  m_Father: {fileID: 561749791}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 180, y: 0, z: 0}
 --- !u!1 &1874764404
 GameObject:
@@ -4237,6 +4295,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MAX_HEALTH: Infinity
+  is_core: 0
   health_bar_prefab: {fileID: 1344433025396718, guid: 7ce92948e3d8941b4805e1c164364c13,
     type: 2}
 --- !u!114 &1937108730

@@ -138,7 +138,9 @@ public class Block : MonoBehaviour {
     void Still(){
         // the block is moving again, so transition to the falling state
         if (rigid.velocity.magnitude > SLEEPING_THRESHOLD) {
-            state = BlockStates.FALLING;
+            if (tag != "Rockets" || tag == "Core") {
+                state = BlockStates.FALLING;
+            }
             return;
         }
     }
@@ -193,11 +195,13 @@ public class Block : MonoBehaviour {
     void CheckAndConnectToNeighbor(Direction dir){
         Block neighbor = null;
         if (CheckForNeighbor (dir, out neighbor)) {
-            // we have a neighbor, so connect to it
-            ConnectToNeighbor (dir, neighbor);
-            // connect the neighbor in the opposite direction, since that's the side
-            // this block is on
-            neighbor.ConnectToNeighbor (Utils.GetOppositeDirection (dir), this);
+            if (!connected_neighbors.ContainsKey(dir)) {
+                // we have a neighbor, so connect to it
+                ConnectToNeighbor(dir, neighbor);
+                // connect the neighbor in the opposite direction, since that's the side
+                // this block is on
+                neighbor.ConnectToNeighbor(Utils.GetOppositeDirection(dir), this);
+            }
         } else if (dir == Direction.SOUTH){
             CheckForGround ();
         }

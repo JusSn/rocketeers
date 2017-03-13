@@ -1294,6 +1294,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MAX_HEALTH: Infinity
+  is_core: 0
   health_bar_prefab: {fileID: 1344433025396718, guid: 7ce92948e3d8941b4805e1c164364c13,
     type: 2}
 --- !u!114 &735617631
@@ -1718,6 +1719,8 @@ MonoBehaviour:
   - {fileID: 1896920066}
   - {fileID: 395592048}
   - {fileID: 1351777658}
+  rockets: []
+  explosion: {fileID: 0}
   itemSpawners:
   - {fileID: 1313379348}
   inBuildPhase: 1
@@ -2579,6 +2582,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MAX_HEALTH: Infinity
+  is_core: 0
   health_bar_prefab: {fileID: 1344433025396718, guid: 7ce92948e3d8941b4805e1c164364c13,
     type: 2}
 --- !u!114 &1383345636
@@ -2779,6 +2783,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MAX_HEALTH: Infinity
+  is_core: 0
   health_bar_prefab: {fileID: 1344433025396718, guid: 7ce92948e3d8941b4805e1c164364c13,
     type: 2}
 --- !u!114 &1559947221
@@ -3174,6 +3179,8 @@ MonoBehaviour:
   - {fileID: 21300008, guid: 66dc04c2c77b64b4b8fc78c4537fd736, type: 3}
   - {fileID: 21300010, guid: 66dc04c2c77b64b4b8fc78c4537fd736, type: 3}
   current: 0
+  loop: 0
+  animating: 0
 --- !u!212 &2042124479
 SpriteRenderer:
   m_ObjectHideFlags: 0
