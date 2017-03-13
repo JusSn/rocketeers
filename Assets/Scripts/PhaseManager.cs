@@ -12,6 +12,7 @@ public class PhaseManager : MonoBehaviour {
     public Text                         ui_timeLeft;
     public LayerMask                    layerMask;
     public GameObject                   ground;
+    public GameObject[]                 backgroundObjects;
     
     // JF: Disable and reenable these depending on phase
     public GameObject[]                 itemSpawners;
@@ -22,10 +23,10 @@ public class PhaseManager : MonoBehaviour {
     public int                          currentRound = 0;
     public bool                         gameOver = false;
     public List<GameObject>             placedBlocks;
-    private bool                        groundGone;
     private Vector3                     groundDestination;
     public float                        flyingSpeed = 2f;
     private Vector3                     groundStartPosition;
+    public float                        gravityScale = 0.9f;
 
     // Timer
     private float                       timeLeft;
@@ -36,9 +37,11 @@ public class PhaseManager : MonoBehaviour {
     public float                       battle_time = 5;
     public int                         rounds_to_play = 2;
 
+    private void Awake() {
+        S = this;
+    }
     // Use this for initialization
     void Start () {
-        S = this;
         placedBlocks = new List<GameObject>();
         timeLeft = build_time;
         groundDestination = new Vector2(0, -25f);
@@ -72,9 +75,14 @@ public class PhaseManager : MonoBehaviour {
         inBuildPhase = false;
         StartCoroutine(moveGround(Vector3.down, groundDestination));
         timeLeft = battle_time;
-        //divider.GetComponent<SpriteRenderer>().color = new Color(0f, 0f, 0f, .25f);
-        //divider.layer = LayerMask.NameToLayer("AllowOnlyProjectiles");
         ui_phase.text = "BATTLE";
+
+        foreach (GameObject obj in backgroundObjects) {
+            obj.GetComponent<Rigidbody2D>().gravityScale = gravityScale;
+            if(obj.GetComponent<SpaceBackground>() != null) {
+                obj.GetComponent<SpaceBackground>().StartFlying();
+            }
+        }
 
         foreach (GameObject obj in itemSpawners) {
             obj.GetComponent<Spawner> ().on = false;
@@ -90,6 +98,10 @@ public class PhaseManager : MonoBehaviour {
         timeLeft = build_time;
         StartCoroutine(moveGround(Vector3.up, groundStartPosition));
         ui_phase.text = "BUILD";
+
+        foreach (GameObject obj in backgroundObjects) {
+            obj.GetComponent<Rigidbody2D>().gravityScale = 0;
+        }
 
         foreach (GameObject obj in itemSpawners) {
             obj.GetComponent<Spawner>().on = true;
