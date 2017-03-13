@@ -6,10 +6,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public class Spawner : MonoBehaviour {
-	// Item to be spawned
-	public GameObject itemPrefab;
+	// Items to be spawned
+	public GameObject[] itemPrefabs;
+	// Likelihood of each item to be spawned, respectively
+	// Probability = weight/total weight of all objects in spawnerScript
+	public float[] weights;
 	// Direction for spawned objects to travel in
 	public Vector3 outputDir;
 	// Maximum number of items in pool
@@ -24,13 +28,27 @@ public class Spawner : MonoBehaviour {
 	// Stack of itemPrefabs in pool	
 	Stack<GameObject> poolStack;
 
+	// For returning a weighted random
+	private float totalWeight;
+
 	// Use this for initialization
 	void Start () {
 		// Pool instances of itemPrefab
 		poolStack = new Stack<GameObject> ();
 
+		// Sum up weights 
+		totalWeight = 0;
+		foreach (float f in weights) {
+			totalWeight += f;
+		}
+
+		// Crash if number of weights provided does not match number of itemPrefabs
+		Assert.AreEqual(itemPrefabs.Length, weights.Length);
+
 		for (int i = 0; i < maxCount; ++i) {
-			GameObject item = Instantiate (itemPrefab, transform.position, Quaternion.identity) as GameObject;
+			// Choose item to be spawned
+			int idx = weightedRandomIndex ();
+			GameObject item = Instantiate (itemPrefabs[idx], transform.position, Quaternion.identity) as GameObject;
 
 			item.SetActive(false);
 			item.GetComponent<Item> ().spawnerScript = this;
@@ -65,5 +83,23 @@ public class Spawner : MonoBehaviour {
 	public void Repool (GameObject go) {
 		go.SetActive(false);
 		poolStack.Push(go);
+	}
+
+
+	// Returns a random index to choose which item to pool
+	// Based on weights provided in Inspector
+	private int weightedRandomIndex () {
+		float f = Random.Range (0, totalWeight);
+
+		float counter = 0;
+		for (int i = 0; i < weights.Length; ++i) {
+			counter += weights[i];
+
+			if (counter > f) {
+				return i;
+			}
+		}
+
+		return weights.Length - 1;
 	}
 }

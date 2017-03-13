@@ -54,6 +54,9 @@ TagManager:
   - name: Blocks
     uniqueID: 4001887935
     locked: 0
+  - name: Conveyor
+    uniqueID: 4032303501
+    locked: 0
   - name: Players
     uniqueID: 2116931259
     locked: 0
