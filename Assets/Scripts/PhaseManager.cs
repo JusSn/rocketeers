@@ -13,6 +13,8 @@ public class PhaseManager : MonoBehaviour {
     public LayerMask                    layerMask;
     public GameObject                   ground;
     public GameObject[]                 backgroundObjects;
+
+    public GameObject                   LaunchCautionUI;
 	public AudioClip					buildBgm;
 	public AudioClip 					battleBgm;
     public AudioClip                    countdownAudio;
@@ -82,8 +84,9 @@ public class PhaseManager : MonoBehaviour {
 
     public void SwitchToCountdownPhase() {
         countdownNotStarted = false;
-        audioSource.PlayOneShot(countdownAudio, 2.0f);
+        audioSource.PlayOneShot(countdownAudio, 3.0f);
         Invoke ("SwitchToBattlePhase", 10);
+        InvokeRepeating ("FlashCautionUI", 0, 1);
         ui_timeLeft.fontSize = 50;
 
         foreach (GameObject obj in itemSpawners) {
@@ -95,6 +98,11 @@ public class PhaseManager : MonoBehaviour {
     // Resets timer, makes divider more transparent and allows projectiles through
     public void SwitchToBattlePhase() {
         inBuildPhase = false;
+        
+        // JF: Stop caution UI from flashing
+        LaunchCautionUI.SetActive(false);
+        CancelInvoke ("FlashCautionUI");
+
         StartCoroutine(moveGround(Vector3.down, groundDestination));
         timeLeft = battle_time;
         ui_phase.text = "BATTLE";
@@ -154,6 +162,10 @@ public class PhaseManager : MonoBehaviour {
         boom.GetComponent<LoopingAnimation>().StartAnimation();
         gameOver = true;
         ui_phase.text = "Team " + winner + " wins!";
+    }
+
+    private void FlashCautionUI () {
+        LaunchCautionUI.SetActive(!LaunchCautionUI.activeInHierarchy);
     }
 
     // Functions used in "build-to-height" game mode
