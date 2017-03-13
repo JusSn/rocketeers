@@ -112,6 +112,7 @@ public class Player : MonoBehaviour {
         // Check if an item is within reach
         Collider2D itemCol;
         if (itemCol = Physics2D.OverlapCircle (transform.position, itemDetectRadius, itemLayer)) {
+            tt_manager.DisplayPrice (itemCol.gameObject);
             if (Input.GetButtonDown ("X" + playerNumStub)) {
                 TryToHoldWeapon (itemCol);
             }
@@ -357,7 +358,7 @@ public class Player : MonoBehaviour {
         Item held = itemCol.GetComponent<Item> ();
 
         if (point_manager.UsePoints (held.GetCost ())) {
-            // show the tooltip of the player spending points on picking up the block
+            // show the tooltip of the player spending points on picking up the item
             tt_manager.SpendPoints(held.GetCost());
             held.Attach (this);
             heldItem = held;

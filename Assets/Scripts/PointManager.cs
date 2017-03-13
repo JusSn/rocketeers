@@ -47,7 +47,7 @@ public class PointManager : MonoBehaviour {
     }
 
     bool CanUsePoints(int pts_to_be_used){
-        return int.Parse(ui_pts_left.text) - pts_to_be_used > 0;
+        return int.Parse(ui_pts_left.text) - pts_to_be_used >= 0;
     }
 
     void InitializePoints(){
