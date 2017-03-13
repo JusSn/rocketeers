@@ -138,7 +138,9 @@ public class Block : MonoBehaviour {
     void Still(){
         // the block is moving again, so transition to the falling state
         if (rigid.velocity.magnitude > SLEEPING_THRESHOLD) {
-            state = BlockStates.FALLING;
+            if (tag != "Rockets" || tag == "Core") {
+                state = BlockStates.FALLING;
+            }
             return;
         }
     }
