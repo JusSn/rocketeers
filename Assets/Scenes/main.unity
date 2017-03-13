@@ -3256,6 +3256,8 @@ MonoBehaviour:
   - {fileID: 1943180531}
   - {fileID: 173399321}
   - {fileID: 586016300}
+  buildBgm: {fileID: 8300000, guid: 47947567e53940f46ab1e09cc3af2350, type: 3}
+  battleBgm: {fileID: 8300000, guid: b6bf1b86025b95e4eae19f0035a9e704, type: 3}
   itemSpawners:
   - {fileID: 1109914464}
   - {fileID: 48262872}
@@ -3285,7 +3287,7 @@ AudioSource:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1523096694}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 47947567e53940f46ab1e09cc3af2350, type: 3}
