@@ -63,8 +63,7 @@ public class Player : MonoBehaviour {
     private int                             groundLayer;
 
     // Internal maps
-    private Dictionary<PlayerForm, Action>  buildUpdateMap;
-	private Dictionary<PlayerForm, Action>  battleUpdateMap;
+    private Dictionary<PlayerForm, Action>  stateUpdateMap;
 
     // Use this for initialization
     void Start () {
@@ -98,16 +97,13 @@ public class Player : MonoBehaviour {
         groundLayer = LayerMask.GetMask ("Ground");
 
         // Filling the function behavior map
-		buildUpdateMap = new Dictionary<PlayerForm, Action> ();
-		buildUpdateMap.Add (PlayerForm.Normal, NormalBuildUpdate);
-		buildUpdateMap.Add (PlayerForm.Holding, HoldingUpdate);
-		buildUpdateMap.Add (PlayerForm.Throwing, ThrowingUpdate);
-		buildUpdateMap.Add (PlayerForm.Setting, SettingUpdate);
-		buildUpdateMap.Add (PlayerForm.Sitting, SittingUpdate);
-
-		battleUpdateMap = new Dictionary<PlayerForm, Action> ();
-		battleUpdateMap.Add (PlayerForm.Normal, NormalBattleUpdate);
-		battleUpdateMap.Add (PlayerForm.Shooting, ShootingUpdate);
+		stateUpdateMap = new Dictionary<PlayerForm, Action> ();
+		stateUpdateMap.Add (PlayerForm.Normal, NormalUpdate);
+		stateUpdateMap.Add (PlayerForm.Shooting, ShootingUpdate);
+		stateUpdateMap.Add (PlayerForm.Holding, HoldingUpdate);
+		stateUpdateMap.Add (PlayerForm.Throwing, ThrowingUpdate);
+		stateUpdateMap.Add (PlayerForm.Setting, SettingUpdate);
+		stateUpdateMap.Add (PlayerForm.Sitting, SittingUpdate);
     }
 
     // Update is called once per frame
@@ -115,11 +111,7 @@ public class Player : MonoBehaviour {
         // Update general attributes
         grounded = IsGrounded ();
         // Call the proper update function
-		if (PhaseManager.S.inBuildPhase) {
-			buildUpdateMap [form] ();
-		} else {
-			battleUpdateMap [form] ();
-		}
+		stateUpdateMap [form] ();
     }
 
     /******************** State Modifiers & Behaviors ********************/
@@ -127,33 +119,27 @@ public class Player : MonoBehaviour {
     // General behavior of the player when not holding anything during the building phase
     // Entered from: Throwing(thrown)
     // Exit to: Holding(pickup)
-    void NormalBuildUpdate() {
+    void NormalUpdate() {
         CalculateMovement ();
 
-        // Check if an item is within reach
-        Collider2D itemCol;
-        if (itemCol = Physics2D.OverlapCircle (transform.position, itemDetectRadius, itemLayer)) {
-            tt_manager.DisplayPrice (itemCol.gameObject);
-            if (Input.GetButtonDown ("X" + playerNumStub)) {
-                TryToHoldWeapon (itemCol);
-            }
-        } else if (Input.GetButtonDown("X" + playerNumStub) && TryToSitInWeapon()) {
-            // there's a weapon underneath us, so sit in it
-        }
-
-    }
-
-	// General behavior of the player during the battle phase
-	// Entered from: Shooting(shot/cancel)
-	// Exit to: Shooting(shoot)
-	void NormalBattleUpdate() {
-		CalculateMovement ();
-
-		if (Input.GetButtonDown ("X" + playerNumStub)) {
-			form = PlayerForm.Shooting;
-			aimArrowObject.SetActive (true);
+		if (PhaseManager.S.inBuildPhase) {
+			// Check if an item is within reach
+			Collider2D itemCol;
+			if (itemCol = Physics2D.OverlapCircle (transform.position, itemDetectRadius, itemLayer)) {
+				tt_manager.DisplayPrice (itemCol.gameObject);
+				if (Input.GetButtonDown ("X" + playerNumStub)) {
+					TryToHoldWeapon (itemCol);
+				}
+			} else if (Input.GetButtonDown ("X" + playerNumStub) && TryToSitInWeapon ()) {
+				// there's a weapon underneath us, so sit in it
+			}
+		} else {
+			if (Input.GetButtonDown ("X" + playerNumStub)) {
+				form = PlayerForm.Shooting;
+				aimArrowObject.SetActive (true);
+			}
 		}
-	}
+    }
 
 	// Aiming the projectile; Let go of the shoot button to fire
 	// Entered from: Normal(shoot)

@@ -13,6 +13,8 @@ public class PhaseManager : MonoBehaviour {
     public LayerMask                    layerMask;
     public GameObject                   ground;
     public GameObject[]                 backgroundObjects;
+	public AudioClip					buildBgm;
+	public AudioClip 					battleBgm;
     
     // JF: Disable and reenable these depending on phase
     public GameObject[]                 itemSpawners;
@@ -37,6 +39,9 @@ public class PhaseManager : MonoBehaviour {
     public float                       battle_time = 5;
     public int                         rounds_to_play = 2;
 
+	// Components
+	private AudioSource					audioSource;
+
     private void Awake() {
         S = this;
     }
@@ -46,6 +51,8 @@ public class PhaseManager : MonoBehaviour {
         timeLeft = build_time;
         groundDestination = new Vector2(0, -25f);
         groundStartPosition = new Vector2(0, -7f);
+
+		audioSource = GetComponent<AudioSource> ();
     }
 	
 	// Update is called once per frame
@@ -76,6 +83,8 @@ public class PhaseManager : MonoBehaviour {
         StartCoroutine(moveGround(Vector3.down, groundDestination));
         timeLeft = battle_time;
         ui_phase.text = "BATTLE";
+		audioSource.clip = battleBgm;
+		audioSource.Play ();
 
         foreach (GameObject obj in backgroundObjects) {
             obj.GetComponent<Rigidbody2D>().gravityScale = gravityScale;
@@ -98,6 +107,8 @@ public class PhaseManager : MonoBehaviour {
         timeLeft = build_time;
         StartCoroutine(moveGround(Vector3.up, groundStartPosition));
         ui_phase.text = "BUILD";
+		audioSource.clip = buildBgm;
+		audioSource.Play ();
 
         foreach (GameObject obj in backgroundObjects) {
             obj.GetComponent<Rigidbody2D>().gravityScale = 0;
