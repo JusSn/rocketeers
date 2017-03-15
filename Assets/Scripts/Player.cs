@@ -38,7 +38,6 @@ public class Player : MonoBehaviour {
 
     // Internal Support Variables
 	private string							playerNumStub;
-	private bool                            left = false;
     private float                           throwChargeCount = 0f;
 
     // GameObject components & child objects
@@ -341,12 +340,6 @@ public class Player : MonoBehaviour {
         vel.x = GetXInputSpeed (vel.x);
         vel.y = GetYInputSpeed (vel.y);
 
-        // Flip Player 
-        if (vel.x < -0.1f && !left || vel.x > 0.1f && left) {
-            transform.RotateAround(sprend.transform.position, Vector3.up, 180);
-            left = !left;
-        }
-
         rigid.velocity = vel;
     }
 
@@ -373,8 +366,10 @@ public class Player : MonoBehaviour {
             currentX = Mathf.Lerp(currentX, direction * xSpeed, Time.deltaTime * 2);
         }
 
-        sprite.transform.rotation = Quaternion.Euler(0f, flip, 0f);
-        
+		if (Input.GetAxis ("LeftJoyX" + playerNumStub) != 0) {
+			sprite.transform.rotation = Quaternion.Euler (0f, flip, 0f);
+		}
+
         return currentX;
     }
 
