@@ -207,6 +207,8 @@ public class Player : MonoBehaviour {
 
         // JF: Check if highlighted position is valid for placement
         Collider2D blocker = Physics2D.OverlapCircle (setPos, placementDetectRadius, placementMask);
+        // if the item is a core, let it be placed anywhere a block already is
+        blocker = (blocker && heldItem.IsCore () && blocker.gameObject.CompareTag("Block")) ? null : blocker;
         // Obstruction here 
         if (blocker) {
             foreach (SpriteRenderer sp in highlightSprends) {

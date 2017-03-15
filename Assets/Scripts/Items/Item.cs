@@ -10,6 +10,7 @@ public class Item : MonoBehaviour {
 	// JF: assigned after instantiate by spawner script
 	public Spawner 					spawnerScript = null;
 	public float					repoolTime;
+    public bool                     is_core;
 	public bool 					________________;
 	public bool 					held = false;
 	private Rigidbody2D 			rigid;
@@ -58,6 +59,11 @@ public class Item : MonoBehaviour {
 	public virtual bool IsSettable() {
 		return false;
 	}
+
+    // Item is core
+    public virtual bool IsCore(){
+        return is_core;
+    }
 
 	// Set item at the input location
 	public virtual void Set(Vector3 setPos) {
