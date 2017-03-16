@@ -144,7 +144,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1749041598868772}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -11.5, y: -6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -296,6 +296,8 @@ MonoBehaviour:
     type: 2}
   projSpeed: 10
   debugMode: 0
+  DRIVE_SPEED_X: 4
+  DRIVE_SPEED_Y: 4
   placementMask:
     serializedVersion: 2
     m_Bits: 2560
@@ -306,7 +308,7 @@ MonoBehaviour:
   _form: 0
   grounded: 0
   heldItem: {fileID: 0}
-  weapon: {fileID: 0}
+  controlled_block: {fileID: 0}
   highlightObject: {fileID: 0}
 --- !u!114 &114239489246610058
 MonoBehaviour:

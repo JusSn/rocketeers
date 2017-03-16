@@ -49,7 +49,7 @@ public class Block : MonoBehaviour {
     protected Health                            health;
 
     // GameObject components & child objects
-    private Rigidbody2D                         rigid;
+    protected Rigidbody2D                       rigid;
 
     // Neighbor joints
     public Dictionary<Direction, FixedJointContainer>         connected_neighbors = new Dictionary<Direction, FixedJointContainer>();
@@ -202,8 +202,6 @@ public class Block : MonoBehaviour {
                 // this block is on
                 neighbor.ConnectToNeighbor(Utils.GetOppositeDirection(dir), this);
             }
-        } else if (dir == Direction.SOUTH){
-            CheckForGround ();
         }
     }
 

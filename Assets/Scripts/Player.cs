@@ -5,16 +5,16 @@ using UnityEngine;
 
 public enum PlayerForm {
     Normal,        // Running, Jumping, Idle
-	Shooting,	   // Aiming to shoot held weapon
+    Shooting,      // Aiming to shoot held weapon
     Holding,       // Holding an item
     Throwing,      // Charging up object to throw
     Setting,       // Placing settable object
-    Sitting        // Used when manning a weapon
+    Controlling,   // Used when driving or firing a block weapon
 }
 
 public class Player : MonoBehaviour {
     // Insepctor manipulated attributes
-	public string							playerNumStr;
+    public string                           playerNumStr;
     public int                              teamNum;
     public float                            xSpeed = 7f;
     public float                            ySpeed = 10f;
@@ -22,9 +22,11 @@ public class Player : MonoBehaviour {
     public float                            placementDetectRadius = 0.3f;
     public float                            throwChargeMax = 2.5f;
     public float                            throwChargeRatio = 10f;
-	public GameObject 						projectilePrefab;
-	public float							projSpeed = 10f;
+    public GameObject                       projectilePrefab;
+    public float                            projSpeed = 10f;
     public bool                             debugMode = false;
+    public float                            DRIVE_SPEED_X = 4f;
+    public float                            DRIVE_SPEED_Y = 4f;
 
     public LayerMask                        placementMask;
     public LayerMask                        groundedMask;
@@ -33,11 +35,11 @@ public class Player : MonoBehaviour {
     public PlayerForm                       _form = PlayerForm.Normal;
     public bool                             grounded;
     private bool                            ducking;
-    public Item                             heldItem;                  
-    public WeaponBlock                      weapon;
+    public Item                             heldItem;
+    public Controllable                     controlled_block;
 
     // Internal Support Variables
-	private string							playerNumStub;
+    private string                          playerNumStub;
     private float                           throwChargeCount = 0f;
 
     // GameObject components & child objects
@@ -54,9 +56,9 @@ public class Player : MonoBehaviour {
     public GameObject                       highlightObject;
     private SpriteRenderer[]                highlightSprends;
 
-	// AW: Aim arrow
-	private GameObject						aimArrowObject;
-	private GameObject 						projSource;
+    // AW: Aim arrow
+    private GameObject                      aimArrowObject;
+    private GameObject                      projSource;
 
     // Detection parameters
     private int                             blockMask;
@@ -84,13 +86,13 @@ public class Player : MonoBehaviour {
         highlightSprends = highlightObject.GetComponentsInChildren<SpriteRenderer> ();
         highlightObject.SetActive(false);
 
-		// AW: Get arrow sprite for aiming shots and proj source
-		aimArrowObject = transform.Find("AimArrow").gameObject;
-		aimArrowObject.SetActive (false);
-		projSource = aimArrowObject.transform.Find ("ProjectileSource").gameObject;
+        // AW: Get arrow sprite for aiming shots and proj source
+        aimArrowObject = transform.Find("AimArrow").gameObject;
+        aimArrowObject.SetActive (false);
+        projSource = aimArrowObject.transform.Find ("ProjectileSource").gameObject;
 
-		// Initializing internal
-		playerNumStub = "_P" + playerNumStr;
+        // Initializing internal
+        playerNumStub = "_P" + playerNumStr;
 
         // Raycast parameters
         itemLayer = LayerMask.GetMask ("Items");
@@ -99,13 +101,13 @@ public class Player : MonoBehaviour {
         groundLayer = LayerMask.GetMask ("Ground");
 
         // Filling the function behavior map
-		stateUpdateMap = new Dictionary<PlayerForm, Action> ();
-		stateUpdateMap.Add (PlayerForm.Normal, NormalUpdate);
-		stateUpdateMap.Add (PlayerForm.Shooting, ShootingUpdate);
-		stateUpdateMap.Add (PlayerForm.Holding, HoldingUpdate);
-		stateUpdateMap.Add (PlayerForm.Throwing, ThrowingUpdate);
-		stateUpdateMap.Add (PlayerForm.Setting, SettingUpdate);
-		stateUpdateMap.Add (PlayerForm.Sitting, SittingUpdate);
+        stateUpdateMap = new Dictionary<PlayerForm, Action> ();
+        stateUpdateMap.Add (PlayerForm.Normal, NormalUpdate);
+        stateUpdateMap.Add (PlayerForm.Shooting, ShootingUpdate);
+        stateUpdateMap.Add (PlayerForm.Holding, HoldingUpdate);
+        stateUpdateMap.Add (PlayerForm.Throwing, ThrowingUpdate);
+        stateUpdateMap.Add (PlayerForm.Setting, SettingUpdate);
+        stateUpdateMap.Add (PlayerForm.Controlling, ControllingUpdate);
     }
 
     // Update is called once per frame
@@ -114,7 +116,7 @@ public class Player : MonoBehaviour {
         grounded = IsGrounded ();
         ducking = IsDucking ();
         // Call the proper update function
-		stateUpdateMap [form] ();
+        stateUpdateMap [form] ();
     }
 
     /******************** State Modifiers & Behaviors ********************/
@@ -125,50 +127,57 @@ public class Player : MonoBehaviour {
     void NormalUpdate() {
         CalculateMovement ();
 
-		if (PhaseManager.S.inBuildPhase) {
-			// Check if an item is within reach
-			Collider2D itemCol;
-			if (itemCol = Physics2D.OverlapCircle (transform.position, itemDetectRadius, itemLayer)) {
-				tt_manager.DisplayPrice (itemCol.gameObject);
-				if (Input.GetButtonDown ("Y" + playerNumStub)) {
-					TryToHoldWeapon (itemCol);
-				}
-			// } else if (Input.GetButtonDown ("X" + playerNumStub) && TryToSitInWeapon ()) {
-			// 	// there's a weapon underneath us, so sit in it
-			}
-		} else {
-			if (Input.GetButtonDown ("X" + playerNumStub)) {
-				form = PlayerForm.Shooting;
-				aimArrowObject.SetActive (true);
-			}
-		}
+        if (PhaseManager.S.inBuildPhase) {
+            // Check if an item is within reach
+            Collider2D itemCol;
+            if (itemCol = Physics2D.OverlapCircle (transform.position, itemDetectRadius, itemLayer)) {
+                tt_manager.DisplayPrice (itemCol.gameObject);
+                if (Input.GetButtonDown ("Y" + playerNumStub)) {
+                    TryToHoldBlock (itemCol);
+                }
+            }
+
+        } else {
+            // Check if a block is within reach
+            Collider2D[] blockCols = Physics2D.OverlapCircleAll (transform.position, itemDetectRadius, blockMask);
+            if (blockCols.Length != 0){
+                if (Input.GetButtonDown ("Y"+ playerNumStub) && TryToSitInBlock (blockCols)) {
+                    // there's a weapon underndeath us, so sit in it
+                    form = PlayerForm.Controlling;
+                }
+            }
+            if (Input.GetButtonDown ("X" + playerNumStub)) {
+                form = PlayerForm.Shooting;
+                aimArrowObject.SetActive (true);
+            }
+        }
     }
 
-	// Aiming the projectile; Let go of the shoot button to fire
-	// Entered from: Normal(shoot)
-	// Exit to: Normal(shoot)
-	void ShootingUpdate() {
+    // Aiming the projectile; Let go of the shoot button to fire
+    // Entered from: Normal(shoot)
+    // Exit to: Normal(shoot)
+    void ShootingUpdate() {
 
-		if (Input.GetAxis ("LeftJoyX" + playerNumStub) != 0 || Input.GetAxis ("LeftJoyX" + playerNumStub) != 0) {
-			Vector3 trajectory = GetAimDirection ();
-			float angle = Vector3.Angle (Vector3.right, trajectory);
-			if (trajectory.y < 0) {
-				angle *= -1;
-			}
-			aimArrowObject.transform.rotation = Quaternion.AngleAxis (angle, Vector3.forward);
-		}
+        if (Input.GetAxis ("LeftJoyX" + playerNumStub) != 0 || Input.GetAxis ("LeftJoyX" + playerNumStub) != 0) {
+            Vector3 trajectory = GetAimDirection ();
+            float angle = Vector3.Angle (Vector3.right, trajectory);
+            if (trajectory.y < 0) {
+                angle *= -1;
+            }
+            aimArrowObject.transform.rotation = Quaternion.AngleAxis (angle, Vector3.forward);
+        }
 
-		if (Input.GetButtonUp ("X" + playerNumStub)) {	
-			GameObject proj = Instantiate<GameObject> (projectilePrefab);
-			proj.transform.position = projSource.transform.position;
-			proj.transform.rotation = projSource.transform.rotation;
-			proj.GetComponent<Rigidbody2D> ().velocity = projSource.transform.right * projSpeed;
-			form = PlayerForm.Normal;
-		} else if (Input.GetButtonDown ("A" + playerNumStub)) {
-			CalculateMovement ();
-			form = PlayerForm.Normal;
-		}
-	}
+        if (Input.GetButtonUp ("X" + playerNumStub)) {
+            GameObject proj = Instantiate<GameObject> (projectilePrefab);
+            proj.transform.position = projSource.transform.position;
+            proj.transform.rotation = projSource.transform.rotation;
+            proj.GetComponent<Rigidbody2D> ().velocity = projSource.transform.right * projSpeed;
+            form = PlayerForm.Normal;
+        } else if (Input.GetButtonDown ("A" + playerNumStub)) {
+            CalculateMovement ();
+            form = PlayerForm.Normal;
+        }
+    }
 
     // Behavior when holding an item; Transitions to either throw or set
     // Entered from: Normal(pickup), Throwing(cancel)
@@ -182,13 +191,6 @@ public class Player : MonoBehaviour {
         } else if (heldItem.IsSettable() && Input.GetButtonDown ("Y" + playerNumStub)) {
             form = PlayerForm.Setting;
         }
-        // TODO: This if statement will probably never be called because
-        //       the user will always put down the block before they attempt to
-        //       sit in a weapon. If we want the weapon to take priority, then
-        //       move this check above the heldItem.IsSettable() check.
-        // else if (Input.GetButtonDown("B" + playerNumStub) && TryToSitInWeapon()) {
-        //     heldItem.Thrown (this, Vector3.left + Vector3.up);
-        // }
 
         // JF: Release held item
         else if (Input.GetButtonDown("B" + playerNumStub)) {
@@ -206,7 +208,7 @@ public class Player : MonoBehaviour {
 
         // JF: Check if highlighted position is valid for placement
         Collider2D blocker = Physics2D.OverlapCircle (setPos, placementDetectRadius, placementMask);
-        // Obstruction here 
+        // Obstruction here
         if (blocker) {
             foreach (SpriteRenderer sp in highlightSprends) {
                 sp.color = Color.red;
@@ -267,22 +269,24 @@ public class Player : MonoBehaviour {
             form = PlayerForm.Holding;
         }
     }
-		
-    // Behavior when sitting in a weapon;
+
+    // Behavior when controlling a block
     // Entered from: Holding(set button), Normal(set button)
     // Exit to: Normal(set)
-    void SittingUpdate() {
+    void ControllingUpdate() {
 
-        // if the user uses the "use" button while in the weapon, it will
-        // detach them from the weapon
-        if (Input.GetButtonDown("X" + playerNumStub)){
-            DetachFromWeapon ();
+        // used to steer the ship
+        float x_val = Input.GetAxis ("LeftJoyX" + playerNumStub) * DRIVE_SPEED_X;
+        float y_val = -Input.GetAxis ("LeftJoyY" + playerNumStub) * DRIVE_SPEED_Y;
+        controlled_block.GetComponent<Rigidbody2D>().velocity = new Vector3 (x_val, y_val, 0f);
+        transform.position = controlled_block.transform.position;
+
+        // Detach from the block if the user wants to
+        if (Input.GetButtonDown("Y" + playerNumStub)){
+            DetachFromBlock ();
             return;
         }
 
-        if (Input.GetAxis ("Trig" + playerNumStub) < 0) {
-            weapon.Fire (GetAimDirection());
-        }
     }
 
     // Getting/Setting form property. Modify statespecific values here
@@ -298,13 +302,13 @@ public class Player : MonoBehaviour {
             case PlayerForm.Normal:
                 // JF: Toggle highlight guide
                 highlightObject.SetActive(false);
-				aimArrowObject.SetActive(false);
+                aimArrowObject.SetActive(false);
                 _form = value;
                 break;
-			case PlayerForm.Shooting:
-				aimArrowObject.SetActive(true);
-				_form = value;
-				break;
+            case PlayerForm.Shooting:
+                aimArrowObject.SetActive(true);
+                _form = value;
+                break;
             case PlayerForm.Holding:
                 // JF: Toggle highlight guide
                 highlightObject.SetActive(false);
@@ -324,7 +328,7 @@ public class Player : MonoBehaviour {
                     _form = value;
                 }
                 break;
-            case PlayerForm.Sitting:
+            case PlayerForm.Controlling:
                 sprend.color = Color.blue;
                 _form = value;
                 break;
@@ -345,7 +349,7 @@ public class Player : MonoBehaviour {
 
     // Calculate and return magnitude of any changes to x velocity from player input
     float GetXInputSpeed(float currentX) {
-		float direction = Input.GetAxis ("LeftJoyX" + playerNumStub);
+        float direction = Input.GetAxis ("LeftJoyX" + playerNumStub);
 
         float flip = (direction < 0) ? 180f : 0f;
 
@@ -366,9 +370,9 @@ public class Player : MonoBehaviour {
             currentX = Mathf.Lerp(currentX, direction * xSpeed, Time.deltaTime * 2);
         }
 
-		if (Input.GetAxis ("LeftJoyX" + playerNumStub) != 0) {
-			sprite.transform.rotation = Quaternion.Euler (0f, flip, 0f);
-		}
+        if (Input.GetAxis ("LeftJoyX" + playerNumStub) != 0) {
+            sprite.transform.rotation = Quaternion.Euler (0f, flip, 0f);
+        }
 
         return currentX;
     }
@@ -376,10 +380,10 @@ public class Player : MonoBehaviour {
     // Calculate and return magnitude of any changes to y velocity from player input
     // JF: Jump and down-jump
     float GetYInputSpeed(float currentY) {
-		if (grounded && Input.GetButtonDown ("A" + playerNumStub)) {
+        if (grounded && Input.GetButtonDown ("A" + playerNumStub)) {
             // Down jump
             if (ducking
-                    && rigid.IsTouchingLayers(platformLayer) 
+                    && rigid.IsTouchingLayers(platformLayer)
                     && !rigid.IsTouchingLayers(groundLayer)) {
                 bodyCollider.isTrigger = true;
                 Invoke ("RestoreCollision", 0.3f);
@@ -423,9 +427,9 @@ public class Player : MonoBehaviour {
         return val;
     }
 
-    // when picking up an item, check to see if we have enough points to be able to 
+    // when picking up an item, check to see if we have enough points to be able to
     // pick up the item in the first place
-    void TryToHoldWeapon(Collider2D itemCol){
+    void TryToHoldBlock(Collider2D itemCol){
         Item held = itemCol.GetComponent<Item> ();
 
         if (point_manager.UsePoints (held.GetCost ())) {
@@ -437,40 +441,42 @@ public class Player : MonoBehaviour {
         }
     }
 
-    bool TryToSitInWeapon(){
-        // check if there's a weapon in front of us
-        Collider2D potential_weapon = Physics2D.OverlapCircle (transform.position, itemDetectRadius, blockMask);
-        if (potential_weapon != null && potential_weapon.gameObject.CompareTag ("WeaponBlock")) {
-            // returns whether or not we successfully attached to the weapon
-            return AttachToWeapon (potential_weapon);
+
+    bool TryToSitInBlock(Collider2D[] potential_controllable){
+        foreach (Collider2D coll in potential_controllable) {
+            // check if there's a weapon in front of us
+            if (potential_controllable != null && coll.CompareTag ("Core")) {
+                // returns whether or not we successfully attached to the block
+                return AttachToBlock (coll);
+            }
         }
 
         return false;
     }
 
-    // used when attaching to a weapon if one is below us
-    bool AttachToWeapon(Collider2D potential_weapon){
-        weapon = potential_weapon.gameObject.GetComponent<WeaponBlock>();
+    // used when attaching to a controllable block if one is below us
+    bool AttachToBlock(Collider2D potential_controllable){
+        controlled_block = potential_controllable.gameObject.GetComponent<Controllable>();
         // check if someone is already in the weapon
-        if (weapon.IsOccupied()) {
+        if (controlled_block.IsOccupied()) {
             return false;
         }
 
-        weapon.AttachUser(this);
+        controlled_block.AttachUser(this);
         rigid.velocity = Vector3.zero;
-        form = PlayerForm.Sitting;
+        form = PlayerForm.Controlling;
 
         // successfully attached!
         return true;
     }
 
-    // used to release from a weapon and update the correct attributes
-    // Calling condition: user presses button to leave weapon or weapon is destroyed
-    // called by: this.SittingUpdate(release btn), WeaponBlock.OnDestroy()
-    public void DetachFromWeapon(){
+    // used to release from a controllable block and update the correct attributes
+    // Calling condition: user presses button to leave block or block is destroyed
+    // called by: this.ControllingUpdate(release btn), Controllable.OnDestroy()
+    public void DetachFromBlock(){
         sprend.color = Color.white;
-        weapon.DetachUser ();
-        weapon = null;
+        controlled_block.DetachUser ();
+        controlled_block = null;
         form = PlayerForm.Normal;
     }
 }
