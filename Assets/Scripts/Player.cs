@@ -37,6 +37,7 @@ public class Player : MonoBehaviour {
     private bool                            ducking;
     public Item                             heldItem;
     public Controllable                     controlled_block;
+	private bool 							doubleJumped;
 
     // Internal Support Variables
     private string                          playerNumStub;
@@ -114,6 +115,9 @@ public class Player : MonoBehaviour {
     void Update () {
         // Update general attributes
         grounded = IsGrounded ();
+		if (grounded) {
+			doubleJumped = false;
+		}
         ducking = IsDucking ();
         // Call the proper update function
         stateUpdateMap [form] ();
@@ -147,8 +151,7 @@ public class Player : MonoBehaviour {
                 }
             }
             if (Input.GetButtonDown ("X" + playerNumStub)) {
-                form = PlayerForm.Shooting;
-                aimArrowObject.SetActive (true);
+				FireProjectile ();
             }
         }
     }
@@ -168,12 +171,7 @@ public class Player : MonoBehaviour {
         }
 
         if (Input.GetButtonUp ("X" + playerNumStub)) {
-            GameObject proj = Instantiate<GameObject> (projectilePrefab);
-            proj.transform.position = projSource.transform.position;
-            proj.transform.rotation = projSource.transform.rotation;
-            proj.GetComponent<Projectile>().teamNum = teamNum;
-            proj.layer = LayerMask.NameToLayer("Team" + teamNum + "Projectiles");
-            proj.GetComponent<Rigidbody2D> ().velocity = projSource.transform.right * projSpeed;
+			FireProjectile ();
             form = PlayerForm.Normal;
         } else if (Input.GetButtonDown ("A" + playerNumStub)) {
             CalculateMovement ();
@@ -371,10 +369,10 @@ public class Player : MonoBehaviour {
             // JF: Decrease maneuverability while in the air
             currentX = Mathf.Lerp(currentX, direction * xSpeed, Time.deltaTime * 2);
         }
-
-        if (Input.GetAxis ("LeftJoyX" + playerNumStub) != 0) {
-            sprite.transform.rotation = Quaternion.Euler (0f, flip, 0f);
-        }
+		
+		if (Input.GetAxis ("LeftJoyX" + playerNumStub) != 0) {
+			transform.rotation = Quaternion.Euler (0f, flip, 0f);
+		}
 
         return currentX;
     }
@@ -382,18 +380,24 @@ public class Player : MonoBehaviour {
     // Calculate and return magnitude of any changes to y velocity from player input
     // JF: Jump and down-jump
     float GetYInputSpeed(float currentY) {
-        if (grounded && Input.GetButtonDown ("A" + playerNumStub)) {
-            // Down jump
-            if (ducking
-                    && rigid.IsTouchingLayers(platformLayer)
-                    && !rigid.IsTouchingLayers(groundLayer)) {
-                bodyCollider.isTrigger = true;
-                Invoke ("RestoreCollision", 0.3f);
-            }
-            else {
-                currentY = ySpeed;
-            }
-        }
+		if (grounded && Input.GetButtonDown ("A" + playerNumStub)) {
+			// Down jump
+			if (ducking
+			             && rigid.IsTouchingLayers (platformLayer)
+			             && !rigid.IsTouchingLayers (groundLayer)) {
+				bodyCollider.isTrigger = true;
+				Invoke ("RestoreCollision", 0.3f);
+			} else {
+				currentY = ySpeed;
+			}
+		}
+
+		// Check for double jump
+		if (!doubleJumped && !grounded && Input.GetButtonDown("A" + playerNumStub)){
+			currentY = ySpeed;
+			StartCoroutine("SpinSprite");
+			doubleJumped = true;
+		}
         return currentY;
     }
 
@@ -481,4 +485,24 @@ public class Player : MonoBehaviour {
         controlled_block = null;
         form = PlayerForm.Normal;
     }
+
+	IEnumerator SpinSprite(){
+		float rate = 45f;
+		for(float i = 0f; i < 360f; i += rate) {
+			sprite.transform.Rotate(Vector3.forward, rate);
+			yield return null;
+		}
+		Quaternion rot = sprite.transform.rotation;
+		rot.z = 0f;
+		sprite.transform.rotation = rot;
+	}
+
+	void FireProjectile() {
+		GameObject proj = Instantiate<GameObject> (projectilePrefab);
+		proj.transform.position = projSource.transform.position;
+		proj.transform.rotation = projSource.transform.rotation;
+		proj.GetComponent<Projectile>().teamNum = teamNum;
+		proj.layer = LayerMask.NameToLayer("Team" + teamNum + "Projectiles");
+		proj.GetComponent<Rigidbody2D> ().velocity = projSource.transform.right * projSpeed;
+	}
 }
