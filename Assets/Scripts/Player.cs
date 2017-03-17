@@ -487,7 +487,7 @@ public class Player : MonoBehaviour {
     }
 
 	IEnumerator SpinSprite(){
-		float rate = 45f;
+		float rate = 30f;
 		for(float i = 0f; i < 360f; i += rate) {
 			sprite.transform.Rotate(Vector3.forward, rate);
 			yield return null;
