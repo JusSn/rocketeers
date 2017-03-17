@@ -171,6 +171,8 @@ public class Player : MonoBehaviour {
             GameObject proj = Instantiate<GameObject> (projectilePrefab);
             proj.transform.position = projSource.transform.position;
             proj.transform.rotation = projSource.transform.rotation;
+            proj.GetComponent<Projectile>().teamNum = teamNum;
+            proj.layer = LayerMask.NameToLayer("Team" + teamNum + "Projectiles");
             proj.GetComponent<Rigidbody2D> ().velocity = projSource.transform.right * projSpeed;
             form = PlayerForm.Normal;
         } else if (Input.GetButtonDown ("A" + playerNumStub)) {

@@ -90,6 +90,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bullet_speed: 4
   damage_amount: 25
+  teamNum: 0
+  lifeTime: 2.25
 --- !u!212 &212236008782226768
 SpriteRenderer:
   m_ObjectHideFlags: 1

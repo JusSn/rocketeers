@@ -7,14 +7,22 @@ public class Projectile : MonoBehaviour {
     // inspector tunables
     public float                    bullet_speed = 4f;
     public float                    damage_amount = 25f;
+    public int                      teamNum;
+    public float                    lifeTime;
 
     // Use this for initialization
 	void Start () {
+        Invoke("DestroyThis", lifeTime);
 	}
 
     void Update(){
-        if (!MainCamera.S.IsOnScreen (transform.position)) {
-            Destroy (gameObject);
+        
+        // SK: shots wrap around to other side
+        if((transform.position.x < MainCamera.S.leftBorder && teamNum == 1) || (transform.position.x > MainCamera.S.rightBorder && teamNum == 2)) {
+                transform.position = new Vector3(-transform.position.x, transform.position.y);
+        }
+        else if(!MainCamera.S.IsOnScreen(transform.position)) {
+            Destroy(gameObject);
         }
     }
 	
@@ -31,6 +39,10 @@ public class Projectile : MonoBehaviour {
         if (other.gameObject.CompareTag ("Block") || other.gameObject.CompareTag ("WeaponBlock") || other.gameObject.CompareTag("Core")) {
             other.gameObject.GetComponent<Block> ().TakeDamage (damage_amount);
         }
+        Destroy(gameObject);
+    }
+
+    protected void DestroyThis() {
         Destroy(gameObject);
     }
 }

@@ -6,12 +6,17 @@ using UnityEngine.SceneManagement;
 public class MainCamera : MonoBehaviour {
    
     public static MainCamera S;
+    public float leftBorder;
+    public float rightBorder;
 
     private float RATIO_MULTIPLIER = 1.875f;
 
 	// Use this for initialization
 	void Start () {
         S = this;
+        float dist = (transform.position - Camera.main.transform.position).z;
+        leftBorder = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, dist)).x;
+        rightBorder = Camera.main.ViewportToWorldPoint(new Vector3(1, 0, dist)).x;
 	}
 	
 	// Update is called once per frame
