@@ -41,7 +41,7 @@ GameObject:
   - component: {fileID: 50607705490680094}
   - component: {fileID: 114314401606400128}
   - component: {fileID: 114128237095437798}
-  m_Layer: 9
+  m_Layer: 18
   m_Name: rocketEngines
   m_TagString: Block
   m_Icon: {fileID: 0}
@@ -150,9 +150,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea899017a0fc2064e9f5070158584731, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mask:
+  allBlocksMask:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 0
   snap_radius: 0.75
   ______________________: 0
   being_manipulated: 0

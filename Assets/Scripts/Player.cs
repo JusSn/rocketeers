@@ -29,6 +29,7 @@ public class Player : MonoBehaviour {
     public float                            DRIVE_SPEED_Y = 4f;
 
     public LayerMask                        placementMask;
+    public  LayerMask                       platformsMask;
     public LayerMask                        groundedMask;
     public bool                             ________________;
     // Encapsulated attributes
@@ -64,7 +65,6 @@ public class Player : MonoBehaviour {
     // Detection parameters
     private int                             blockMask;
     private int                             itemLayer;
-    private int                             platformLayer;
     private int                             groundLayer;
 
     // Internal maps
@@ -98,7 +98,6 @@ public class Player : MonoBehaviour {
         // Raycast parameters
         itemLayer = LayerMask.GetMask ("Items");
         blockMask = LayerMask.GetMask ("Blocks");
-        platformLayer = LayerMask.GetMask ("Platform");
         groundLayer = LayerMask.GetMask ("Ground");
 
         // Filling the function behavior map
@@ -383,7 +382,7 @@ public class Player : MonoBehaviour {
 		if (grounded && Input.GetButtonDown ("A" + playerNumStub)) {
 			// Down jump
 			if (ducking
-			             && rigid.IsTouchingLayers (platformLayer)
+			             && rigid.IsTouchingLayers (platformsMask)
 			             && !rigid.IsTouchingLayers (groundLayer)) {
 				bodyCollider.isTrigger = true;
 				Invoke ("RestoreCollision", 0.3f);

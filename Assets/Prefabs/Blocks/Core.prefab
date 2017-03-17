@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 255608565626333116}
   - component: {fileID: 114182506631606390}
   - component: {fileID: 114995443064091736}
-  m_Layer: 9
+  m_Layer: 18
   m_Name: Core
   m_TagString: Core
   m_Icon: {fileID: 0}
@@ -150,9 +150,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92a9398cbb35741a7896199f6a3ecaf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mask:
+  allBlocksMask:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 786432
   snap_radius: 0.75
   ______________________: 0
   being_manipulated: 0

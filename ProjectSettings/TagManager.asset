@@ -24,8 +24,8 @@ TagManager:
   - 
   - 
   - Items
-  - Blocks
-  - Players
+  - Team1Player
+  - Team2Player
   - Ground
   - Projectiles
   - Highlight
@@ -33,10 +33,10 @@ TagManager:
   - Platform
   - Team1Projectiles
   - Team2Projectiles
-  - 
-  - 
-  - 
-  - 
+  - Team1Block
+  - Team2Block
+  - Team1Platform
+  - Team2Platform
   - 
   - 
   - 

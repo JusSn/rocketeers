@@ -41,7 +41,7 @@ GameObject:
   - component: {fileID: 50371196347684284}
   - component: {fileID: 114546016792703760}
   - component: {fileID: 114088167640794872}
-  m_Layer: 9
+  m_Layer: 19
   m_Name: OneAndHalfStrongBlock
   m_TagString: Block
   m_Icon: {fileID: 0}
@@ -194,9 +194,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea899017a0fc2064e9f5070158584731, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mask:
+  allBlocksMask:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 786432
   snap_radius: 0.75
   ______________________: 0
   being_manipulated: 0

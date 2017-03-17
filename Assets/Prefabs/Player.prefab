@@ -35,7 +35,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4063651337987320}
-  m_Layer: 10
+  m_Layer: 5
   m_Name: ProjectileSource
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -87,7 +87,7 @@ GameObject:
   - component: {fileID: 114199607879326764}
   - component: {fileID: 114239489246610058}
   - component: {fileID: 114914717376876626}
-  m_Layer: 10
+  m_Layer: 9
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -102,7 +102,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4926628978617950}
-  m_Layer: 10
+  m_Layer: 5
   m_Name: AimArrow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -118,7 +118,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4302924022749824}
   - component: {fileID: 212431415134673496}
-  m_Layer: 10
+  m_Layer: 5
   m_Name: ArrowSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -300,10 +300,13 @@ MonoBehaviour:
   DRIVE_SPEED_Y: 4
   placementMask:
     serializedVersion: 2
-    m_Bits: 2560
+    m_Bits: 264192
+  platformsMask:
+    serializedVersion: 2
+    m_Bits: 3145728
   groundedMask:
     serializedVersion: 2
-    m_Bits: 34816
+    m_Bits: 1050624
   ________________: 0
   _form: 0
   grounded: 0

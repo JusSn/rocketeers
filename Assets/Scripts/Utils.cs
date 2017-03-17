@@ -64,4 +64,11 @@ public class Utils {
         Debug.Log ("Something went wrong with DirsAreOpposite");
         return false;
     }
+
+    // JF: returns true if layer is in Layermask. 
+    public static bool IsInLayerMask(int layer, LayerMask layermask)
+    {
+    return layermask == (layermask | (1 << layer));
+    }
+
 }

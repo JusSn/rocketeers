@@ -38,9 +38,13 @@ public struct FixedJointContainer {
 
 public class Block : MonoBehaviour {
     // Inspector manipulated attributes
-    public LayerMask                            mask;
+    // JF: Contains layers of blocks from all teams for attachment purposes
+    public LayerMask                            allBlocksMask;
     public float                                snap_radius = 0.75f;
     public bool                                 ______________________;
+
+    // JF: Team this block is assigned to. Inherit from blocks it first connects to
+    public int                                  teamNum = 0;
 
     // Encapsulated attributes
     public bool                                 being_manipulated;
@@ -68,6 +72,7 @@ public class Block : MonoBehaviour {
         health = GetComponent<Health> ();
         ground_mask = LayerMask.GetMask ("Ground");
         health.SetParent (this);
+
         states.Add (BlockStates.FALLING, Falling);
         states.Add (BlockStates.FALLING_TO_STILL, FallingToStill);
         states.Add (BlockStates.STILL, Still);
@@ -194,13 +199,17 @@ public class Block : MonoBehaviour {
     // Called by: this.FallingToStill()
     void CheckAndConnectToNeighbor(Direction dir){
         Block neighbor = null;
-        if (CheckForNeighbor (dir, out neighbor)) {
+        int neighborTeamNum = CheckForNeighbor (dir, out neighbor);
+        if (neighborTeamNum > 0) {
             if (!connected_neighbors.ContainsKey(dir)) {
                 // we have a neighbor, so connect to it
                 ConnectToNeighbor(dir, neighbor);
                 // connect the neighbor in the opposite direction, since that's the side
                 // this block is on
                 neighbor.ConnectToNeighbor(Utils.GetOppositeDirection(dir), this);
+
+                // JF: Assign teamNum to this block according to neighborTeamNum
+                AssignTeamToBlock (this, neighborTeamNum);
             }
         }
     }
@@ -236,15 +245,18 @@ public class Block : MonoBehaviour {
     // Calling condition: When a block falls. The direction passed in is not
     //                    already present in the direction map
     // Called by: FallingToStill()
-    public bool CheckForNeighbor(Direction dir, out Block neighbor_block) {
-        Collider2D neighbor = CheckForObj(Utils.DirToVec(dir), mask);
-        if (neighbor != null && (neighbor.gameObject.layer == LayerMask.NameToLayer("Blocks") ||
-                                 neighbor.gameObject.layer == LayerMask.NameToLayer("WeaponBlocks"))) {
+    // [JF] Returns: Team the neighbor block is assigned to
+    public int CheckForNeighbor(Direction dir, out Block neighbor_block) {
+        int teamNum = 0;
+        Collider2D neighbor = CheckForObj(Utils.DirToVec(dir), allBlocksMask);
+        if (neighbor != null) {
             neighbor_block = neighbor.gameObject.GetComponent<Block>();
-            return true;
+            teamNum = neighbor_block.teamNum;
         }
-        neighbor_block = null; // to appease the compiler, we must assign to it regardless
-        return false;
+        else {
+            neighbor_block = null;
+        }
+        return teamNum;
     }
 
     // Calling condition: When either another block or this block has fallen and
@@ -254,6 +266,17 @@ public class Block : MonoBehaviour {
         // add the fixedjoints and update the direction map
         FixedJoint2D fj = AddFixedJoint (other.gameObject);
         connected_neighbors.Add(dir, new FixedJointContainer(fj, other));
+    }
+
+    // JF: Assigns block to a team and modifies its layers to match
+    public void AssignTeamToBlock(Block block, int teamNum) {
+        block.teamNum = teamNum;
+        block.gameObject.layer = LayerMask.NameToLayer ("Team" + teamNum + "Block");
+
+        // Assign platform layers
+        foreach (Transform t in block.transform) {
+            t.gameObject.layer = LayerMask.NameToLayer ("Team" + teamNum + "Platform");
+        }
     }
 
     void ConnectToGround(Direction dir, GameObject ground){
