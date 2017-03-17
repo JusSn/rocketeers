@@ -85,7 +85,7 @@ public class PhaseManager : MonoBehaviour {
             else {
                 foreach (GameObject player in players) {
                     if (player != null) {
-                        DestroyPlayerIfOffScreen (player);
+                        DestroyPlayerIfBelowScreen (player);
                     }
                 }
             }
@@ -175,10 +175,10 @@ public class PhaseManager : MonoBehaviour {
         LaunchCautionUI.SetActive(!LaunchCautionUI.activeInHierarchy);
     }
 
-    // JF: Calling condition: check and destroy this player if it's offscreen
+    // JF: Calling condition: check and destroy this player if it's fallen too far
     // Called by: this.Update()
-    private void DestroyPlayerIfOffScreen(GameObject obj){
-        if (!MainCamera.S.IsOnScreen (obj.transform.position)) {
+    private void DestroyPlayerIfBelowScreen(GameObject obj){
+        if (MainCamera.S.IsBelowScreen (obj.transform.position)) {
             // Get TeamNum and decrement lives
             int teamNum = obj.GetComponent<Player> ().teamNum;
             TeamLives[teamNum - 1]--;

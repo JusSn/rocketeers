@@ -165,7 +165,7 @@ public class Block : MonoBehaviour {
     // Exits to: nothing
     void Unhinged(){
         // check and destroy us if we're offscreen
-        DestroyIfOffScreen ();
+        DestoryIfBelowScreen ();
     }
 
     // Calling condition: when a projectile collides with a block
@@ -180,8 +180,8 @@ public class Block : MonoBehaviour {
 
     // Calling condition: check and destroy this block if it's offscreen
     // Called by: this.Update()
-    void DestroyIfOffScreen(){
-        if (!MainCamera.S.IsOnScreen (transform.position)) {
+    void DestoryIfBelowScreen(){
+        if (MainCamera.S.IsBelowScreen (transform.position)) {
             Destroy (gameObject);
         }
     }

@@ -11,6 +11,9 @@ public class MainCamera : MonoBehaviour {
 
     private float RATIO_MULTIPLIER = 1.875f;
 
+    // JF: Determines how far objects can fall off screen during battle before being destroyed
+    private int CAMERA_LOWER_LEEWAY = 3;
+
 	// Use this for initialization
 	void Start () {
         S = this;
@@ -51,6 +54,11 @@ public class MainCamera : MonoBehaviour {
 
         // otherwise, the position is within the screen!
         return true;
+    }
+
+    // JF: Gammeplay check to destroy objects and players if they fall too far below the rocket
+    public bool IsBelowScreen(Vector3 pos) {
+        return (pos.y < GetSouthCameraBound () - CAMERA_LOWER_LEEWAY);
     }
 
     // returns the west bound of the camera
