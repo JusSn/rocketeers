@@ -75,9 +75,6 @@ public class PhaseManager : MonoBehaviour {
         timeLeft -= Time.deltaTime;
         if (timeLeft % 60 < 11 && countdownNotStarted) {
             SwitchToCountdownPhase();
-            // else {
-            //     SwitchToBuildPhase();
-            // }
         }
         else {
             if (inBuildPhase) {
@@ -162,16 +159,13 @@ public class PhaseManager : MonoBehaviour {
         while(ground.transform.position != destination) {
             ground.transform.position = Vector3.MoveTowards(ground.transform.position, destination, (Time.time - starttime) * flyingSpeed);
             yield return null;
-            }
         }
+    }
 
     // Sets gameOver to true and creates an explosion at the losing team's core
-    public void EndGame(GameObject destroyedCore) {
-        int winner = 1;
-        if (destroyedCore.transform.position.x < 0) {
-            winner = 2;
-        }
-        GameObject boom = Instantiate(explosion, destroyedCore.transform.position, Quaternion.identity);
+    public void EndGame(Block destroyedCoreBlock) {
+        int winner = (destroyedCoreBlock.teamNum == 1) ? 2 : 1;
+        GameObject boom = Instantiate(explosion, destroyedCoreBlock.transform.position, Quaternion.identity);
         boom.GetComponent<LoopingAnimation>().StartAnimation();
         gameOver = true;
         ui_phase.text = "Team " + winner + " wins!";
