@@ -38,7 +38,7 @@ public class Player : MonoBehaviour {
     private bool                            ducking;
     public Item                             heldItem;
     public Controllable                     controlled_block;
-	private bool 							doubleJumped;
+    private bool                             doubleJumped;
 
     // Internal Support Variables
     private string                          playerNumStub;
@@ -97,7 +97,7 @@ public class Player : MonoBehaviour {
 
         // Raycast parameters
         itemLayer = LayerMask.GetMask ("Items");
-        blockMask = LayerMask.GetMask ("Blocks");
+        blockMask = LayerMask.GetMask ("Team" + teamNum.ToString() + "Block");
         groundLayer = LayerMask.GetMask ("Ground");
 
         // Filling the function behavior map
@@ -114,9 +114,9 @@ public class Player : MonoBehaviour {
     void Update () {
         // Update general attributes
         grounded = IsGrounded ();
-		if (grounded) {
-			doubleJumped = false;
-		}
+        if (grounded) {
+            doubleJumped = false;
+        }
         ducking = IsDucking ();
         // Call the proper update function
         stateUpdateMap [form] ();
@@ -150,7 +150,7 @@ public class Player : MonoBehaviour {
                 }
             }
             if (Input.GetButtonDown ("X" + playerNumStub)) {
-				FireProjectile ();
+                FireProjectile ();
             }
         }
     }
@@ -160,7 +160,7 @@ public class Player : MonoBehaviour {
     // Exit to: Normal(shoot)
     void ShootingUpdate() {
 
-        if (Input.GetAxis ("LeftJoyX" + playerNumStub) != 0 || Input.GetAxis ("LeftJoyX" + playerNumStub) != 0) {
+        if (Input.GetAxis ("LeftJoyX" + playerNumStub) != 0 || Input.GetAxis ("LeftJoyY" + playerNumStub) != 0) {
             Vector3 trajectory = GetAimDirection ();
             float angle = Vector3.Angle (Vector3.right, trajectory);
             if (trajectory.y < 0) {
@@ -170,7 +170,7 @@ public class Player : MonoBehaviour {
         }
 
         if (Input.GetButtonUp ("X" + playerNumStub)) {
-			FireProjectile ();
+            FireProjectile ();
             form = PlayerForm.Normal;
         } else if (Input.GetButtonDown ("A" + playerNumStub)) {
             CalculateMovement ();
@@ -207,8 +207,10 @@ public class Player : MonoBehaviour {
 
         // JF: Check if highlighted position is valid for placement
         Collider2D blocker = Physics2D.OverlapCircle (setPos, placementDetectRadius, placementMask);
+        // [CG]: Check if we're by another block forcing us to start connections with the core
+        bool valid_neighbor = Utils.ValidBlockPlacement (setPos, blockMask);
         // Obstruction here
-        if (blocker) {
+        if (blocker || !valid_neighbor) {
             foreach (SpriteRenderer sp in highlightSprends) {
                 sp.color = Color.red;
             }
@@ -225,7 +227,7 @@ public class Player : MonoBehaviour {
                 Debug.DrawLine (transform.position, setPos, Color.red);
             }
 
-            if (blocker) { // Cannot place here
+            if (blocker || !valid_neighbor) { // Cannot place here
                 form = PlayerForm.Holding;
                 // TODO: JF: Play buzzer sound if player attempts to set item here
             }
@@ -368,10 +370,10 @@ public class Player : MonoBehaviour {
             // JF: Decrease maneuverability while in the air
             currentX = Mathf.Lerp(currentX, direction * xSpeed, Time.deltaTime * 2);
         }
-		
-		if (Input.GetAxis ("LeftJoyX" + playerNumStub) != 0) {
-			transform.rotation = Quaternion.Euler (0f, flip, 0f);
-		}
+
+        if (Input.GetAxis ("LeftJoyX" + playerNumStub) != 0) {
+            transform.rotation = Quaternion.Euler (0f, flip, 0f);
+        }
 
         return currentX;
     }
@@ -379,24 +381,24 @@ public class Player : MonoBehaviour {
     // Calculate and return magnitude of any changes to y velocity from player input
     // JF: Jump and down-jump
     float GetYInputSpeed(float currentY) {
-		if (grounded && Input.GetButtonDown ("A" + playerNumStub)) {
-			// Down jump
-			if (ducking
-			             && rigid.IsTouchingLayers (platformsMask)
-			             && !rigid.IsTouchingLayers (groundLayer)) {
-				bodyCollider.isTrigger = true;
-				Invoke ("RestoreCollision", 0.3f);
-			} else {
-				currentY = ySpeed;
-			}
-		}
+        if (grounded && Input.GetButtonDown ("A" + playerNumStub)) {
+            // Down jump
+            if (ducking
+                         && rigid.IsTouchingLayers (platformsMask)
+                         && !rigid.IsTouchingLayers (groundLayer)) {
+                bodyCollider.isTrigger = true;
+                Invoke ("RestoreCollision", 0.3f);
+            } else {
+                currentY = ySpeed;
+            }
+        }
 
-		// Check for double jump
-		if (!doubleJumped && !grounded && Input.GetButtonDown("A" + playerNumStub)){
-			currentY = ySpeed;
-			StartCoroutine("SpinSprite");
-			doubleJumped = true;
-		}
+        // Check for double jump
+        if (!doubleJumped && !grounded && Input.GetButtonDown("A" + playerNumStub)){
+            currentY = ySpeed;
+            StartCoroutine("SpinSprite");
+            doubleJumped = true;
+        }
         return currentY;
     }
 
@@ -485,23 +487,23 @@ public class Player : MonoBehaviour {
         form = PlayerForm.Normal;
     }
 
-	IEnumerator SpinSprite(){
-		float rate = 30f;
-		for(float i = 0f; i < 360f; i += rate) {
-			sprite.transform.Rotate(Vector3.forward, rate);
-			yield return null;
-		}
-		Quaternion rot = sprite.transform.rotation;
-		rot.z = 0f;
-		sprite.transform.rotation = rot;
-	}
+    IEnumerator SpinSprite(){
+        float rate = 30f;
+        for(float i = 0f; i < 360f; i += rate) {
+            sprite.transform.Rotate(Vector3.forward, rate);
+            yield return null;
+        }
+        Quaternion rot = sprite.transform.rotation;
+        rot.z = 0f;
+        sprite.transform.rotation = rot;
+    }
 
-	void FireProjectile() {
-		GameObject proj = Instantiate<GameObject> (projectilePrefab);
-		proj.transform.position = projSource.transform.position;
-		proj.transform.rotation = projSource.transform.rotation;
-		proj.GetComponent<Projectile>().teamNum = teamNum;
-		proj.layer = LayerMask.NameToLayer("Team" + teamNum + "Projectiles");
-		proj.GetComponent<Rigidbody2D> ().velocity = projSource.transform.right * projSpeed;
-	}
+    void FireProjectile() {
+        GameObject proj = Instantiate<GameObject> (projectilePrefab);
+        proj.transform.position = projSource.transform.position;
+        proj.transform.rotation = projSource.transform.rotation;
+        proj.GetComponent<Projectile>().teamNum = teamNum;
+        proj.layer = LayerMask.NameToLayer("Team" + teamNum + "Projectiles");
+        proj.GetComponent<Rigidbody2D> ().velocity = projSource.transform.right * projSpeed;
+    }
 }

@@ -118,8 +118,7 @@ public class Block : MonoBehaviour {
 
         // create a full set of directions, that we will "subtract" from as we go through our
         // direction map
-        HashSet<Direction> dir_set = new HashSet<Direction>{ Direction.NORTH, Direction.SOUTH,
-                                                             Direction.EAST, Direction.NORTH };
+        HashSet<Direction> dir_set = Utils.GetAllDirections();
         // remove each direction that is already in our Direction Map
         foreach(KeyValuePair<Direction, FixedJointContainer> dir in connected_neighbors){
             if (dir_set.Contains (dir.Key)) {
@@ -189,11 +188,12 @@ public class Block : MonoBehaviour {
     // Calling condition: Checking for any block in all four directions to connect to
     // Called by: this.Start()
     void CheckForAnyNeighbors(){
-        HashSet<Direction> all_dirs = new HashSet<Direction>{ Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST };
+        HashSet<Direction> all_dirs = Utils.GetAllDirections ();
         foreach (Direction dir in all_dirs) {
             CheckAndConnectToNeighbor (dir);
         }
     }
+
 
     // Calling Condition: Check for a surrounding neighbor and connect to it
     // Called by: this.FallingToStill()
@@ -218,17 +218,12 @@ public class Block : MonoBehaviour {
     //                    ground and a rigid body attachment needs to be made
     // Called by: this.CheckAndConnectToNeighbor()
     void CheckForGround(){
-        Collider2D obj = CheckForObj (Vector3.down, ground_mask);
+        Collider2D obj = Utils.CheckForObj (transform.position + Vector3.down, ground_mask);
         if (obj != null && obj.gameObject.CompareTag("Ground")) {
             ConnectToGround (Direction.SOUTH, obj.gameObject);
         }
     }
 
-    // Calling condition: checks for an object at the offset from the blocks location and returns that object if found.
-    // Called by: this.CheckForGround, this.CheckForNeighbor
-    Collider2D CheckForObj(Vector3 offset, LayerMask specific_mask){
-        return Physics2D.OverlapPoint(transform.position + offset, specific_mask);
-    }
 
     // Calling condition: A neighboring block dies
     // Called by: neighboring block - not invoked by this on itself.
@@ -248,7 +243,8 @@ public class Block : MonoBehaviour {
     // [JF] Returns: Team the neighbor block is assigned to
     public int CheckForNeighbor(Direction dir, out Block neighbor_block) {
         int teamNum = 0;
-        Collider2D neighbor = CheckForObj(Utils.DirToVec(dir), allBlocksMask);
+        Collider2D neighbor = Utils.CheckForObj(transform.position + Utils.DirToVec(dir),
+                                                allBlocksMask);
         if (neighbor != null) {
             neighbor_block = neighbor.gameObject.GetComponent<Block>();
             teamNum = neighbor_block.teamNum;

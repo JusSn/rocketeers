@@ -779,7 +779,7 @@ Prefab:
     - target: {fileID: 114199607879326764, guid: d5f3f8a3bac4ba4479ce70f034a940ec,
         type: 2}
       propertyPath: placementMask.m_Bits
-      value: 526336
+      value: 2623488
       objectReference: {fileID: 0}
     - target: {fileID: 212537581966050700, guid: d5f3f8a3bac4ba4479ce70f034a940ec,
         type: 2}
@@ -5735,7 +5735,7 @@ Prefab:
     - target: {fileID: 114199607879326764, guid: d5f3f8a3bac4ba4479ce70f034a940ec,
         type: 2}
       propertyPath: placementMask.m_Bits
-      value: 264192
+      value: 1312768
       objectReference: {fileID: 0}
     - target: {fileID: 212537581966050700, guid: d5f3f8a3bac4ba4479ce70f034a940ec,
         type: 2}
@@ -6870,7 +6870,7 @@ Prefab:
     - target: {fileID: 114199607879326764, guid: d5f3f8a3bac4ba4479ce70f034a940ec,
         type: 2}
       propertyPath: placementMask.m_Bits
-      value: 526336
+      value: 2623488
       objectReference: {fileID: 0}
     - target: {fileID: 212537581966050700, guid: d5f3f8a3bac4ba4479ce70f034a940ec,
         type: 2}

@@ -1,16 +1,22 @@
-﻿using System.Collections;
+﻿/*
+ * Author: Cameron Gagnon
+ *
+ */
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Controllable : Block {
 
     private Player                               controller = null;
-
+    private LayerMask                            original_player_layer;
     // Calling condition: when a user is near a block and
     //                    presses the correct button to use
     //                    the controllable block
     // Called by: Player.CanSitInBlock()
     public void AttachUser(Player user){
+        original_player_layer = user.gameObject.layer;
         user.gameObject.layer = LayerMask.NameToLayer ("TransparentFX");
         user.transform.position = this.transform.position;
         rigid.constraints = RigidbodyConstraints2D.None;
@@ -22,7 +28,7 @@ public class Controllable : Block {
     //                    exit the block
     // Called by: Player.SittingUpdate(release button)
     public void DetachUser(){
-        controller.gameObject.layer = LayerMask.NameToLayer ("Players");
+        controller.gameObject.layer = original_player_layer;
         controller = null;
         rigid.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY;
     }

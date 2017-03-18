@@ -65,10 +65,41 @@ public class Utils {
         return false;
     }
 
-    // JF: returns true if layer is in Layermask. 
+    // JF: returns true if layer is in Layermask.
     public static bool IsInLayerMask(int layer, LayerMask layermask)
     {
     return layermask == (layermask | (1 << layer));
     }
 
+    // [CG]
+    // Returns a hashset of all directions. Not efficient, but using the .Contains method in a
+    // few places is a bit cleaner
+    public static HashSet<Direction> GetAllDirections(){
+        HashSet<Direction> dir_set = new HashSet<Direction> { Direction.NORTH, Direction.SOUTH,
+                                                              Direction.EAST, Direction.WEST };
+        return dir_set;
+    }
+
+    // [CG]
+    // Calling condition: Called when placing a block to see if it connects to another
+    //                    valid block
+    // Called by: Player.SettingUpdate()
+    public static bool ValidBlockPlacement(Vector3 setPos, LayerMask mask){
+        HashSet<Direction> all_dirs = Utils.GetAllDirections ();
+
+        foreach (Direction dir in all_dirs) {
+            if (CheckForObj(setPos + Utils.DirToVec(dir), mask)){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    // [CG]
+    // Calling condition: checks for *an* object at the offset from the blocks location and returns that object if found.
+    // Called by: Block.CheckForGround, Block.CheckForNeighbor
+    public static Collider2D CheckForObj(Vector3 pos, LayerMask mask){
+        return Physics2D.OverlapPoint(pos, mask);
+    }
 }

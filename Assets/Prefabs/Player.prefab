@@ -300,7 +300,7 @@ MonoBehaviour:
   DRIVE_SPEED_Y: 4
   placementMask:
     serializedVersion: 2
-    m_Bits: 264192
+    m_Bits: 1312768
   platformsMask:
     serializedVersion: 2
     m_Bits: 3145728
