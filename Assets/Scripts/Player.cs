@@ -26,9 +26,11 @@ public class Player : MonoBehaviour {
     public float                            projSpeed = 10f;
 	public float 							projCDCounter = 0f;
 	public float							projCDTime = 0.5f;
-    public bool                             debugMode = false;
     public float                            DRIVE_SPEED_X = 4f;
     public float                            DRIVE_SPEED_Y = 4f;
+	public float							jetpackMaxSpeed = 8f;
+	public float 							jetpackAccel = 40f;
+	public bool                             debugMode = false;
 
     public LayerMask                        placementMask;
     public  LayerMask                       platformsMask;
@@ -64,6 +66,9 @@ public class Player : MonoBehaviour {
     private GameObject                      aimArrowObject;
     private GameObject                      projSource;
 
+	// AW: Jetpack objects
+	private GameObject 						jetpackFire;
+
     // Detection parameters
     private int                             blockMask;
     private int                             itemLayer;
@@ -93,6 +98,10 @@ public class Player : MonoBehaviour {
         aimArrowObject = transform.Find("Aiming").gameObject;
         aimArrowObject.SetActive (false);
         projSource = aimArrowObject.transform.Find ("ProjectileSource").gameObject;
+
+		// AW: Get jetpack related variables
+		jetpackFire = sprite.transform.Find("Jetpack").transform.Find("Fire").gameObject;
+		jetpackFire.SetActive (false);
 
         // Initializing internal
         playerNumStub = "_P" + playerNumStr;
@@ -416,6 +425,15 @@ public class Player : MonoBehaviour {
             StartCoroutine("SpinSprite");
             doubleJumped = true;
         }
+
+		// Activate jetpack
+		if (Input.GetAxis ("TriggerL" + playerNumStub) > 0) {
+			currentY = GetJetpackThrust ();
+			jetpackFire.SetActive (true);
+		} else {
+			jetpackFire.SetActive (false);
+		}
+
         return currentY;
     }
 
@@ -529,4 +547,14 @@ public class Player : MonoBehaviour {
         proj.layer = LayerMask.NameToLayer("Team" + teamNum + "Projectiles");
         proj.GetComponent<Rigidbody2D> ().velocity = projSource.transform.right * projSpeed;
     }
+
+	float GetJetpackThrust() {
+		float magnitude = jetpackAccel * Time.deltaTime;
+		if (magnitude + rigid.velocity.y > jetpackMaxSpeed) {
+			magnitude = jetpackMaxSpeed;
+		} else {
+			magnitude += rigid.velocity.y;
+		}
+		return magnitude;
+	}
 }
