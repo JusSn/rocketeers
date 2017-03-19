@@ -24,6 +24,8 @@ public class Player : MonoBehaviour {
     public float                            throwChargeRatio = 10f;
     public GameObject                       projectilePrefab;
     public float                            projSpeed = 10f;
+	public float 							projCDCounter = 0f;
+	public float							projCDTime = 0.5f;
     public bool                             debugMode = false;
     public float                            DRIVE_SPEED_X = 4f;
     public float                            DRIVE_SPEED_Y = 4f;
@@ -88,7 +90,7 @@ public class Player : MonoBehaviour {
         highlightObject.SetActive(false);
 
         // AW: Get arrow sprite for aiming shots and proj source
-        aimArrowObject = transform.Find("AimArrow").gameObject;
+        aimArrowObject = transform.Find("Aiming").gameObject;
         aimArrowObject.SetActive (false);
         projSource = aimArrowObject.transform.Find ("ProjectileSource").gameObject;
 
@@ -141,16 +143,33 @@ public class Player : MonoBehaviour {
             }
 
         } else {
-            // Check if a block is within reach
+           	// Aiming shot trajectory with the right stsick
+			aimArrowObject.SetActive(true);
+			if (Input.GetAxis ("RightJoyX" + playerNumStub) != 0 || Input.GetAxis ("RightJoyY" + playerNumStub) != 0) {
+				Vector3 trajectory = GetRightJoyDirection ();
+				float angle = Vector3.Angle (Vector3.right, trajectory);
+				if (trajectory.y < 0) {
+					angle *= -1;
+				}
+				aimArrowObject.transform.rotation = Quaternion.AngleAxis (angle, Vector3.forward);
+			}
+
+			// Check if a block is within reach
             Collider2D[] blockCols = Physics2D.OverlapCircleAll (transform.position, itemDetectRadius, blockMask);
             if (blockCols.Length != 0){
                 if (Input.GetButtonDown ("Y"+ playerNumStub) && TryToSitInBlock (blockCols)) {
+					aimArrowObject.SetActive(false);
                     // there's a weapon underndeath us, so sit in it
                     form = PlayerForm.Controlling;
                 }
             }
-            if (Input.GetButtonDown ("X" + playerNumStub)) {
-                FireProjectile ();
+
+			projCDCounter += Time.deltaTime;
+			if (Input.GetAxis ("TriggerR" + playerNumStub) > 0) {
+				if (projCDCounter >= projCDTime) {
+					FireProjectile ();
+					projCDCounter = 0f;
+				}
             }
         }
     }
@@ -161,7 +180,7 @@ public class Player : MonoBehaviour {
     void ShootingUpdate() {
 
         if (Input.GetAxis ("LeftJoyX" + playerNumStub) != 0 || Input.GetAxis ("LeftJoyY" + playerNumStub) != 0) {
-            Vector3 trajectory = GetAimDirection ();
+			Vector3 trajectory = GetRightJoyDirection ();
             float angle = Vector3.Angle (Vector3.right, trajectory);
             if (trajectory.y < 0) {
                 angle *= -1;
@@ -185,7 +204,7 @@ public class Player : MonoBehaviour {
         CalculateMovement ();
 
         // Switch to either throwing or setting
-        if (Input.GetAxis ("Trig" + playerNumStub) < 0) {
+        if (Input.GetAxis ("TriggerR" + playerNumStub) > 0) {
             form = PlayerForm.Throwing;
         } else if (heldItem.IsSettable() && Input.GetButtonDown ("Y" + playerNumStub)) {
             form = PlayerForm.Setting;
@@ -252,12 +271,12 @@ public class Player : MonoBehaviour {
         throwChargeCount += Time.deltaTime;
         sprend.color = Color.Lerp (Color.white, Color.red, throwChargeCount / throwChargeMax);
 
-        if (Input.GetAxis ("Trig" + playerNumStub) == 0) {
+        if (Input.GetAxis ("TriggerR" + playerNumStub) == 0) {
             // Item is thrown
             if (throwChargeCount > throwChargeMax) {
                 throwChargeCount = throwChargeMax;
             }
-            Vector3 throwVel = GetAimDirection()*throwChargeCount*throwChargeRatio;
+			Vector3 throwVel = GetLeftJoyDirection()*throwChargeCount*throwChargeRatio;
             heldItem.Thrown (this, throwVel);
             heldItem = null;
             throwChargeCount = 0f;
@@ -303,11 +322,9 @@ public class Player : MonoBehaviour {
             case PlayerForm.Normal:
                 // JF: Toggle highlight guide
                 highlightObject.SetActive(false);
-                aimArrowObject.SetActive(false);
                 _form = value;
                 break;
             case PlayerForm.Shooting:
-                aimArrowObject.SetActive(true);
                 _form = value;
                 break;
             case PlayerForm.Holding:
@@ -372,7 +389,7 @@ public class Player : MonoBehaviour {
         }
 
         if (Input.GetAxis ("LeftJoyX" + playerNumStub) != 0) {
-            transform.rotation = Quaternion.Euler (0f, flip, 0f);
+            sprite.transform.rotation = Quaternion.Euler (0f, flip, 0f);
         }
 
         return currentX;
@@ -406,16 +423,22 @@ public class Player : MonoBehaviour {
         bodyCollider.isTrigger = false;
     }
 
-    // Returns a normalized vector pointed toward the direction of the aiming joystick
-    Vector3 GetAimDirection() {
+    // Returns a normalized vector pointed toward the direction of the left joystick
+    Vector3 GetLeftJoyDirection() {
         Vector3 inputDir = new Vector3 (Input.GetAxisRaw ("LeftJoyX" + playerNumStub), -Input.GetAxisRaw ("LeftJoyY" + playerNumStub));
         return inputDir.normalized;
     }
 
+	// Returns a normalized vector pointed toward the direction of the left joystick
+	Vector3 GetRightJoyDirection() {
+		Vector3 inputDir = new Vector3 (Input.GetAxisRaw ("RightJoyX" + playerNumStub), -Input.GetAxisRaw ("RightJoyY" + playerNumStub));
+		return inputDir.normalized;
+	}
+
     // Return a vector3 of the location pointed to by the aiming joystick
     // Rounded to nearest 0.5 (e.g. 1.2 rounds to 1.5, 0.8 rounds to 0.5, etc.)
     Vector3 GetGridPosition() {
-        Vector3 gridPos = sprend.transform.position + GetAimDirection ();
+		Vector3 gridPos = sprend.transform.position + GetLeftJoyDirection ();
         gridPos.x = Mathf.Round (gridPos.x);
         gridPos.y = Mathf.Round (gridPos.y);
         return gridPos;

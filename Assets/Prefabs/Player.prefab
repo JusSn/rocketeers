@@ -103,7 +103,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4926628978617950}
   m_Layer: 5
-  m_Name: AimArrow
+  m_Name: Aiming
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

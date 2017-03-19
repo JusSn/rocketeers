@@ -198,6 +198,134 @@ InputManager:
     axis: 1
     joyNum: 4
   - serializedVersion: 3
+    m_Name: RightJoyX_P1
+    descriptiveName: Player One's right stick x
+    descriptiveNegativeName: 
+    negativeButton: 
+    positiveButton: 
+    altNegativeButton: 
+    altPositiveButton: 
+    gravity: 0
+    dead: 0.5
+    sensitivity: 1
+    snap: 0
+    invert: 0
+    type: 2
+    axis: 3
+    joyNum: 1
+  - serializedVersion: 3
+    m_Name: RightJoyX_P2
+    descriptiveName: Player Two's right stick x
+    descriptiveNegativeName: 
+    negativeButton: 
+    positiveButton: 
+    altNegativeButton: 
+    altPositiveButton: 
+    gravity: 0
+    dead: 0.5
+    sensitivity: 1
+    snap: 0
+    invert: 0
+    type: 2
+    axis: 3
+    joyNum: 2
+  - serializedVersion: 3
+    m_Name: RightJoyX_P3
+    descriptiveName: Player Three's right stick x
+    descriptiveNegativeName: 
+    negativeButton: 
+    positiveButton: 
+    altNegativeButton: 
+    altPositiveButton: 
+    gravity: 0
+    dead: 0.5
+    sensitivity: 1
+    snap: 0
+    invert: 0
+    type: 2
+    axis: 3
+    joyNum: 3
+  - serializedVersion: 3
+    m_Name: RightJoyX_P4
+    descriptiveName: Player Four's right stick x
+    descriptiveNegativeName: 
+    negativeButton: 
+    positiveButton: 
+    altNegativeButton: 
+    altPositiveButton: 
+    gravity: 0
+    dead: 0.5
+    sensitivity: 1
+    snap: 0
+    invert: 0
+    type: 2
+    axis: 3
+    joyNum: 4
+  - serializedVersion: 3
+    m_Name: RightJoyY_P1
+    descriptiveName: Player One's right stick Y
+    descriptiveNegativeName: 
+    negativeButton: 
+    positiveButton: 
+    altNegativeButton: 
+    altPositiveButton: 
+    gravity: 0
+    dead: 0.5
+    sensitivity: 1
+    snap: 0
+    invert: 0
+    type: 2
+    axis: 4
+    joyNum: 1
+  - serializedVersion: 3
+    m_Name: RightJoyY_P2
+    descriptiveName: Player Two's right stick Y
+    descriptiveNegativeName: 
+    negativeButton: 
+    positiveButton: 
+    altNegativeButton: 
+    altPositiveButton: 
+    gravity: 0
+    dead: 0.5
+    sensitivity: 1
+    snap: 0
+    invert: 0
+    type: 2
+    axis: 4
+    joyNum: 1
+  - serializedVersion: 3
+    m_Name: RightJoyY_P3
+    descriptiveName: Player One's right stick Y
+    descriptiveNegativeName: 
+    negativeButton: 
+    positiveButton: 
+    altNegativeButton: 
+    altPositiveButton: 
+    gravity: 0
+    dead: 0.5
+    sensitivity: 1
+    snap: 0
+    invert: 0
+    type: 2
+    axis: 4
+    joyNum: 1
+  - serializedVersion: 3
+    m_Name: RightJoyY_P4
+    descriptiveName: Player One's right stick Y
+    descriptiveNegativeName: 
+    negativeButton: 
+    positiveButton: 
+    altNegativeButton: 
+    altPositiveButton: 
+    gravity: 0
+    dead: 0.5
+    sensitivity: 1
+    snap: 0
+    invert: 0
+    type: 2
+    axis: 4
+    joyNum: 1
+  - serializedVersion: 3
     m_Name: A_P1
     descriptiveName: Player One's jump button
     descriptiveNegativeName: 
@@ -454,68 +582,132 @@ InputManager:
     axis: 0
     joyNum: 4
   - serializedVersion: 3
-    m_Name: Trig_P1
-    descriptiveName: Player one's triggers
+    m_Name: TriggerR_P1
+    descriptiveName: Player one's right trigger
     descriptiveNegativeName: 
     negativeButton: 
     positiveButton: 
     altNegativeButton: 
     altPositiveButton: 
     gravity: 1000
-    dead: 0.19
+    dead: 0.2
     sensitivity: 1
     snap: 1
     invert: 0
     type: 2
-    axis: 2
+    axis: 9
     joyNum: 1
   - serializedVersion: 3
-    m_Name: Trig_P2
-    descriptiveName: Player two's triggers
+    m_Name: TriggerR_P2
+    descriptiveName: Player two's right trigger
     descriptiveNegativeName: 
     negativeButton: 
     positiveButton: 
     altNegativeButton: 
     altPositiveButton: 
     gravity: 1000
-    dead: 0.19
+    dead: 0.2
     sensitivity: 1
     snap: 1
     invert: 0
     type: 2
-    axis: 2
+    axis: 9
     joyNum: 2
   - serializedVersion: 3
-    m_Name: Trig_P3
-    descriptiveName: Player three's triggers
+    m_Name: TriggerR_P3
+    descriptiveName: Player three's right trigger
     descriptiveNegativeName: 
     negativeButton: 
     positiveButton: 
     altNegativeButton: 
     altPositiveButton: 
     gravity: 1000
-    dead: 0.19
+    dead: 0.2
     sensitivity: 1
     snap: 1
     invert: 0
     type: 2
-    axis: 2
+    axis: 9
     joyNum: 3
   - serializedVersion: 3
-    m_Name: Trig_P4
-    descriptiveName: Player four's triggers
+    m_Name: TriggerR_P4
+    descriptiveName: Player four's right trigger
     descriptiveNegativeName: 
     negativeButton: 
     positiveButton: 
     altNegativeButton: 
     altPositiveButton: 
     gravity: 1000
-    dead: 0.19
+    dead: 0.2
     sensitivity: 1
     snap: 1
     invert: 0
     type: 2
-    axis: 2
+    axis: 9
+    joyNum: 4
+  - serializedVersion: 3
+    m_Name: TriggerL_P1
+    descriptiveName: Player one's left trigger
+    descriptiveNegativeName: 
+    negativeButton: 
+    positiveButton: 
+    altNegativeButton: 
+    altPositiveButton: 
+    gravity: 1000
+    dead: 0.2
+    sensitivity: 1
+    snap: 1
+    invert: 0
+    type: 2
+    axis: 8
+    joyNum: 1
+  - serializedVersion: 3
+    m_Name: TriggerL_P2
+    descriptiveName: Player two's left trigger
+    descriptiveNegativeName: 
+    negativeButton: 
+    positiveButton: 
+    altNegativeButton: 
+    altPositiveButton: 
+    gravity: 1000
+    dead: 0.2
+    sensitivity: 1
+    snap: 1
+    invert: 0
+    type: 2
+    axis: 8
+    joyNum: 2
+  - serializedVersion: 3
+    m_Name: TriggerL_P3
+    descriptiveName: Player three's left trigger
+    descriptiveNegativeName: 
+    negativeButton: 
+    positiveButton: 
+    altNegativeButton: 
+    altPositiveButton: 
+    gravity: 1000
+    dead: 0.2
+    sensitivity: 1
+    snap: 1
+    invert: 0
+    type: 2
+    axis: 8
+    joyNum: 3
+  - serializedVersion: 3
+    m_Name: TriggerL_P4
+    descriptiveName: Player four's left trigger
+    descriptiveNegativeName: 
+    negativeButton: 
+    positiveButton: 
+    altNegativeButton: 
+    altPositiveButton: 
+    gravity: 1000
+    dead: 0.2
+    sensitivity: 1
+    snap: 1
+    invert: 0
+    type: 2
+    axis: 8
     joyNum: 4
   - serializedVersion: 3
     m_Name: Restart
