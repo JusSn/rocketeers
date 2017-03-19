@@ -378,6 +378,8 @@ MonoBehaviour:
   DRIVE_SPEED_Y: 4
   jetpackMaxSpeed: 8
   jetpackAccel: 30
+  jetpackFuelMax: 4
+  jetpackRefuelRate: 3
   debugMode: 0
   placementMask:
     serializedVersion: 2
@@ -393,6 +395,7 @@ MonoBehaviour:
   grounded: 0
   heldItem: {fileID: 0}
   controlled_block: {fileID: 0}
+  jetpackFuelCurrent: 0
   highlightObject: {fileID: 0}
 --- !u!114 &114239489246610058
 MonoBehaviour:

@@ -30,6 +30,8 @@ public class Player : MonoBehaviour {
     public float                            DRIVE_SPEED_Y = 4f;
 	public float							jetpackMaxSpeed = 8f;
 	public float 							jetpackAccel = 40f;
+	public float							jetpackFuelMax = 5f;
+	public float 							jetpackRefuelRate = 5f;
 	public bool                             debugMode = false;
 
     public LayerMask                        placementMask;
@@ -42,11 +44,13 @@ public class Player : MonoBehaviour {
     private bool                            ducking;
     public Item                             heldItem;
     public Controllable                     controlled_block;
-    private bool                             doubleJumped;
+    private bool                            doubleJumped;
+
 
     // Internal Support Variables
     private string                          playerNumStub;
     private float                           throwChargeCount = 0f;
+	public float 							jetpackFuelCurrent;
 
     // GameObject components & child objects
     private Rigidbody2D                     rigid;
@@ -105,6 +109,7 @@ public class Player : MonoBehaviour {
 
         // Initializing internal
         playerNumStub = "_P" + playerNumStr;
+		jetpackFuelCurrent = jetpackFuelMax;
 
         // Raycast parameters
         itemLayer = LayerMask.GetMask ("Items");
@@ -426,8 +431,16 @@ public class Player : MonoBehaviour {
             doubleJumped = true;
         }
 
-		// Activate jetpack
-		if (Input.GetAxis ("TriggerL" + playerNumStub) > 0) {
+		// Jetpack calculations
+		if (grounded) {
+			jetpackFuelCurrent += jetpackRefuelRate * Time.deltaTime;
+			if (jetpackFuelCurrent > jetpackFuelMax)
+				jetpackFuelCurrent = jetpackFuelMax;
+		}
+		
+		if (Input.GetAxis ("TriggerL" + playerNumStub) > 0
+			&& jetpackFuelCurrent > 0f) {
+			jetpackFuelCurrent -= Time.deltaTime;
 			currentY = GetJetpackThrust ();
 			jetpackFire.SetActive (true);
 		} else {
