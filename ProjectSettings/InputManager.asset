@@ -38,6 +38,22 @@ InputManager:
     axis: 1
     joyNum: 1
   - serializedVersion: 3
+    m_Name: Submit
+    descriptiveName: Selecting a menu button
+    descriptiveNegativeName: 
+    negativeButton: 
+    positiveButton: joystick button 0
+    altNegativeButton: 
+    altPositiveButton: joystick button 16
+    gravity: 0
+    dead: 0
+    sensitivity: 0
+    snap: 0
+    invert: 0
+    type: 0
+    axis: 0
+    joyNum: 0
+  - serializedVersion: 3
     m_Name: MenuSelect
     descriptiveName: Selecting a menu button
     descriptiveNegativeName: 
@@ -45,6 +61,22 @@ InputManager:
     positiveButton: joystick button 0
     altNegativeButton: 
     altPositiveButton: joystick button 16
+    gravity: 0
+    dead: 0
+    sensitivity: 0
+    snap: 0
+    invert: 0
+    type: 0
+    axis: 0
+    joyNum: 0
+  - serializedVersion: 3
+    m_Name: Cancel
+    descriptiveName: Cancelling on the menu
+    descriptiveNegativeName: 
+    negativeButton: 
+    positiveButton: joystick button 1
+    altNegativeButton: 
+    altPositiveButton: joystick button 17
     gravity: 0
     dead: 0
     sensitivity: 0

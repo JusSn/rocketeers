@@ -5150,7 +5150,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1418905803
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5904,7 +5904,7 @@ MonoBehaviour:
   placedBlocks: []
   flyingSpeed: 0.2
   gravityScale: 1
-  build_time: 11
+  build_time: 60
   battle_time: -1
   rounds_to_play: 3
 --- !u!114 &1523096696
@@ -5926,7 +5926,7 @@ AudioSource:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1523096694}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 47947567e53940f46ab1e09cc3af2350, type: 3}
