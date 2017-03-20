@@ -433,6 +433,8 @@ public class Player : MonoBehaviour {
 
         // Check for double jump
         if (!doubleJumped && !grounded && Input.GetButtonDown("A" + playerNumStub)){
+            tt_manager.doubleJumped = true;
+
             currentY = ySpeed;
             StartCoroutine("SpinSprite");
             doubleJumped = true;
@@ -450,6 +452,11 @@ public class Player : MonoBehaviour {
 			jetpackFuelCurrent -= Time.deltaTime;
 			currentY = GetJetpackThrust ();
 			jetpackFire.SetActive (true);
+
+            // JF: Disable tooltip once player has used jetpack a sufficient amount
+            if (jetpackFuelCurrent < 3.5f) {
+                tt_manager.jetpacked = true;
+            }
 		} else {
 			jetpackFire.SetActive (false);
 		}

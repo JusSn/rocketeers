@@ -12,6 +12,9 @@ public class ToolTipManager : MonoBehaviour {
 
     public bool                         jumped = false;
     public bool                         downJumped = false;
+    public bool                         doubleJumped = false;
+    public bool                         jetpacked = false;
+    public bool                         setted = false;
     private GameObject                  playerObj;
     private Player                      playerScript;
     private Image                       tooltipImage;
@@ -30,34 +33,47 @@ public class ToolTipManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		// JF: Shows the prompt above the player to press the jump button 
+        // JF:
+        // Shows the prompt above the player to place a block
+        // When: Player is holding settable block item and has not set before
+        if (!setted && playerScript.form == PlayerForm.Holding) {
+            tooltipImage.sprite = spritesArray[3]; //Custom set/cancel image
+            tooltipImage.enabled = true;
+        }
+		// Shows the prompt above the player to press the jump button 
         // When: player reaches any set block and has yet to jump once
-        if (!jumped && isNearBlock ()) {
+        else if (!jumped && isNearBlock ()) {
             tooltipImage.sprite = spritesArray[0]; //A button
             tooltipImage.enabled = true;
         }
+        // Shows the prompt above the player to down jump
+        // When: player first lands on a platform than can be down jumped
         else if (!downJumped && playerScript.canDownJump) {
             tooltipImage.sprite = spritesArray[1]; //down A 
             tooltipImage.enabled = true;
         }
+        // Shows the prompt above the player to prompt a double jump
+        // When: Player is airborne and has not double jumped
+        else if (!doubleJumped && !playerScript.grounded) {
+            tooltipImage.sprite = spritesArray[0]; //A button
+            tooltipImage.enabled = true;
+        }
+        // Shows the prompt above the player to press the jetpack button
+        // When: Player has doubleJumped
+        // Note: Will be disabled after player depletes fuel to certain amount
+        else if (!jetpacked && doubleJumped) {
+            tooltipImage.sprite = spritesArray[2]; //Left trigger
+            tooltipImage.enabled = true;
+        }
+        // Shows the prompt above the player to place a block
+        // When: Player is holding settable block item and has not set before
+
+        // Shows the prompt above the player to press the fire button
+        // When: Battle phase has begun 
+
         else {
             tooltipImage.enabled = false;
         }
-
-        // JF: Shows the prompt above the player to down jump
-        // When: player first lands on a platform than can be down jumped
-
-        // JF : Shows the prompt above the player to press the jetpack button
-        // When: Player is grounded after jumping for the first time
-
-        // JF: Removes the rocket button prompt
-        // When: Player has used the jetpack for longer than 0.5s
-
-        // JF: Shows the prompt above the player to press the fire button
-        // When: Battle phase has begun 
-
-        // JF: Removes the fire button prompt
-        // When: Player has fired their weapon for the first time
 
 	}
 
