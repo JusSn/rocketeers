@@ -71,6 +71,9 @@ public class Player : MonoBehaviour {
     private GameObject                      aimArrowObject;
     private GameObject                      projSource;
 
+    // JF: Aim aimSprend
+    private SpriteRenderer                  aimSprend;
+
 	// AW: Jetpack objects
 	private GameObject 						jetpackFire;
     private JetpackBar                      jetpack_bar;
@@ -106,6 +109,9 @@ public class Player : MonoBehaviour {
         aimArrowObject = transform.Find("Aiming").gameObject;
         aimArrowObject.SetActive (false);
         projSource = aimArrowObject.transform.Find ("ProjectileSource").gameObject;
+
+        // JF: Arrow and gun sprite for flipping
+        aimSprend = aimArrowObject.transform.Find("ArrowSprite").GetComponent<SpriteRenderer> ();
 
 		// AW: Get jetpack related variables
 		jetpackFire = sprite.transform.Find("Jetpack").transform.Find("Fire").gameObject;
@@ -168,9 +174,11 @@ public class Player : MonoBehaviour {
 			if (Input.GetAxis ("RightJoyX" + playerNumStub) != 0 || Input.GetAxis ("RightJoyY" + playerNumStub) != 0) {
 				Vector3 trajectory = GetRightJoyDirection ();
 				float angle = Vector3.Angle (Vector3.right, trajectory);
-				if (trajectory.y < 0) {
-					angle *= -1;
-				}
+                angle = (trajectory.y < 0) ? -angle : angle; 
+
+                // JF: Flip ray gun if aiming to left
+                aimSprend.flipY = (trajectory.x < 0) ? true : false;
+
 				aimArrowObject.transform.rotation = Quaternion.AngleAxis (angle, Vector3.forward);
 			}
 
@@ -202,9 +210,10 @@ public class Player : MonoBehaviour {
         if (Input.GetAxis ("LeftJoyX" + playerNumStub) != 0 || Input.GetAxis ("LeftJoyY" + playerNumStub) != 0) {
 			Vector3 trajectory = GetRightJoyDirection ();
             float angle = Vector3.Angle (Vector3.right, trajectory);
-            if (trajectory.y < 0) {
+            if (trajectory.x < 0) {
                 angle *= -1;
             }
+            aimArrowObject.transform.rotation = Quaternion.AngleAxis (angle, Vector3.forward);
             aimArrowObject.transform.rotation = Quaternion.AngleAxis (angle, Vector3.forward);
         }
 
@@ -491,7 +500,7 @@ public class Player : MonoBehaviour {
         return gridPos;
     }
 
-    // Return a bool checking if player object is standing on top of a block or ground
+    // JF: Return a bool checking if player object is standing on top of a block or ground
     bool IsGrounded() {
         bool val = rigid.IsTouchingLayers(groundedMask);
         animator.SetBool("grounded", val);
