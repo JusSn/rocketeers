@@ -745,12 +745,14 @@ MonoBehaviour:
   - {fileID: 21300000, guid: b0e1a9b14879bb2449760e27da2b2e2c, type: 3}
   - {fileID: 21300000, guid: 8fc44c33e577ace4386db139bbb7e906, type: 3}
   - {fileID: 21300000, guid: 044d256396ac4ee4cbb567bc969f1d30, type: 3}
+  - {fileID: 21300000, guid: 64553a98e20236845b5777db940e38c9, type: 3}
   _______________________: 0
   jumped: 0
   downJumped: 0
   doubleJumped: 0
   jetpacked: 0
   setted: 0
+  fired: 0
 --- !u!114 &114935185006673474
 MonoBehaviour:
   m_ObjectHideFlags: 1

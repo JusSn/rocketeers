@@ -15,6 +15,7 @@ public class ToolTipManager : MonoBehaviour {
     public bool                         doubleJumped = false;
     public bool                         jetpacked = false;
     public bool                         setted = false;
+    public bool                         fired = false;
     private GameObject                  playerObj;
     private Player                      playerScript;
     private Image                       tooltipImage;
@@ -65,11 +66,12 @@ public class ToolTipManager : MonoBehaviour {
             tooltipImage.sprite = spritesArray[2]; //Left trigger
             tooltipImage.enabled = true;
         }
-        // Shows the prompt above the player to place a block
-        // When: Player is holding settable block item and has not set before
-
         // Shows the prompt above the player to press the fire button
         // When: Battle phase has begun 
+        else if (!fired && !PhaseManager.S.inBuildPhase) {
+            tooltipImage.sprite = spritesArray[4]; //Right trigger
+            tooltipImage.enabled = true;
+        }
 
         else {
             tooltipImage.enabled = false;

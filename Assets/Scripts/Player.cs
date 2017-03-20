@@ -579,6 +579,8 @@ public class Player : MonoBehaviour {
         proj.GetComponent<Projectile>().teamNum = teamNum;
         proj.layer = LayerMask.NameToLayer("Team" + teamNum + "Projectiles");
         proj.GetComponent<Rigidbody2D> ().velocity = projSource.transform.right * projSpeed;
+
+        tt_manager.fired = true;
     }
 
 	float GetJetpackThrust() {
