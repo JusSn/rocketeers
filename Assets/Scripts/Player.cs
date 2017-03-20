@@ -55,6 +55,7 @@ public class Player : MonoBehaviour {
     // GameObject components & child objects
     private Rigidbody2D                     rigid;
     private GameObject                      sprite;
+	private GameObject						charSprite;
     private SpriteRenderer                  sprend;
     private Animator                        animator;
     private PointManager                    point_manager;
@@ -73,6 +74,7 @@ public class Player : MonoBehaviour {
 	// AW: Jetpack objects
 	private GameObject 						jetpackFire;
     private JetpackBar                      jetpack_bar;
+	private GameObject 						jetpackFuelUI;
 
     // Detection parameters
     private int                             blockMask;
@@ -87,8 +89,9 @@ public class Player : MonoBehaviour {
         // Get GameObject components & children
         rigid = GetComponent<Rigidbody2D> ();
         sprite = transform.Find ("Sprite").gameObject;
-        animator = sprite.GetComponent<Animator> ();
-        sprend = sprite.GetComponent<SpriteRenderer> ();
+		charSprite = sprite.transform.Find ("Character").gameObject;
+		animator = charSprite.GetComponent<Animator> ();
+		sprend = charSprite.GetComponent<SpriteRenderer> ();
         bodyCollider = GetComponent<BoxCollider2D> ();
         point_manager = GetComponent<PointManager> ();
         jetpack_bar = GetComponent<JetpackBar> ();
@@ -109,6 +112,8 @@ public class Player : MonoBehaviour {
 		// AW: Get jetpack related variables
 		jetpackFire = sprite.transform.Find("Jetpack").transform.Find("Fire").gameObject;
 		jetpackFire.SetActive (false);
+		jetpackFuelUI = sprite.transform.Find ("Jetpack").transform.Find ("JetpackBar").gameObject;
+		jetpackFuelUI.SetActive (false);
 
         // Initializing internal
         playerNumStub = "_P" + playerNumStr;
@@ -406,7 +411,7 @@ public class Player : MonoBehaviour {
         }
 
         if (Input.GetAxis ("LeftJoyX" + playerNumStub) != 0) {
-            sprite.transform.rotation = Quaternion.Euler (0f, flip, 0f);
+			charSprite.transform.rotation = Quaternion.Euler (0f, flip, 0f);
         }
 
         return currentX;
@@ -437,8 +442,10 @@ public class Player : MonoBehaviour {
 		// Jetpack calculations
 		if (grounded) {
 			jetpackFuelCurrent += jetpackRefuelRate * Time.deltaTime;
-			if (jetpackFuelCurrent > jetpackFuelMax)
+			if (jetpackFuelCurrent > jetpackFuelMax) {
 				jetpackFuelCurrent = jetpackFuelMax;
+				jetpackFuelUI.SetActive (false);
+			}
         }
 		
 		if (Input.GetAxis ("TriggerL" + playerNumStub) > 0
@@ -446,6 +453,7 @@ public class Player : MonoBehaviour {
 			jetpackFuelCurrent -= Time.deltaTime;
 			currentY = GetJetpackThrust ();
 			jetpackFire.SetActive (true);
+			jetpackFuelUI.SetActive (true);
 		} else {
 			jetpackFire.SetActive (false);
 		}
@@ -549,12 +557,12 @@ public class Player : MonoBehaviour {
     IEnumerator SpinSprite(){
         float rate = 30f;
         for(float i = 0f; i < 360f; i += rate) {
-            sprite.transform.Rotate(Vector3.forward, rate);
+			charSprite.transform.Rotate(Vector3.forward, rate);
             yield return null;
         }
-        Quaternion rot = sprite.transform.rotation;
+		Quaternion rot = charSprite.transform.rotation;
         rot.z = 0f;
-        sprite.transform.rotation = rot;
+		charSprite.transform.rotation = rot;
     }
 
     void FireProjectile() {
