@@ -13,6 +13,7 @@ public class TTSpendPoints : MonoBehaviour {
 
 
     public Text                  ui_spend_amt;
+    public Image                 buttonImage;
 
     private Vector3              SPEND_PTS_OFFSET_END = Vector3.up * 1.5f;
     private float                STEP_AMT = 10f;
@@ -43,9 +44,9 @@ public class TTSpendPoints : MonoBehaviour {
         }
     }
 
-    // Destroys the cost of the item that is floating above a block after 0.2 seconds
+    // Destroys the cost of the item that is floating above a block
     void DisplayState(){
-        Destroy (gameObject, 0.2f);
+        Destroy (gameObject);
     }
 
     // Called by: ToolTipManager.DisplayPrice()
@@ -59,6 +60,8 @@ public class TTSpendPoints : MonoBehaviour {
     // Causes Item to transition to BoughtState()
     public void Purchase(int spend_amt){
         ui_spend_amt.text = spend_amt.ToString ();
+        // JF: Disable button ToolTip
+        buttonImage.enabled = false;
         state = TTSpendPointsStates.BOUGHT;
     }
 }

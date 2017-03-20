@@ -41,6 +41,7 @@ public class Player : MonoBehaviour {
     // Encapsulated attributes
     public PlayerForm                       _form = PlayerForm.Normal;
     public bool                             grounded;
+    public bool                             canDownJump;
     private bool                            ducking;
     public Item                             heldItem;
     public Controllable                     controlled_block;
@@ -99,7 +100,7 @@ public class Player : MonoBehaviour {
         // JF: Get highlightObject and disable. Enable if item is held later
         highlightObject = transform.Find ("Highlight").gameObject;
         highlightSprends = highlightObject.GetComponentsInChildren<SpriteRenderer> ();
-        highlightObject.SetActive(false);
+        highlightObject.SetActive (false);
 
         // AW: Get arrow sprite for aiming shots and proj source
         aimArrowObject = transform.Find("Aiming").gameObject;
@@ -137,6 +138,7 @@ public class Player : MonoBehaviour {
             doubleJumped = false;
         }
         ducking = IsDucking ();
+        canDownJump = CanDownJump ();
         // Call the proper update function
         stateUpdateMap [form] ();
     }
@@ -154,6 +156,7 @@ public class Player : MonoBehaviour {
             Collider2D itemCol;
             if (itemCol = Physics2D.OverlapCircle (transform.position, itemDetectRadius, itemLayer)) {
                 tt_manager.DisplayPrice (itemCol.gameObject);
+
                 if (Input.GetButtonDown ("Y" + playerNumStub)) {
                     TryToHoldBlock (itemCol);
                 }
@@ -370,7 +373,6 @@ public class Player : MonoBehaviour {
             }
         }
     }
-
     /******************** Utility ********************/
 
     // Retrieve and apply any changes to the players movement
@@ -414,15 +416,17 @@ public class Player : MonoBehaviour {
 
     // Calculate and return magnitude of any changes to y velocity from player input
     // JF: Jump and down-jump
+    // AW: Jetpack
     float GetYInputSpeed(float currentY) {
         if (grounded && Input.GetButtonDown ("A" + playerNumStub)) {
             // Down jump
-            if (ducking
-                         && rigid.IsTouchingLayers (platformsMask)
-                         && !rigid.IsTouchingLayers (groundLayer)) {
+            if (ducking && canDownJump) {
+                tt_manager.downJumped = true;
                 bodyCollider.isTrigger = true;
                 Invoke ("RestoreCollision", 0.3f);
             } else {
+                // Has jumped  
+                tt_manager.jumped = true;
                 currentY = ySpeed;
             }
         }
@@ -493,6 +497,11 @@ public class Player : MonoBehaviour {
         return val;
     }
 
+    bool CanDownJump () {
+        return rigid.IsTouchingLayers (platformsMask)
+                && !rigid.IsTouchingLayers (groundLayer);
+    }
+
     // when picking up an item, check to see if we have enough points to be able to
     // pick up the item in the first place
     void TryToHoldBlock(Collider2D itemCol){
@@ -506,7 +515,6 @@ public class Player : MonoBehaviour {
             form = PlayerForm.Holding;
         }
     }
-
 
     bool TryToSitInBlock(Collider2D[] potential_controllable){
         foreach (Collider2D coll in potential_controllable) {
