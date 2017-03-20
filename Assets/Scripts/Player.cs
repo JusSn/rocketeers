@@ -547,6 +547,9 @@ public class Player : MonoBehaviour {
         rigid.velocity = Vector3.zero;
         form = PlayerForm.Controlling;
 
+        // JF: Disable tooltip
+        controlled_block.image.enabled = false;
+
         // successfully attached!
         return true;
     }
@@ -557,6 +560,10 @@ public class Player : MonoBehaviour {
     public void DetachFromBlock(){
         sprend.color = Color.white;
         controlled_block.DetachUser ();
+
+        // JF: Re-enable tooltip
+        controlled_block.image.enabled = true;
+
         controlled_block = null;
         form = PlayerForm.Normal;
     }

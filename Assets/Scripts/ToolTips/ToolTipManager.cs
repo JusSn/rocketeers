@@ -34,7 +34,7 @@ public class ToolTipManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        // JF:
+        // JF: Player-centric tool tips
         // Shows the prompt above the player to place a block
         // When: Player is holding settable block item and has not set before
         if (!setted && playerScript.form == PlayerForm.Holding) {
@@ -72,7 +72,6 @@ public class ToolTipManager : MonoBehaviour {
             tooltipImage.sprite = spritesArray[4]; //Right trigger
             tooltipImage.enabled = true;
         }
-
         else {
             tooltipImage.enabled = false;
         }

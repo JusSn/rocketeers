@@ -134,6 +134,11 @@ public class PhaseManager : MonoBehaviour {
         foreach (GameObject go in placedBlocks) {
             go.GetComponent<Rigidbody2D>().gravityScale = 1;
         }
+
+        // JF: Enable tooltips on cores
+        foreach (GameObject obj in cores) {
+            obj.GetComponent<Block> ().image.enabled = true;
+        }
     }
 
     public void SwitchToBuildPhase() {
