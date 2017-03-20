@@ -7,6 +7,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum Direction {
     NORTH,
@@ -55,6 +56,9 @@ public class Block : MonoBehaviour {
     // GameObject components & child objects
     protected Rigidbody2D                       rigid;
 
+    // JF: Image object to display sprites on the block, such as a tooltip
+    public Image                               image;
+
     // Neighbor joints
     public Dictionary<Direction, FixedJointContainer>         connected_neighbors = new Dictionary<Direction, FixedJointContainer>();
 
@@ -77,6 +81,11 @@ public class Block : MonoBehaviour {
         states.Add (BlockStates.FALLING_TO_STILL, FallingToStill);
         states.Add (BlockStates.STILL, Still);
         states.Add (BlockStates.UNHINGED, Unhinged);
+
+        // JF: Get image object if core
+        if (tag == "Core") {
+            image = transform.Find("Canvas").Find("Image").GetComponent<Image> ();
+        }
         // SK: Don't want rockets and core to add joints
         if(tag == "Rockets" || tag == "Core") {
             state = BlockStates.STILL;

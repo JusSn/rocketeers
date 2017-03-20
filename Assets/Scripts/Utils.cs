@@ -1,8 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 public class Utils {
+    // JF: Serializable struct for string/Sprite pairs. Useful for editing dictionaries in the editor.
+
+    [System.SerializableAttribute]
+    public struct NamedSprite {
+        public string name;
+        public Sprite sprite;
+    }
 
     public static int LEFT_CLICK_BTN = 0;
     // Returns the opposite direction

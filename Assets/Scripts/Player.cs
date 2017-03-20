@@ -41,6 +41,7 @@ public class Player : MonoBehaviour {
     // Encapsulated attributes
     public PlayerForm                       _form = PlayerForm.Normal;
     public bool                             grounded;
+    public bool                             canDownJump;
     private bool                            ducking;
     public Item                             heldItem;
     public Controllable                     controlled_block;
@@ -69,6 +70,9 @@ public class Player : MonoBehaviour {
     // AW: Aim arrow
     private GameObject                      aimArrowObject;
     private GameObject                      projSource;
+
+    // JF: Aim aimSprend
+    private SpriteRenderer                  aimSprend;
 
 	// AW: Jetpack objects
 	private GameObject 						jetpackFire;
@@ -99,12 +103,15 @@ public class Player : MonoBehaviour {
         // JF: Get highlightObject and disable. Enable if item is held later
         highlightObject = transform.Find ("Highlight").gameObject;
         highlightSprends = highlightObject.GetComponentsInChildren<SpriteRenderer> ();
-        highlightObject.SetActive(false);
+        highlightObject.SetActive (false);
 
         // AW: Get arrow sprite for aiming shots and proj source
         aimArrowObject = transform.Find("Aiming").gameObject;
         aimArrowObject.SetActive (false);
         projSource = aimArrowObject.transform.Find ("ProjectileSource").gameObject;
+
+        // JF: Arrow and gun sprite for flipping
+        aimSprend = aimArrowObject.transform.Find("ArrowSprite").GetComponent<SpriteRenderer> ();
 
 		// AW: Get jetpack related variables
 		jetpackFire = sprite.transform.Find("Jetpack").transform.Find("Fire").gameObject;
@@ -137,6 +144,7 @@ public class Player : MonoBehaviour {
             doubleJumped = false;
         }
         ducking = IsDucking ();
+        canDownJump = CanDownJump ();
         // Call the proper update function
         stateUpdateMap [form] ();
     }
@@ -154,6 +162,7 @@ public class Player : MonoBehaviour {
             Collider2D itemCol;
             if (itemCol = Physics2D.OverlapCircle (transform.position, itemDetectRadius, itemLayer)) {
                 tt_manager.DisplayPrice (itemCol.gameObject);
+
                 if (Input.GetButtonDown ("Y" + playerNumStub)) {
                     TryToHoldBlock (itemCol);
                 }
@@ -165,9 +174,11 @@ public class Player : MonoBehaviour {
 			if (Input.GetAxis ("RightJoyX" + playerNumStub) != 0 || Input.GetAxis ("RightJoyY" + playerNumStub) != 0) {
 				Vector3 trajectory = GetRightJoyDirection ();
 				float angle = Vector3.Angle (Vector3.right, trajectory);
-				if (trajectory.y < 0) {
-					angle *= -1;
-				}
+                angle = (trajectory.y < 0) ? -angle : angle; 
+
+                // JF: Flip ray gun if aiming to left
+                aimSprend.flipY = (trajectory.x < 0) ? true : false;
+
 				aimArrowObject.transform.rotation = Quaternion.AngleAxis (angle, Vector3.forward);
 			}
 
@@ -199,9 +210,10 @@ public class Player : MonoBehaviour {
         if (Input.GetAxis ("LeftJoyX" + playerNumStub) != 0 || Input.GetAxis ("LeftJoyY" + playerNumStub) != 0) {
 			Vector3 trajectory = GetRightJoyDirection ();
             float angle = Vector3.Angle (Vector3.right, trajectory);
-            if (trajectory.y < 0) {
+            if (trajectory.x < 0) {
                 angle *= -1;
             }
+            aimArrowObject.transform.rotation = Quaternion.AngleAxis (angle, Vector3.forward);
             aimArrowObject.transform.rotation = Quaternion.AngleAxis (angle, Vector3.forward);
         }
 
@@ -370,7 +382,6 @@ public class Player : MonoBehaviour {
             }
         }
     }
-
     /******************** Utility ********************/
 
     // Retrieve and apply any changes to the players movement
@@ -414,21 +425,25 @@ public class Player : MonoBehaviour {
 
     // Calculate and return magnitude of any changes to y velocity from player input
     // JF: Jump and down-jump
+    // AW: Jetpack
     float GetYInputSpeed(float currentY) {
         if (grounded && Input.GetButtonDown ("A" + playerNumStub)) {
             // Down jump
-            if (ducking
-                         && rigid.IsTouchingLayers (platformsMask)
-                         && !rigid.IsTouchingLayers (groundLayer)) {
+            if (ducking && canDownJump) {
+                tt_manager.downJumped = true;
                 bodyCollider.isTrigger = true;
                 Invoke ("RestoreCollision", 0.3f);
             } else {
+                // Has jumped  
+                tt_manager.jumped = true;
                 currentY = ySpeed;
             }
         }
 
         // Check for double jump
         if (!doubleJumped && !grounded && Input.GetButtonDown("A" + playerNumStub)){
+            tt_manager.doubleJumped = true;
+
             currentY = ySpeed;
             StartCoroutine("SpinSprite");
             doubleJumped = true;
@@ -446,6 +461,11 @@ public class Player : MonoBehaviour {
 			jetpackFuelCurrent -= Time.deltaTime;
 			currentY = GetJetpackThrust ();
 			jetpackFire.SetActive (true);
+
+            // JF: Disable tooltip once player has used jetpack a sufficient amount
+            if (jetpackFuelCurrent < 3.5f) {
+                tt_manager.jetpacked = true;
+            }
 		} else {
 			jetpackFire.SetActive (false);
 		}
@@ -480,7 +500,7 @@ public class Player : MonoBehaviour {
         return gridPos;
     }
 
-    // Return a bool checking if player object is standing on top of a block or ground
+    // JF: Return a bool checking if player object is standing on top of a block or ground
     bool IsGrounded() {
         bool val = rigid.IsTouchingLayers(groundedMask);
         animator.SetBool("grounded", val);
@@ -491,6 +511,11 @@ public class Player : MonoBehaviour {
         bool val = -Input.GetAxisRaw ("LeftJoyY" + playerNumStub) < 0;
         animator.SetBool("ducking", val);
         return val;
+    }
+
+    bool CanDownJump () {
+        return rigid.IsTouchingLayers (platformsMask)
+                && !rigid.IsTouchingLayers (groundLayer);
     }
 
     // when picking up an item, check to see if we have enough points to be able to
@@ -506,7 +531,6 @@ public class Player : MonoBehaviour {
             form = PlayerForm.Holding;
         }
     }
-
 
     bool TryToSitInBlock(Collider2D[] potential_controllable){
         foreach (Collider2D coll in potential_controllable) {
@@ -532,6 +556,9 @@ public class Player : MonoBehaviour {
         rigid.velocity = Vector3.zero;
         form = PlayerForm.Controlling;
 
+        // JF: Disable tooltip
+        controlled_block.image.enabled = false;
+
         // successfully attached!
         return true;
     }
@@ -542,6 +569,10 @@ public class Player : MonoBehaviour {
     public void DetachFromBlock(){
         sprend.color = Color.white;
         controlled_block.DetachUser ();
+
+        // JF: Re-enable tooltip
+        controlled_block.image.enabled = true;
+
         controlled_block = null;
         form = PlayerForm.Normal;
     }
@@ -564,6 +595,8 @@ public class Player : MonoBehaviour {
         proj.GetComponent<Projectile>().teamNum = teamNum;
         proj.layer = LayerMask.NameToLayer("Team" + teamNum + "Projectiles");
         proj.GetComponent<Rigidbody2D> ().velocity = projSource.transform.right * projSpeed;
+
+        tt_manager.fired = true;
     }
 
 	float GetJetpackThrust() {
