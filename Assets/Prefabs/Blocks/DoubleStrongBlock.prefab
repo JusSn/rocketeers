@@ -165,9 +165,9 @@ BoxCollider2D:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_UsedByEffector: 1
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: 0.457927}
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1, y: 0.08414602}
 --- !u!114 &114720795011954418
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -184,9 +184,11 @@ MonoBehaviour:
     m_Bits: 786432
   snap_radius: 0.75
   ______________________: 0
+  teamNum: 0
   being_manipulated: 0
   in_placeable_spot: 0
   block_fell: 0
+  image: {fileID: 0}
 --- !u!114 &114786604197903458
 MonoBehaviour:
   m_ObjectHideFlags: 1
