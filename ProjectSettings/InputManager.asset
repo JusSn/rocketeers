@@ -292,7 +292,7 @@ InputManager:
     invert: 0
     type: 2
     axis: 4
-    joyNum: 1
+    joyNum: 2
   - serializedVersion: 3
     m_Name: RightJoyY_P3
     descriptiveName: Player One's right stick Y
@@ -308,7 +308,7 @@ InputManager:
     invert: 0
     type: 2
     axis: 4
-    joyNum: 1
+    joyNum: 3
   - serializedVersion: 3
     m_Name: RightJoyY_P4
     descriptiveName: Player One's right stick Y
@@ -324,7 +324,7 @@ InputManager:
     invert: 0
     type: 2
     axis: 4
-    joyNum: 1
+    joyNum: 4
   - serializedVersion: 3
     m_Name: A_P1
     descriptiveName: Player One's jump button
