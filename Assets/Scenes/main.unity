@@ -826,6 +826,11 @@ Prefab:
       propertyPath: m_Layer
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 114199607879326764, guid: d5f3f8a3bac4ba4479ce70f034a940ec,
+        type: 2}
+      propertyPath: groundedMask.m_Bits
+      value: 2099200
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d5f3f8a3bac4ba4479ce70f034a940ec, type: 2}
   m_IsPrefabParent: 0
@@ -4758,7 +4763,7 @@ Prefab:
     - target: {fileID: 50752930843160082, guid: 6655be76da9d7e34a865e223296a99ec,
         type: 2}
       propertyPath: m_Constraints
-      value: 0
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1200059222658778, guid: 6655be76da9d7e34a865e223296a99ec, type: 2}
       propertyPath: m_Layer
@@ -5856,7 +5861,7 @@ MonoBehaviour:
   placedBlocks: []
   flyingSpeed: 0.2
   gravityScale: 1
-  build_time: 45
+  build_time: 60
   battle_time: -1
   rounds_to_play: 3
 --- !u!114 &1523096696
@@ -6916,6 +6921,11 @@ Prefab:
     - target: {fileID: 1749041598868772, guid: d5f3f8a3bac4ba4479ce70f034a940ec, type: 2}
       propertyPath: m_Layer
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 114199607879326764, guid: d5f3f8a3bac4ba4479ce70f034a940ec,
+        type: 2}
+      propertyPath: groundedMask.m_Bits
+      value: 2099200
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d5f3f8a3bac4ba4479ce70f034a940ec, type: 2}
