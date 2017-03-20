@@ -72,6 +72,7 @@ public class Player : MonoBehaviour {
 
 	// AW: Jetpack objects
 	private GameObject 						jetpackFire;
+    private JetpackBar                      jetpack_bar;
 
     // Detection parameters
     private int                             blockMask;
@@ -90,6 +91,8 @@ public class Player : MonoBehaviour {
         sprend = sprite.GetComponent<SpriteRenderer> ();
         bodyCollider = GetComponent<BoxCollider2D> ();
         point_manager = GetComponent<PointManager> ();
+        jetpack_bar = GetComponent<JetpackBar> ();
+        jetpack_bar.SetMaxFuel (jetpackFuelMax);
         tt_manager = GetComponent<ToolTipManager> ();
         tt_manager.SetPlayer (gameObject);
 
@@ -436,7 +439,7 @@ public class Player : MonoBehaviour {
 			jetpackFuelCurrent += jetpackRefuelRate * Time.deltaTime;
 			if (jetpackFuelCurrent > jetpackFuelMax)
 				jetpackFuelCurrent = jetpackFuelMax;
-		}
+        }
 		
 		if (Input.GetAxis ("TriggerL" + playerNumStub) > 0
 			&& jetpackFuelCurrent > 0f) {
@@ -446,6 +449,8 @@ public class Player : MonoBehaviour {
 		} else {
 			jetpackFire.SetActive (false);
 		}
+        jetpack_bar.SetFuel (jetpackFuelCurrent);
+
 
         return currentY;
     }
