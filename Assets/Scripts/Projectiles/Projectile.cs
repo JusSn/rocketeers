@@ -28,15 +28,19 @@ public class Projectile : MonoBehaviour {
 	
     // changes the collider to be active instead of just a trigger once it
     // crosses the center line
-    protected virtual void OnTriggerEnter2D(Collider2D other){
-        if (other.gameObject.CompareTag ("ConvertProjectile")) {
-            GetComponent<CircleCollider2D> ().isTrigger = false;
-        }
-    }
+    // protected virtual void OnTriggerEnter2D(Collider2D other){
+    //     if (other.gameObject.CompareTag ("ConvertProjectile")) {
+    //         GetComponent<CircleCollider2D> ().isTrigger = false;
+    //     }
+    // }
 
     protected virtual void OnCollisionEnter2D(Collision2D other){
+        Debug.Log("other layer");
+        Debug.Log(LayerMask.LayerToName(other.gameObject.layer));
+        Debug.Log("this layer:");
+        Debug.Log(LayerMask.LayerToName(gameObject.layer));
         // check if we came in contact with another block/weaponblock
-        if (other.gameObject.CompareTag ("Block") || other.gameObject.CompareTag ("WeaponBlock") || other.gameObject.CompareTag("Core")) {
+        if (other.gameObject.CompareTag ("Block") || other.gameObject.CompareTag("Core")) {
             other.gameObject.GetComponent<Block> ().TakeDamage (damage_amount);
         }
         Destroy(gameObject);

@@ -51,6 +51,7 @@ public class Health : MonoBehaviour {
             // SK: add logic for core ending the game
             if (is_core) {
                 PhaseManager.S.EndGame(parent_block);
+                Destroy(gameObject);
             }
             // remove all the hinges on the block to let it fall offscreen
             parent_block.UnhingeAndFall ();

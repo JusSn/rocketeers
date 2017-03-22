@@ -29,6 +29,7 @@ public class Controllable : Block {
     // Called by: Player.SittingUpdate(release button)
     public void DetachUser(){
         controller.gameObject.layer = original_player_layer;
+        controller.gameObject.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
         controller = null;
         rigid.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY;
     }

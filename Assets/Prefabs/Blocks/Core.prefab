@@ -259,6 +259,7 @@ MonoBehaviour:
   being_manipulated: 0
   in_placeable_spot: 0
   block_fell: 0
+  image: {fileID: 0}
 --- !u!212 &212695543998307056
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -363,7 +364,7 @@ PlatformEffector2D:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1200059222658778}
   m_Enabled: 1
-  m_UseColliderMask: 1
+  m_UseColliderMask: 0
   m_ColliderMask:
     serializedVersion: 2
     m_Bits: 4294967295

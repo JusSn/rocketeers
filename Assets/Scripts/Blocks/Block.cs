@@ -18,7 +18,6 @@ public enum Direction {
 
 public enum BlockStates {
     FALLING,
-    FALLING_TO_STILL,
     STILL,
     UNHINGED,
 }
@@ -78,7 +77,6 @@ public class Block : MonoBehaviour {
         health.SetParent (this);
 
         states.Add (BlockStates.FALLING, Falling);
-        states.Add (BlockStates.FALLING_TO_STILL, FallingToStill);
         states.Add (BlockStates.STILL, Still);
         states.Add (BlockStates.UNHINGED, Unhinged);
 
@@ -103,12 +101,12 @@ public class Block : MonoBehaviour {
 
     // Block is in this state if it is falling
     // Entered from: Block creation or surrounding block destruction
-    // Exits to: FallingToStill()
+    // Exits to: Still()
     void Falling(){
 
         // check if the block has come to a rest
         if (rigid.velocity.magnitude <= SLEEPING_THRESHOLD) {
-            state = BlockStates.FALLING_TO_STILL;
+            state = BlockStates.STILL;
             return;
         }
 
@@ -116,37 +114,8 @@ public class Block : MonoBehaviour {
         // At the moment, I can't think of anything the block needs to do when it is falling though
     }
 
-    // Once the block has come to a rest, this function is called once
-    // Entered from: Falling()
-    // Exits to: Still() 
-    void FallingToStill(){
-
-        // check if there are blocks that can be attached to, this should automatically be called
-        // on all the blocks in a clump that fell together, so no need to trigger any other
-        // blocks than yourself
-
-        // create a full set of directions, that we will "subtract" from as we go through our
-        // direction map
-        HashSet<Direction> dir_set = Utils.GetAllDirections();
-        // remove each direction that is already in our Direction Map
-        foreach(KeyValuePair<Direction, FixedJointContainer> dir in connected_neighbors){
-            if (dir_set.Contains (dir.Key)) {
-                dir_set.Remove (dir.Key);
-            }
-        }
-
-        // now our original dir_set is left with only directions that we do not already
-        // have connections to, so we know blocks weren't previously there, but now there might
-        // be blocks there, so we check.
-        foreach (Direction dir in dir_set) {
-            CheckAndConnectToNeighbor (dir);
-        }
-
-        state = BlockStates.STILL;
-    }
-
     // When a block is not moving, or not just previously moving
-    // Entered from: FallingToStill()
+    // Entered from: Falling()
     // Exits to: Falling(), OnDestroy() (indirectly)
     void Still(){
         // the block is moving again, so transition to the falling state
@@ -205,7 +174,7 @@ public class Block : MonoBehaviour {
 
 
     // Calling Condition: Check for a surrounding neighbor and connect to it
-    // Called by: this.FallingToStill()
+    // Called by: this.Start()
     void CheckAndConnectToNeighbor(Direction dir){
         Block neighbor = null;
         int neighborTeamNum = CheckForNeighbor (dir, out neighbor);
@@ -277,6 +246,9 @@ public class Block : MonoBehaviour {
     public void AssignTeamToBlock(Block block, int teamNum) {
         block.teamNum = teamNum;
         block.gameObject.layer = LayerMask.NameToLayer ("Team" + teamNum + "Block");
+
+        block.GetComponent<BoxCollider2D> ().enabled = false;
+        block.GetComponent<BoxCollider2D> ().enabled = true;
 
         // Assign platform layers
         foreach (Transform t in block.transform) {

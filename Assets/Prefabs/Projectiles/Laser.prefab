@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 58709517388009754}
   - component: {fileID: 50888163648912304}
   - component: {fileID: 114945579628129328}
-  m_Layer: 12
+  m_Layer: 16
   m_Name: Laser
   m_TagString: Bullet
   m_Icon: {fileID: 0}
@@ -72,7 +72,7 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
