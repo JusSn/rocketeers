@@ -42,7 +42,7 @@ else
     echo "$ZIP" a "$ZIPFILE" "$APP" "$EXE" "$EXEDATA"
     "$ZIP" a "$ZIPFILE" "$APP" "$EXE" "$EXEDATA"
     EL=$?
-  fi=
+  fi
 fi
 
 echo ""
