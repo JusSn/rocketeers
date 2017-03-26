@@ -557,7 +557,7 @@ MonoBehaviour:
   throwChargeRatio: 10
   projectilePrefab: {fileID: 1731158819494592, guid: 08d847f8dbb19904fab96cb89f11acc3,
     type: 2}
-  projSpeed: 10
+  projSpeed: 20
   projCDCounter: 73.25124
   projCDTime: 0.5
   DRIVE_SPEED_X: 4
@@ -575,7 +575,7 @@ MonoBehaviour:
     m_Bits: 3145728
   groundedMask:
     serializedVersion: 2
-    m_Bits: 1050624
+    m_Bits: 3147776
   ________________: 0
   _form: 0
   grounded: 1

@@ -300,7 +300,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &35909535
 Transform:
   m_ObjectHideFlags: 0
@@ -502,7 +502,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &85719921
 Transform:
   m_ObjectHideFlags: 0
@@ -589,6 +589,10 @@ Prefab:
     - target: {fileID: 4955202862010842, guid: 2107cd28cf6effb44837da31344beaf5, type: 2}
       propertyPath: m_RootOrder
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1355744231898528, guid: 2107cd28cf6effb44837da31344beaf5, type: 2}
+      propertyPath: m_Layer
+      value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2107cd28cf6effb44837da31344beaf5, type: 2}
@@ -774,7 +778,7 @@ Prefab:
     - target: {fileID: 114199607879326764, guid: d5f3f8a3bac4ba4479ce70f034a940ec,
         type: 2}
       propertyPath: placementMask.m_Bits
-      value: 788480
+      value: 2623488
       objectReference: {fileID: 0}
     - target: {fileID: 212537581966050700, guid: d5f3f8a3bac4ba4479ce70f034a940ec,
         type: 2}
@@ -824,12 +828,7 @@ Prefab:
     - target: {fileID: 114199607879326764, guid: d5f3f8a3bac4ba4479ce70f034a940ec,
         type: 2}
       propertyPath: groundedMask.m_Bits
-      value: 3147776
-      objectReference: {fileID: 0}
-    - target: {fileID: 114199607879326764, guid: d5f3f8a3bac4ba4479ce70f034a940ec,
-        type: 2}
-      propertyPath: projSpeed
-      value: 20
+      value: 2099200
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d5f3f8a3bac4ba4479ce70f034a940ec, type: 2}
@@ -1042,16 +1041,6 @@ Prefab:
     - target: {fileID: 1749041598868772, guid: d5f3f8a3bac4ba4479ce70f034a940ec, type: 2}
       propertyPath: m_Name
       value: Player1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114199607879326764, guid: d5f3f8a3bac4ba4479ce70f034a940ec,
-        type: 2}
-      propertyPath: debugMode
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114199607879326764, guid: d5f3f8a3bac4ba4479ce70f034a940ec,
-        type: 2}
-      propertyPath: placementMask.m_Bits
-      value: 788480
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d5f3f8a3bac4ba4479ce70f034a940ec, type: 2}
@@ -5370,6 +5359,29 @@ Prefab:
       propertyPath: m_ConnectedRigidBody
       value: 
       objectReference: {fileID: 1475100068}
+    - target: {fileID: 50752930843160082, guid: 6655be76da9d7e34a865e223296a99ec,
+        type: 2}
+      propertyPath: m_GravityScale
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 50752930843160082, guid: 6655be76da9d7e34a865e223296a99ec,
+        type: 2}
+      propertyPath: m_Constraints
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1390623067759426, guid: 6655be76da9d7e34a865e223296a99ec, type: 2}
+      propertyPath: m_Layer
+      value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: 1200059222658778, guid: 6655be76da9d7e34a865e223296a99ec, type: 2}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 114995443064091736, guid: 6655be76da9d7e34a865e223296a99ec,
+        type: 2}
+      propertyPath: teamNum
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6655be76da9d7e34a865e223296a99ec, type: 2}
   m_IsPrefabParent: 0
@@ -5642,7 +5654,7 @@ Prefab:
     - target: {fileID: 114199607879326764, guid: d5f3f8a3bac4ba4479ce70f034a940ec,
         type: 2}
       propertyPath: placementMask.m_Bits
-      value: 788480
+      value: 1312768
       objectReference: {fileID: 0}
     - target: {fileID: 212537581966050700, guid: d5f3f8a3bac4ba4479ce70f034a940ec,
         type: 2}
@@ -5689,11 +5701,6 @@ Prefab:
       value: 
       objectReference: {fileID: 21300000, guid: db1043a930a91ea41bf8e8d24bb1471a,
         type: 3}
-    - target: {fileID: 114199607879326764, guid: d5f3f8a3bac4ba4479ce70f034a940ec,
-        type: 2}
-      propertyPath: projSpeed
-      value: 20
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d5f3f8a3bac4ba4479ce70f034a940ec, type: 2}
   m_IsPrefabParent: 0
@@ -5768,7 +5775,7 @@ MonoBehaviour:
   placedBlocks: []
   flyingSpeed: 0.2
   gravityScale: 1
-  build_time: 45
+  build_time: 10
   battle_time: -1
   rounds_to_play: 3
 --- !u!114 &1523096696
@@ -6783,7 +6790,7 @@ Prefab:
     - target: {fileID: 114199607879326764, guid: d5f3f8a3bac4ba4479ce70f034a940ec,
         type: 2}
       propertyPath: placementMask.m_Bits
-      value: 788480
+      value: 2623488
       objectReference: {fileID: 0}
     - target: {fileID: 212537581966050700, guid: d5f3f8a3bac4ba4479ce70f034a940ec,
         type: 2}
@@ -6833,12 +6840,7 @@ Prefab:
     - target: {fileID: 114199607879326764, guid: d5f3f8a3bac4ba4479ce70f034a940ec,
         type: 2}
       propertyPath: groundedMask.m_Bits
-      value: 3147776
-      objectReference: {fileID: 0}
-    - target: {fileID: 114199607879326764, guid: d5f3f8a3bac4ba4479ce70f034a940ec,
-        type: 2}
-      propertyPath: projSpeed
-      value: 20
+      value: 2099200
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d5f3f8a3bac4ba4479ce70f034a940ec, type: 2}
