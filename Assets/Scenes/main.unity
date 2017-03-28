@@ -1989,6 +1989,12 @@ MonoBehaviour:
   - {fileID: 439417827}
   - {fileID: 439417826}
   explosion: {fileID: 1593478875652032, guid: a28e92fadf2d42848976be3c82b3d5ac, type: 2}
+  spawn_flash: {fileID: 1452833306883316, guid: 295079e1d7e2b6445b9c32ba5d96ac5d,
+    type: 2}
+  lightning_fizzle: {fileID: 1432116130232582, guid: 9de383d6fb698d14bbbdf2ae9e69d438,
+    type: 2}
+  smoke_plume: {fileID: 1567542743534140, guid: bce905349183de94aabf4a96f3c66604,
+    type: 2}
   players:
   - {fileID: 843972461}
   - {fileID: 108485968}
@@ -3908,7 +3914,7 @@ Transform:
   - {fileID: 963738355}
   - {fileID: 456543715}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1724324929
 GameObject:
@@ -4114,7 +4120,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4896331645626934, guid: 6fa99bba588ee4a328b733bb38f1c774, type: 2}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1906739939999114, guid: 6fa99bba588ee4a328b733bb38f1c774, type: 2}
       propertyPath: m_Name

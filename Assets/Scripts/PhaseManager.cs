@@ -20,6 +20,9 @@ public class PhaseManager : MonoBehaviour {
     public AudioClip                    countdownAudio;
     public GameObject[]                 rockets;
     public GameObject                   explosion;
+    public GameObject                   spawn_flash;
+    public GameObject                   lightning_fizzle;
+    public GameObject                   smoke_plume;
 
     // JF: References to core and player objects
     public GameObject[]                 players;
@@ -187,22 +190,40 @@ public class PhaseManager : MonoBehaviour {
         LaunchCautionUI.SetActive(!LaunchCautionUI.activeInHierarchy);
     }
 
-    // JF: Calling condition: check and destroy this player if it's fallen too far
+    // JF: Calling condition: check and respawn this player if it's fallen too far
+    // SK: Changed to respawning and added effects for JUICE
     // Called by: this.Update()
     private void DestroyPlayerIfBelowScreen(GameObject obj){
-        if (MainCamera.S.IsBelowScreen (obj.transform.position)) {
-            // Get TeamNum and decrement lives
+        if (MainCamera.S.IsBelowScreen (obj.transform.position) && !gameOver) {
             int teamNum = obj.GetComponent<Player> ().teamNum;
-            TeamLives[teamNum - 1]--;
-            Destroy (obj);
+
+            // Create effects to make it look cool
+            GameObject flash = Instantiate(spawn_flash);
+            flash.transform.position = cores[teamNum - 1].transform.position + new Vector3(-0.1f, 0.5f);
+            flash.GetComponent<LoopingAnimation>().StartAnimation();
+            GameObject sizzle = Instantiate(lightning_fizzle);
+            sizzle.transform.position = cores[teamNum - 1].transform.position;
+            sizzle.GetComponent<LoopingAnimation>().StartAnimation();
+            GameObject smoke = Instantiate(smoke_plume);
+            smoke.transform.position = cores[teamNum - 1].transform.position;
+            smoke.GetComponent<LoopingAnimation>().StartAnimation();
+
+            // Move the player to the core
+            obj.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
+            obj.transform.position = cores[teamNum - 1].transform.position;
+
+
+            //TeamLives[teamNum - 1]--;
+            //Destroy (obj);
 
             // If out of lives, destroy team's core
-            if (TeamLives[teamNum - 1] <= 0) {
-                float damage = cores[teamNum - 1].gameObject.GetComponent<Health> ().MAX_HEALTH;
-                cores[teamNum - 1].gameObject.GetComponent<Block> ().TakeDamage (damage);
-            }
+            //if (TeamLives[teamNum - 1] <= 0) {
+            //    float damage = cores[teamNum - 1].gameObject.GetComponent<Health> ().MAX_HEALTH;
+            //    cores[teamNum - 1].gameObject.GetComponent<Block> ().TakeDamage (damage);
+            //}
 
         }
+
     }
 
     // Functions used in "build-to-height" game mode
