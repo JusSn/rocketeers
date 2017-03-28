@@ -13,10 +13,12 @@ public class Item : MonoBehaviour {
 	public bool 					________________;
 	public bool 					held = false;
 	private Rigidbody2D 			rigid;
+	private BoxCollider2D  			boxCollider;
 
 	// Use this for initialization
 	void Start () {
 		rigid =	GetComponent<Rigidbody2D>();
+		boxCollider = GetComponent<BoxCollider2D> ();
 	}
 
 	// Set this object as the child of _player at local position heldPos
@@ -25,6 +27,9 @@ public class Item : MonoBehaviour {
 		rigid.isKinematic = true;
 		transform.parent = _player.transform;
 		transform.localPosition = heldPos;
+
+		// JF: Disable collider when held to enable down jumping and disable other people from picking it up
+		boxCollider.enabled = false;
 
 		CancelInvoke ();
 	}
@@ -36,6 +41,7 @@ public class Item : MonoBehaviour {
 		transform.parent = _player.transform.parent;
 
 		// JF: Disappears after 10 s if not picked up 
+		boxCollider.enabled = true;
 		ScheduleRepool (repoolTime);
 	}
 
@@ -45,6 +51,7 @@ public class Item : MonoBehaviour {
 		rigid.velocity = throwVel;
 
 		// JF: Disappears after 10 s if not picked up 
+		boxCollider.enabled = true;
 		ScheduleRepool (repoolTime);
 	}
 
