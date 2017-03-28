@@ -132,11 +132,13 @@ public class PhaseManager : MonoBehaviour {
 
         foreach (GameObject go in placedBlocks) {
             go.GetComponent<Rigidbody2D>().gravityScale = 1;
+            go.GetComponent<Block> ().RemoveHighlights ();
         }
 
         // JF: Enable tooltips on cores
         foreach (GameObject obj in cores) {
             obj.GetComponent<Block> ().image.enabled = true;
+            obj.GetComponent<Block> ().RemoveHighlights ();
         }
 
         foreach (GameObject player in players) {

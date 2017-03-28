@@ -198,6 +198,11 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 786432
   snap_radius: 0.75
+  highlight_sprend: {fileID: 1795590417846894, guid: 9dc3cacb604ba81419b634e1bcc9f67e,
+    type: 2}
+  placementMask:
+    serializedVersion: 2
+    m_Bits: 837632
   ______________________: 0
   teamNum: 0
   being_manipulated: 0

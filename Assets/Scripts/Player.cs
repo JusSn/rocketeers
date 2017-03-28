@@ -192,6 +192,8 @@ public class Player : MonoBehaviour {
     }
 
 
+    // setting update occurs when a player is holding a block
+    // in this case it is most of the build phase
     void SettingUpdate() {
         CalculateMovement ();
         // CG: still need to be able to pick up the other items if we're close to them
@@ -207,15 +209,16 @@ public class Player : MonoBehaviour {
         // [CG]: Check if we're by another block forcing us to start connections with the core
         bool valid_neighbor = Utils.ValidBlockPlacement (setPos, blockMask);
         // Obstruction here
-        if (blocker || !valid_neighbor || setPos.x == 0) {
-            foreach (SpriteRenderer sp in highlightSprends) {
-                sp.color = Color.red;
-            }
-        }
-        else {
-            foreach (SpriteRenderer sp in highlightSprends) {
-                sp.color = Color.white;
-            }
+//        if (blocker || !valid_neighbor || setPos.x == 0) {
+//            foreach (SpriteRenderer sp in highlightSprends) {
+//                sp.color = Color.red;
+//            }
+//        }
+        // show or don't show the valid placement object
+        if (!blocker && valid_neighbor) {
+            highlightObject.SetActive (true);
+        } else {
+            highlightObject.SetActive (false);
         }
 
         // JF: Attempt to place block
@@ -270,7 +273,6 @@ public class Player : MonoBehaviour {
                 break;
             case PlayerForm.Setting:
                 // JF: Toggle highlight guide
-                highlightObject.SetActive(true);
                 _form = value;
                 break;
             case PlayerForm.Controlling:
