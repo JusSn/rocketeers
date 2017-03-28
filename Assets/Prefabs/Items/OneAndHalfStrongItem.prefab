@@ -88,7 +88,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 665b7a714f052e8468c11218d205aa8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  heldPos: {x: 0, y: 0, z: 0}
+  heldPos: {x: 0.5, y: 0, z: 0}
   resource_cost: 150
   repoolTime: 10
   ________________: 0

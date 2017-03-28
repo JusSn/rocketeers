@@ -27,6 +27,7 @@ public class Player : MonoBehaviour {
 	public float							projCDTime = 0.5f;
     public float                            DRIVE_SPEED_X = 4f;
     public float                            DRIVE_SPEED_Y = 4f;
+    public Vector3                          SET_POS_OFFSET = new Vector3(1f, 0f, 0f);
 	public float							jetpackMaxSpeed = 8f;
 	public float 							jetpackAccel = 40f;
 	public float							jetpackFuelMax = 5f;
@@ -448,10 +449,19 @@ public class Player : MonoBehaviour {
     // Return a vector3 of the location pointed to by the aiming joystick
     // Rounded to nearest 0.5 (e.g. 1.2 rounds to 1.5, 0.8 rounds to 0.5, etc.)
     Vector3 GetGridPosition() {
-		Vector3 gridPos = sprend.transform.position + GetLeftJoyDirection ();
+        float flip = (IsFlipped()) ? -1f : 1f;
+        Vector3 gridPos = sprend.transform.position + SET_POS_OFFSET * flip;
         gridPos.x = Mathf.Round (gridPos.x);
         gridPos.y = Mathf.Round (gridPos.y);
         return gridPos;
+    }
+
+    public bool IsFlipped(){
+        return (charSprite.transform.rotation.y != 0f);
+    }
+
+    bool IsRightJoyActive(){
+        return Input.GetAxis ("RightJoyX" + playerNumStub) != 0 || Input.GetAxis ("RightJoyY" + playerNumStub) != 0;
     }
 
     // JF: Return a bool checking if player object is standing on top of a block or ground

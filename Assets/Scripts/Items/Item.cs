@@ -13,6 +13,21 @@ public class Item : MonoBehaviour {
 	private Rigidbody2D 			rigid;
 	private BoxCollider2D  			boxCollider;
 
+    private Player                  player;
+
+
+    void Update(){
+        if (!player) {
+            return;
+        }
+
+        if (player.IsFlipped ()) {
+            transform.localPosition = new Vector3(heldPos.x * -1f, heldPos.y, heldPos.z);
+        } else {
+            transform.localPosition = heldPos;
+        }
+
+    }
 	// Use this for initialization
 	void Awake () {
 		rigid =	GetComponent<Rigidbody2D>();
@@ -24,7 +39,7 @@ public class Item : MonoBehaviour {
 		rigid.velocity = Vector3.zero;
 		rigid.isKinematic = true;
 		transform.parent = _player.transform;
-		transform.localPosition = heldPos;
+        transform.localPosition = heldPos;
         transform.localScale = Vector3.one / 2f;
         _player.form = PlayerForm.Holding;
 
@@ -32,6 +47,7 @@ public class Item : MonoBehaviour {
 		boxCollider.enabled = false;
 
 		CancelInvoke ();
+        player = _player;
 	}
 
 	// Assumes _player is the parent of this object

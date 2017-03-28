@@ -2005,7 +2005,7 @@ MonoBehaviour:
   placedBlocks: []
   flyingSpeed: 0.2
   gravityScale: 1
-  build_time: 10
+  build_time: 60
   battle_time: -1
   rounds_to_play: 3
 --- !u!114 &669842091
@@ -2368,15 +2368,15 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4116526857445798, guid: d5f3f8a3bac4ba4479ce70f034a940ec, type: 2}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4116526857445798, guid: d5f3f8a3bac4ba4479ce70f034a940ec, type: 2}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4116526857445798, guid: d5f3f8a3bac4ba4479ce70f034a940ec, type: 2}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4116526857445798, guid: d5f3f8a3bac4ba4479ce70f034a940ec, type: 2}
       propertyPath: m_LocalRotation.w
@@ -2404,6 +2404,14 @@ Prefab:
         type: 2}
       propertyPath: placementMask.m_Bits
       value: 804864
+      objectReference: {fileID: 0}
+    - target: {fileID: 4116526857445798, guid: d5f3f8a3bac4ba4479ce70f034a940ec, type: 2}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4116526857445798, guid: d5f3f8a3bac4ba4479ce70f034a940ec, type: 2}
+      propertyPath: m_LocalScale.x
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d5f3f8a3bac4ba4479ce70f034a940ec, type: 2}
