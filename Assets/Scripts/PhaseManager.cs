@@ -1,9 +1,8 @@
-﻿// SK
-
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PhaseManager : MonoBehaviour {
     // Inspector manipulated attributes
@@ -180,11 +179,24 @@ public class PhaseManager : MonoBehaviour {
     // Sets gameOver to true and creates an explosion at the losing team's core
     public void EndGame(Block destroyedCoreBlock) {
         int winner = (destroyedCoreBlock.teamNum == 1) ? 2 : 1;
+
         GameObject boom = Instantiate(explosion, destroyedCoreBlock.transform.position, Quaternion.identity);
         boom.GetComponent<LoopingAnimation>().StartAnimation();
         gameOver = true;
         ui_phase.text = "Team " + winner + " wins!";
+
+        // SK: Winning ship flies up off the screen
+        cores[winner - 1].GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.None;
+        cores[winner - 1].GetComponent<Rigidbody2D>().gravityScale = -10;
+        Destroy(GameObject.Find("Ground (3)"));
+
+        Invoke("BackToMenu", 5);
     }
+
+    private void BackToMenu() {
+        SceneManager.LoadScene("Menu");
+    }
+
 
     private void FlashCautionUI () {
         LaunchCautionUI.SetActive(!LaunchCautionUI.activeInHierarchy);
