@@ -171,11 +171,14 @@ public class Player : MonoBehaviour {
 
 				aimArrowObject.transform.rotation = Quaternion.AngleAxis (angle, Vector3.forward);
 
-                // CG: Shoot gun every projCDTime seconds
-                projCDCounter += Time.deltaTime;
-                if (projCDCounter >= projCDTime) {
-                    FireProjectile ();
-                    projCDCounter = 0f;
+                // CG: shooting occurs with right trigger
+                if (Input.GetAxis ("TriggerR" + playerNumStub) > 0) {
+                    // CG: Shoot gun every projCDTime seconds
+                    projCDCounter += Time.deltaTime;
+                    if (projCDCounter >= projCDTime) {
+                        FireProjectile ();
+                        projCDCounter = 0f;
+                    }
                 }
 			}
 
@@ -199,7 +202,6 @@ public class Player : MonoBehaviour {
         // CG: still need to be able to pick up the other items if we're close to them
         TryToPickUpItem ();
 
-
         // JF: Change location of highlight guide
         Vector3 setPos = GetGridPosition ();
         highlightObject.transform.position = setPos;
@@ -208,12 +210,7 @@ public class Player : MonoBehaviour {
         Collider2D blocker = Physics2D.OverlapCircle (setPos, placementDetectRadius, placementMask);
         // [CG]: Check if we're by another block forcing us to start connections with the core
         bool valid_neighbor = Utils.ValidBlockPlacement (setPos, blockMask);
-        // Obstruction here
-//        if (blocker || !valid_neighbor || setPos.x == 0) {
-//            foreach (SpriteRenderer sp in highlightSprends) {
-//                sp.color = Color.red;
-//            }
-//        }
+
         // show or don't show the valid placement object
         if (!blocker && valid_neighbor) {
             highlightObject.SetActive (true);
