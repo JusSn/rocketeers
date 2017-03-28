@@ -14,7 +14,5 @@ public class Settable : Item {
         // SK: keep track of blocks that have been placed
         PhaseManager.S.placedBlocks.Add(go);
         // JF: push back into pool
-        CancelInvoke ();
-		PoolDestroy ();
 	}
 }

@@ -7,16 +7,14 @@ public class Item : MonoBehaviour {
     // how much this resource costs to pickup/use
     public int                      resource_cost;
 
-	// JF: assigned after instantiate by spawner script
-	public Spawner 					spawnerScript = null;
-	public float					repoolTime;
+	public float					repoolTime = 10f;
 	public bool 					________________;
 	public bool 					held = false;
 	private Rigidbody2D 			rigid;
 	private BoxCollider2D  			boxCollider;
 
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 		rigid =	GetComponent<Rigidbody2D>();
 		boxCollider = GetComponent<BoxCollider2D> ();
 	}
@@ -27,6 +25,8 @@ public class Item : MonoBehaviour {
 		rigid.isKinematic = true;
 		transform.parent = _player.transform;
 		transform.localPosition = heldPos;
+        transform.localScale = Vector3.one / 2f;
+        _player.form = PlayerForm.Holding;
 
 		// JF: Disable collider when held to enable down jumping and disable other people from picking it up
 		boxCollider.enabled = false;
@@ -37,13 +37,11 @@ public class Item : MonoBehaviour {
 	// Assumes _player is the parent of this object
 	// Puts this object and _player at the same level
 	public void Detach(Player _player) {
-		rigid.isKinematic = false;
-		transform.parent = _player.transform.parent;
+        _player.heldItem = null;
+        _player.form = PlayerForm.Normal;
 
-		// JF: Disappears after 10 s if not picked up 
-		boxCollider.enabled = true;
-		ScheduleRepool (repoolTime);
-	}
+        Destroy (gameObject);
+    }
 
 	// Detach item from parent and add velocity throwVel to this object
 	public void Thrown(Player _player, Vector3 throwVel) {
@@ -51,7 +49,6 @@ public class Item : MonoBehaviour {
 		rigid.velocity = throwVel;
 
 		// JF: Disappears after 10 s if not picked up 
-		boxCollider.enabled = true;
 		ScheduleRepool (repoolTime);
 	}
 
@@ -81,12 +78,8 @@ public class Item : MonoBehaviour {
 		CancelInvoke ();
 		Invoke ("PoolDestroy", time);
 	}
-	public void PoolDestroy () {
-		if (spawnerScript != null) {
-			spawnerScript.Repool(gameObject);
-		}
-		else {
-			Destroy (gameObject);
-		}
+
+    public void PoolDestroy () {
+		Destroy (gameObject);
 	}
 }

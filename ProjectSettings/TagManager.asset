@@ -27,10 +27,10 @@ TagManager:
   - Team1Player
   - Team2Player
   - Ground
-  - Projectiles
+  - 
   - Highlight
-  - ConvertProjectiles
-  - Platform
+  - Team1Rockets
+  - Team2Rockets
   - Team1Projectiles
   - Team2Projectiles
   - Team1Block

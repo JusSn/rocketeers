@@ -21,9 +21,6 @@ public class PhaseManager : MonoBehaviour {
     public GameObject[]                 rockets;
     public GameObject                   explosion;
 
-    // JF: Disable and reenable these depending on phase
-    public GameObject[]                 itemSpawners;
-
     // JF: References to core and player objects
     public GameObject[]                 players;
     public int[]                        TeamLives;
@@ -98,10 +95,6 @@ public class PhaseManager : MonoBehaviour {
         Invoke ("SwitchToBattlePhase", 10);
         InvokeRepeating ("FlashCautionUI", 0, 1);
         ui_timeLeft.fontSize = 50;
-
-        foreach (GameObject obj in itemSpawners) {
-            obj.GetComponent<Spawner> ().on = false;
-        }
     }
 
     // Switches to battle phase:
@@ -139,6 +132,13 @@ public class PhaseManager : MonoBehaviour {
         foreach (GameObject obj in cores) {
             obj.GetComponent<Block> ().image.enabled = true;
         }
+
+        foreach (GameObject player in players) {
+            Player player_script = player.GetComponent<Player> ();
+            if (player_script.heldItem) {
+                player_script.heldItem.Detach (player_script);
+            }
+        }
     }
 
     public void SwitchToBuildPhase() {
@@ -153,15 +153,11 @@ public class PhaseManager : MonoBehaviour {
             obj.GetComponent<Rigidbody2D>().gravityScale = 0;
         }
 
-        foreach (GameObject obj in itemSpawners) {
-            obj.GetComponent<Spawner>().on = true;
-        }
-
     }
 
     IEnumerator moveGround(Vector3 direction, Vector3 destination) {
         float starttime = Time.time;
-        while(ground.transform.position != destination) {
+        while (ground.transform.position != destination) {
             ground.transform.position = Vector3.MoveTowards(ground.transform.position, destination, (Time.time - starttime) * flyingSpeed);
             yield return null;
         }
@@ -222,10 +218,6 @@ public class PhaseManager : MonoBehaviour {
         divider.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f);
         divider.layer = LayerMask.NameToLayer("Default");
         ui_phase.text = "BUILD";
-
-        foreach (GameObject obj in itemSpawners) {
-            obj.GetComponent<Spawner> ().on = true;
-        }
     }
 
     // Casts a raycast left and a raycast right at the desired height to see if a tower is at that height

@@ -51,7 +51,6 @@ public class Spawner : MonoBehaviour {
 			GameObject item = Instantiate (itemPrefabs[idx], transform.position, Quaternion.identity) as GameObject;
 
 			item.SetActive(false);
-			item.GetComponent<Item> ().spawnerScript = this;
 			poolStack.Push(item);
 		}
 		// Invoke repeating spawns of prefab

@@ -7,7 +7,6 @@ public enum PlayerForm {
     Normal,        // Running, Jumping, Idle
     Shooting,      // Aiming to shoot held weapon
     Holding,       // Holding an item
-    Throwing,      // Charging up object to throw
     Setting,       // Placing settable object
     Controlling,   // Used when driving or firing a block weapon
 }
@@ -35,7 +34,7 @@ public class Player : MonoBehaviour {
 	public bool                             debugMode = false;
 
     public LayerMask                        placementMask;
-    public  LayerMask                       platformsMask;
+    public LayerMask                        platformsMask;
     public LayerMask                        groundedMask;
     public bool                             ________________;
     // Encapsulated attributes
@@ -50,7 +49,6 @@ public class Player : MonoBehaviour {
 
     // Internal Support Variables
     private string                          playerNumStub;
-    private float                           throwChargeCount = 0f;
 	private float 							jetpackFuelCurrent;
 
     // GameObject components & child objects
@@ -136,7 +134,6 @@ public class Player : MonoBehaviour {
         stateUpdateMap.Add (PlayerForm.Normal, NormalUpdate);
         stateUpdateMap.Add (PlayerForm.Shooting, ShootingUpdate);
         stateUpdateMap.Add (PlayerForm.Holding, HoldingUpdate);
-        stateUpdateMap.Add (PlayerForm.Throwing, ThrowingUpdate);
         stateUpdateMap.Add (PlayerForm.Setting, SettingUpdate);
         stateUpdateMap.Add (PlayerForm.Controlling, ControllingUpdate);
     }
@@ -163,15 +160,7 @@ public class Player : MonoBehaviour {
         CalculateMovement ();
 
         if (PhaseManager.S.inBuildPhase) {
-            // Check if an item is within reach
-            Collider2D itemCol;
-            if (itemCol = Physics2D.OverlapCircle (transform.position, itemDetectRadius, itemLayer)) {
-                tt_manager.DisplayPrice (itemCol.gameObject);
-
-                if (Input.GetButtonDown ("Y" + playerNumStub)) {
-                    TryToHoldBlock (itemCol);
-                }
-            }
+            TryToPickUpItem ();
 
         } else {
            	// Aiming shot trajectory with the right stsick
@@ -236,23 +225,17 @@ public class Player : MonoBehaviour {
     // Exit to: Throwing(throw button)
     void HoldingUpdate() {
         CalculateMovement ();
+        // CG: still need to be able to pick up the other items if we're close to them
+        TryToPickUpItem ();
 
-        // Switch to either throwing or setting
-        if (Input.GetAxis ("TriggerR" + playerNumStub) > 0) {
-            form = PlayerForm.Throwing;
-        } else if (heldItem.IsSettable() && Input.GetButtonDown ("Y" + playerNumStub)) {
+        if (heldItem.IsSettable() && Input.GetButtonDown ("Y" + playerNumStub)) {
             form = PlayerForm.Setting;
-        }
-
-        // JF: Release held item
-        else if (Input.GetButtonDown("B" + playerNumStub)) {
-            heldItem.Thrown (this, Vector3.left + Vector3.up);
-            form = PlayerForm.Normal;
         }
     }
 
     void SettingUpdate() {
         // CalculateMovement ();
+
 
         // JF: Change location of highlight guide
         Vector3 setPos = GetGridPosition ();
@@ -281,45 +264,15 @@ public class Player : MonoBehaviour {
             }
 
             if (blocker || !valid_neighbor || setPos.x == 0) { // Cannot place here
-                form = PlayerForm.Holding;
                 // TODO: JF: Play buzzer sound if player attempts to set item here
+                form = PlayerForm.Holding;
             }
             else {
-                heldItem.Set (setPos);
-                heldItem.Detach (this);
-                heldItem = null;
-                form = PlayerForm.Normal;
+                SetItem (setPos);
             }
         }
         // JF: Cancel setting
         else if (Input.GetButtonDown("B" + playerNumStub)) {
-            form = PlayerForm.Holding;
-        }
-    }
-
-    // Behavior when charging a throw; let go of the throw button to throw
-    // Entered from: Holding(throw button)
-    // Exit to: Holding(cancel), Normal(throw)
-    void ThrowingUpdate() {
-        CalculateMovement ();
-        throwChargeCount += Time.deltaTime;
-        sprend.color = Color.Lerp (Color.white, Color.red, throwChargeCount / throwChargeMax);
-
-        if (Input.GetAxis ("TriggerR" + playerNumStub) == 0) {
-            // Item is thrown
-            if (throwChargeCount > throwChargeMax) {
-                throwChargeCount = throwChargeMax;
-            }
-			Vector3 throwVel = GetLeftJoyDirection()*throwChargeCount*throwChargeRatio;
-            heldItem.Thrown (this, throwVel);
-            heldItem = null;
-            throwChargeCount = 0f;
-            sprend.color = Color.white;
-            form = PlayerForm.Normal;
-        } else if (Input.GetButtonDown ("B" + playerNumStub)) {
-            // Throwing was cancelled
-            throwChargeCount = 0f;
-            sprend.color = Color.white;
             form = PlayerForm.Holding;
         }
     }
@@ -365,13 +318,6 @@ public class Player : MonoBehaviour {
                 // JF: Toggle highlight guide
                 highlightObject.SetActive(false);
                 _form = value;
-                break;
-            case PlayerForm.Throwing:
-                if (_form == PlayerForm.Holding) {
-                    _form = value;
-                } else {
-                    Debug.LogError ("Transition to Holding state from " + gameObject.name + " from " + _form);
-                }
                 break;
             case PlayerForm.Setting:
                 // JF: Toggle highlight guide
@@ -569,6 +515,35 @@ public class Player : MonoBehaviour {
 
         // successfully attached!
         return true;
+    }
+
+    // Check if there's an item around us (the main 3 item spawners) and pick it up if so
+    void TryToPickUpItem(){
+        Collider2D itemCol = Physics2D.OverlapCircle (transform.position, itemDetectRadius, itemLayer);
+        if (itemCol) {
+
+            GameObject duplicate_item = Instantiate<GameObject>(itemCol.gameObject,
+                                                                itemCol.gameObject.transform.position,
+                                                                Quaternion.identity);
+            if (heldItem) {
+                heldItem.Detach (this);
+            }
+
+            heldItem = duplicate_item.GetComponent<Item> ();
+            heldItem.Attach (this);
+           
+        }
+    }
+
+    // performs all steps necessary to set an item once a valid position has been found
+    void SetItem(Vector3 set_pos){
+        heldItem.Set (set_pos);
+        if (point_manager.UsePoints (heldItem.GetCost ())) {
+            // show the tooltip of the player spending points on picking up the item
+            tt_manager.SpendPoints (heldItem.GetCost ());
+        }
+
+        form = PlayerForm.Holding;
     }
 
     // used to release from a controllable block and update the correct attributes
