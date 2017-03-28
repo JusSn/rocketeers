@@ -537,12 +537,11 @@ public class Player : MonoBehaviour {
 
     // performs all steps necessary to set an item once a valid position has been found
     void SetItem(Vector3 set_pos){
-        heldItem.Set (set_pos);
         if (point_manager.UsePoints (heldItem.GetCost ())) {
+            heldItem.Set (set_pos);
             // show the tooltip of the player spending points on picking up the item
             tt_manager.SpendPoints (heldItem.GetCost ());
         }
-
         form = PlayerForm.Holding;
     }
 

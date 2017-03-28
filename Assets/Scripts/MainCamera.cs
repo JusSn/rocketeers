@@ -13,6 +13,7 @@ public class MainCamera : MonoBehaviour {
 
     // JF: Determines how far objects can fall off screen during battle before being destroyed
     private int CAMERA_LOWER_LEEWAY = 3;
+    private float battlePhaseSize = 9f;
 
 	// Use this for initialization
 	void Start () {
@@ -30,6 +31,24 @@ public class MainCamera : MonoBehaviour {
     void CheckForRestart(){
         if (Input.GetButtonDown ("Restart")) {
             SceneManager.LoadScene ("Main");
+        }
+    }
+
+    // CG called by the phase manager when the switch to battle phase begins
+    public void SwitchToBattlePhase(){
+        StartCoroutine ("LerpToBattlePhaseCamera");
+    }
+
+    // CG: Lerps the camera to be 1 unit wider than it starts out as
+    IEnumerator LerpToBattlePhaseCamera(){
+        // wait 5 seconds before starting to lerp the camera. This results in lerping
+        // beginning with 5 seconds left in the countdown
+        yield return new WaitForSeconds (5f);
+        // don't worry about going the entire distance, just some
+        while (GetHalfHeightOfCamera() <= (battlePhaseSize - 0.15f)) {
+            GetComponent<Camera> ().orthographicSize = Mathf.Lerp(GetHalfHeightOfCamera(),
+                    battlePhaseSize, Time.deltaTime * 0.2f);
+            yield return null;
         }
     }
 

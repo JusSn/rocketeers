@@ -75,6 +75,11 @@ public class PhaseManager : MonoBehaviour {
         }
         else {
             if (inBuildPhase) {
+                if (!countdownNotStarted) {
+                    // shake the camera with an increasing magnitude per the countdown timer
+                    CameraShake.Shake (0.1f, 0.5f / (timeLeft + 1f)); // timeLeft + 1f so we don't divide by zero
+                }
+
                 seconds = (timeLeft % 60).ToString("00");
                 ui_timeLeft.text = seconds;
             }
@@ -95,6 +100,7 @@ public class PhaseManager : MonoBehaviour {
         Invoke ("SwitchToBattlePhase", 10);
         InvokeRepeating ("FlashCautionUI", 0, 1);
         ui_timeLeft.fontSize = 50;
+        MainCamera.S.SwitchToBattlePhase ();
     }
 
     // Switches to battle phase:
@@ -158,6 +164,11 @@ public class PhaseManager : MonoBehaviour {
     IEnumerator moveGround(Vector3 direction, Vector3 destination) {
         float starttime = Time.time;
         while (ground.transform.position != destination) {
+            // CG: 0.5f is the screen shake magnitude at the time of switching to battle phase
+            // so the magnitude function here goes from 0.5f to 0 and subtracted by the amount of time
+            // we've been in the battle phase divided by 5f. 5f acts as a scaling value since Time.time - starttime
+            // will be much larger than 0.5f after 0.5 seconds has passed. These values seemed to give a decent transition
+            CameraShake.Shake (0.1f, 0.5f - ((Time.time - starttime) / 5f));
             ground.transform.position = Vector3.MoveTowards(ground.transform.position, destination, (Time.time - starttime) * flyingSpeed);
             yield return null;
         }

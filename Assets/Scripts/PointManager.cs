@@ -29,7 +29,7 @@ public class PointManager : MonoBehaviour {
     // Calling condition: When a player wants to pick up a resource,
     //                    check to see if they can use that resource
     //                    based on how many points their team has
-    // Called by: player.TODO()
+    // Called by: player.Setting()
     public bool UsePoints(int pts_to_be_used){
         // check if we can use the amount of points we want to
         if (CanUsePoints (pts_to_be_used)) {

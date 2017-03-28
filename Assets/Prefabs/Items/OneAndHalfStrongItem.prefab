@@ -90,7 +90,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   heldPos: {x: 0, y: 0, z: 0}
   resource_cost: 150
-  spawnerScript: {fileID: 0}
   repoolTime: 10
   ________________: 0
   held: 0
@@ -126,7 +125,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -226222937
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: ca2477718e923674797f9069c007f997, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 8b25876e418ae4fd5a0cb9bcfdf90337, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
