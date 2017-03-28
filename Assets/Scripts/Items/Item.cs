@@ -26,7 +26,7 @@ public class Item : MonoBehaviour {
 		transform.parent = _player.transform;
 		transform.localPosition = heldPos;
         transform.localScale = Vector3.one / 2f;
-        _player.form = PlayerForm.Holding;
+        _player.form = PlayerForm.Setting;
 
 		// JF: Disable collider when held to enable down jumping and disable other people from picking it up
 		boxCollider.enabled = false;

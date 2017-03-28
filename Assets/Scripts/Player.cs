@@ -5,8 +5,6 @@ using UnityEngine;
 
 public enum PlayerForm {
     Normal,        // Running, Jumping, Idle
-    Shooting,      // Aiming to shoot held weapon
-    Holding,       // Holding an item
     Setting,       // Placing settable object
     Controlling,   // Used when driving or firing a block weapon
 }
@@ -132,8 +130,6 @@ public class Player : MonoBehaviour {
         // Filling the function behavior map
         stateUpdateMap = new Dictionary<PlayerForm, Action> ();
         stateUpdateMap.Add (PlayerForm.Normal, NormalUpdate);
-        stateUpdateMap.Add (PlayerForm.Shooting, ShootingUpdate);
-        stateUpdateMap.Add (PlayerForm.Holding, HoldingUpdate);
         stateUpdateMap.Add (PlayerForm.Setting, SettingUpdate);
         stateUpdateMap.Add (PlayerForm.Controlling, ControllingUpdate);
     }
@@ -155,7 +151,7 @@ public class Player : MonoBehaviour {
 
     // General behavior of the player when not holding anything during the building phase
     // Entered from: Throwing(thrown)
-    // Exit to: Holding(pickup)
+    // Exit to: Setting(pickup)
     void NormalUpdate() {
         CalculateMovement ();
 
@@ -163,9 +159,9 @@ public class Player : MonoBehaviour {
             TryToPickUpItem ();
 
         } else {
-           	// Aiming shot trajectory with the right stsick
+            // Aiming shot trajectory with the right stick
 			aimArrowObject.SetActive(true);
-			if (Input.GetAxis ("RightJoyX" + playerNumStub) != 0 || Input.GetAxis ("RightJoyY" + playerNumStub) != 0) {
+            if (IsRightJoyActive()) {
 				Vector3 trajectory = GetRightJoyDirection ();
 				float angle = Vector3.Angle (Vector3.right, trajectory);
                 angle = (trajectory.y < 0) ? -angle : angle; 
@@ -174,6 +170,13 @@ public class Player : MonoBehaviour {
                 aimSprend.flipY = (trajectory.x < 0) ? true : false;
 
 				aimArrowObject.transform.rotation = Quaternion.AngleAxis (angle, Vector3.forward);
+
+                // CG: Shoot gun every projCDTime seconds
+                projCDCounter += Time.deltaTime;
+                if (projCDCounter >= projCDTime) {
+                    FireProjectile ();
+                    projCDCounter = 0f;
+                }
 			}
 
 			// Check if a block is within reach
@@ -181,60 +184,18 @@ public class Player : MonoBehaviour {
             if (blockCols.Length != 0){
                 if (Input.GetButtonDown ("Y"+ playerNumStub) && TryToSitInBlock (blockCols)) {
 					aimArrowObject.SetActive(false);
-                    // there's a weapon underndeath us, so sit in it
+                    // there's a weapon underneath us, so sit in it
                     form = PlayerForm.Controlling;
                 }
             }
-
-			projCDCounter += Time.deltaTime;
-			if (Input.GetAxis ("TriggerR" + playerNumStub) > 0) {
-				if (projCDCounter >= projCDTime) {
-					FireProjectile ();
-					projCDCounter = 0f;
-				}
-            }
         }
     }
 
-    // Aiming the projectile; Let go of the shoot button to fire
-    // Entered from: Normal(shoot)
-    // Exit to: Normal(shoot)
-    void ShootingUpdate() {
 
-        if (Input.GetAxis ("LeftJoyX" + playerNumStub) != 0 || Input.GetAxis ("LeftJoyY" + playerNumStub) != 0) {
-			Vector3 trajectory = GetRightJoyDirection ();
-            float angle = Vector3.Angle (Vector3.right, trajectory);
-            if (trajectory.x < 0) {
-                angle *= -1;
-            }
-            aimArrowObject.transform.rotation = Quaternion.AngleAxis (angle, Vector3.forward);
-            aimArrowObject.transform.rotation = Quaternion.AngleAxis (angle, Vector3.forward);
-        }
-
-        if (Input.GetButtonUp ("X" + playerNumStub)) {
-            FireProjectile ();
-            form = PlayerForm.Normal;
-        } else if (Input.GetButtonDown ("A" + playerNumStub)) {
-            CalculateMovement ();
-            form = PlayerForm.Normal;
-        }
-    }
-
-    // Behavior when holding an item; Transitions to either throw or set
-    // Entered from: Normal(pickup), Throwing(cancel)
-    // Exit to: Throwing(throw button)
-    void HoldingUpdate() {
+    void SettingUpdate() {
         CalculateMovement ();
         // CG: still need to be able to pick up the other items if we're close to them
         TryToPickUpItem ();
-
-        if (heldItem.IsSettable() && Input.GetButtonDown ("Y" + playerNumStub)) {
-            form = PlayerForm.Setting;
-        }
-    }
-
-    void SettingUpdate() {
-        // CalculateMovement ();
 
 
         // JF: Change location of highlight guide
@@ -258,28 +219,24 @@ public class Player : MonoBehaviour {
         }
 
         // JF: Attempt to place block
-        if (Input.GetButtonUp ("Y" + playerNumStub)) {
+        if (Input.GetAxis ("TriggerR" + playerNumStub) > 0) {
             if (debugMode) {
                 Debug.DrawLine (transform.position, setPos, Color.red);
             }
 
             if (blocker || !valid_neighbor || setPos.x == 0) { // Cannot place here
                 // TODO: JF: Play buzzer sound if player attempts to set item here
-                form = PlayerForm.Holding;
+                form = PlayerForm.Setting;
             }
             else {
                 SetItem (setPos);
             }
         }
-        // JF: Cancel setting
-        else if (Input.GetButtonDown("B" + playerNumStub)) {
-            form = PlayerForm.Holding;
-        }
     }
 
     // Behavior when controlling a block
-    // Entered from: Holding(set button), Normal(set button)
-    // Exit to: Normal(set)
+    // Entered from: Normal(sit button)
+    // Exit to: Normal(sit button)
     void ControllingUpdate() {
 
         // used to steer the ship
@@ -311,20 +268,10 @@ public class Player : MonoBehaviour {
                 highlightObject.SetActive(false);
                 _form = value;
                 break;
-            case PlayerForm.Shooting:
-                _form = value;
-                break;
-            case PlayerForm.Holding:
-                // JF: Toggle highlight guide
-                highlightObject.SetActive(false);
-                _form = value;
-                break;
             case PlayerForm.Setting:
                 // JF: Toggle highlight guide
                 highlightObject.SetActive(true);
-                if (_form == PlayerForm.Holding) {
-                    _form = value;
-                }
+                _form = value;
                 break;
             case PlayerForm.Controlling:
                 sprend.color = Color.blue;
@@ -448,10 +395,14 @@ public class Player : MonoBehaviour {
     // Return a vector3 of the location pointed to by the aiming joystick
     // Rounded to nearest 0.5 (e.g. 1.2 rounds to 1.5, 0.8 rounds to 0.5, etc.)
     Vector3 GetGridPosition() {
-		Vector3 gridPos = sprend.transform.position + GetLeftJoyDirection ();
+		Vector3 gridPos = sprend.transform.position + GetRightJoyDirection ();
         gridPos.x = Mathf.Round (gridPos.x);
         gridPos.y = Mathf.Round (gridPos.y);
         return gridPos;
+    }
+
+    bool IsRightJoyActive(){
+        return Input.GetAxis ("RightJoyX" + playerNumStub) != 0 || Input.GetAxis ("RightJoyY" + playerNumStub) != 0;
     }
 
     // JF: Return a bool checking if player object is standing on top of a block or ground
@@ -482,7 +433,7 @@ public class Player : MonoBehaviour {
             tt_manager.SpendPoints(held.GetCost());
             held.Attach (this);
             heldItem = held;
-            form = PlayerForm.Holding;
+            form = PlayerForm.Setting;
         }
     }
 
@@ -542,7 +493,7 @@ public class Player : MonoBehaviour {
             // show the tooltip of the player spending points on picking up the item
             tt_manager.SpendPoints (heldItem.GetCost ());
         }
-        form = PlayerForm.Holding;
+        form = PlayerForm.Setting;
     }
 
     // used to release from a controllable block and update the correct attributes

@@ -37,7 +37,7 @@ public class ToolTipManager : MonoBehaviour {
         // JF: Player-centric tool tips
         // Shows the prompt above the player to place a block
         // When: Player is holding settable block item and has not set before
-        if (!setted && playerScript.form == PlayerForm.Holding) {
+        if (!setted && playerScript.form == PlayerForm.Setting) {
             tooltipImage.sprite = spritesArray[3]; //Custom set/cancel image
             tooltipImage.enabled = true;
         }
