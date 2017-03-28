@@ -252,8 +252,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   allBlocksMask:
     serializedVersion: 2
-    m_Bits: 786432
+    m_Bits: 835584
   snap_radius: 0.75
+  highlight_sprend: {fileID: 1795590417846894, guid: 9dc3cacb604ba81419b634e1bcc9f67e,
+    type: 2}
+  placementMask:
+    serializedVersion: 2
+    m_Bits: 837632
   ______________________: 0
   teamNum: 1
   being_manipulated: 0

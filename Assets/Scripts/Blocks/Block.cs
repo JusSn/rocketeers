@@ -41,6 +41,8 @@ public class Block : MonoBehaviour {
     // JF: Contains layers of blocks from all teams for attachment purposes
     public LayerMask                            allBlocksMask;
     public float                                snap_radius = 0.75f;
+    public GameObject                           highlight_sprend;
+    public LayerMask                            placementMask;
     public bool                                 ______________________;
 
     // JF: Team this block is assigned to. Inherit from blocks it first connects to
@@ -60,6 +62,8 @@ public class Block : MonoBehaviour {
 
     // Neighbor joints
     public Dictionary<Direction, FixedJointContainer>         connected_neighbors = new Dictionary<Direction, FixedJointContainer>();
+    public Dictionary<Direction, GameObject>    highlight_map = new Dictionary<Direction, GameObject>();
+
 
     // Block states
     public Dictionary<BlockStates, Action>      states = new Dictionary<BlockStates, Action>();
@@ -84,6 +88,7 @@ public class Block : MonoBehaviour {
         if (tag == "Core") {
             image = transform.Find("Canvas").Find("Image").GetComponent<Image> ();
         }
+        ShowAvailablePlaces ();
         // SK: Don't want rockets and core to add joints
         if(tag == "Rockets" || tag == "Core") {
             state = BlockStates.STILL;
@@ -155,6 +160,26 @@ public class Block : MonoBehaviour {
     /******************** Utility ********************/
 
 
+    void ShowAvailablePlaces(){
+        print ("Showing highlights");
+
+        HashSet<Direction> all_dirs = Utils.GetAllDirections ();
+        foreach (Direction dir in all_dirs) {
+            Collider2D blocker = Physics2D.OverlapCircle (transform.position + Utils.DirToVec(dir),
+                                                          0.3f,
+                                                          placementMask);
+
+            // no neighbor here so display the highlight
+            if (blocker == null) {
+                print ("Showing highlights");
+                GameObject go = Instantiate<GameObject> (highlight_sprend,
+                                                         transform.position + Utils.DirToVec (dir),
+                                                         Quaternion.identity);
+                highlight_map.Add (dir, go);
+            }
+        }
+    }
+
     // Calling condition: check and destroy this block if it's offscreen
     // Called by: this.Update()
     void DestoryIfBelowScreen(){
@@ -212,6 +237,7 @@ public class Block : MonoBehaviour {
         // need to remove the fixedjoint in this direction, not just the direction from the map
         Destroy(connected_neighbors[dir].fixed_joint);
         connected_neighbors.Remove (dir);
+        ShowAvailablePlaces ();
     }
 
 
@@ -240,6 +266,12 @@ public class Block : MonoBehaviour {
         // add the fixedjoints and update the direction map
         FixedJoint2D fj = AddFixedJoint (other.gameObject);
         connected_neighbors.Add(dir, new FixedJointContainer(fj, other));
+        // destroy the highlight map
+        // the newest block being placed will not have the highlight direction in it
+        if (highlight_map.ContainsKey (dir)) {
+            Destroy (highlight_map [dir]);
+            highlight_map.Remove (dir);
+        }
     }
 
     // JF: Assigns block to a team and modifies its layers to match
@@ -307,5 +339,17 @@ public class Block : MonoBehaviour {
         var children = new List<GameObject>();
         foreach (Transform child in transform) children.Add(child.gameObject);
         children.ForEach(child => Destroy(child));
+    }
+
+    // removes all the highlights from the block
+    public void RemoveHighlights(){
+        foreach(Direction dir in highlight_map.Keys){
+            Destroy (highlight_map [dir]);
+        }
+        highlight_map.Clear ();
+    }
+
+    void OnDestroy(){
+        RemoveHighlights ();
     }
 }
