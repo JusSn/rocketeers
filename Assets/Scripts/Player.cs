@@ -161,22 +161,23 @@ public class Player : MonoBehaviour {
         } else {
             // Aiming shot trajectory with the right stick
 			aimArrowObject.SetActive(true);
+            projCDCounter += Time.deltaTime;
             if (IsRightJoyActive()) {
 				Vector3 trajectory = GetRightJoyDirection ();
 				float angle = Vector3.Angle (Vector3.right, trajectory);
                 angle = (trajectory.y < 0) ? -angle : angle; 
 
                 // JF: Flip ray gun if aiming to left
-                aimSprend.flipY = (trajectory.x < 0) ? true : false;
+                aimSprend.flipY = trajectory.x < 0;
 
 				aimArrowObject.transform.rotation = Quaternion.AngleAxis (angle, Vector3.forward);
 
                 // CG: shooting occurs with right trigger
                 if (Input.GetAxis ("TriggerR" + playerNumStub) > 0) {
                     // CG: Shoot gun every projCDTime seconds
-                    projCDCounter += Time.deltaTime;
                     if (projCDCounter >= projCDTime) {
-                        FireProjectile ();
+                        FireBurst ();
+                        // FireProjectile ();
                         projCDCounter = 0f;
                     }
                 }
@@ -518,6 +519,13 @@ public class Player : MonoBehaviour {
         Quaternion rot = sprite.transform.rotation;
         rot.z = 0f;
 		charSprite.transform.rotation = rot;
+    }
+
+    // JF: Fire burst of three rounds for 
+    void FireBurst () {
+        Invoke ("FireProjectile", 0);
+        Invoke ("FireProjectile", 0.085f);
+        Invoke ("FireProjectile", 0.17f);
     }
 
     void FireProjectile() {
