@@ -92,6 +92,7 @@ MonoBehaviour:
   damage_amount: 25
   teamNum: 0
   lifeTime: 2.25
+  hit_effect: {fileID: 1883780633904654, guid: c90bd418384f4f54eb9ce23c4dfc5956, type: 2}
 --- !u!212 &212236008782226768
 SpriteRenderer:
   m_ObjectHideFlags: 1

@@ -176,6 +176,7 @@ public class PhaseManager : MonoBehaviour {
             ground.transform.position = Vector3.MoveTowards(ground.transform.position, destination, (Time.time - starttime) * flyingSpeed);
             yield return null;
         }
+        Destroy(ground);
     }
 
     // Sets gameOver to true and creates an explosion at the losing team's core
