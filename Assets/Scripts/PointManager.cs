@@ -56,6 +56,7 @@ public class PointManager : MonoBehaviour {
 
     // starts a coroutine that flashes the main points text red and black
     public void NotEnoughPoints(){
+        StopAllCoroutines ();
         StartCoroutine(FlashPoints());
     }
 
@@ -68,7 +69,7 @@ public class PointManager : MonoBehaviour {
             yield return new WaitForSeconds (0.25f);
 
             // sets the text to be black for 0.5 seconds
-            ui_pts_left.color = Color.black;
+            ui_pts_left.color = Color.white;
             yield return new WaitForSeconds (0.25f);
         }
     }
