@@ -92,7 +92,7 @@ MonoBehaviour:
   repoolTime: 10
   ________________: 0
   held: 0
-  heldPos: {x: 0, y: -1, z: 0}
+  heldPos: {x: 0, y: 0.9, z: 0}
   setObject: {fileID: 1480987293945216, guid: 2fb5ff631e39744fc859ccfb89da1bd5, type: 2}
 --- !u!212 &212223248893138628
 SpriteRenderer:
