@@ -164,7 +164,6 @@ public class Player : MonoBehaviour {
     // Exit to: Setting(pickup)
     void NormalUpdate() {
         CalculateMovement ();
-
         if (PhaseManager.S.inBuildPhase) {
             TryToPickUpItem ();
 
@@ -531,7 +530,7 @@ public class Player : MonoBehaviour {
 			charSprite.transform.Rotate(Vector3.forward, rate);
             yield return null;
         }
-        Quaternion rot = sprite.transform.rotation;
+		Quaternion rot = charSprite.transform.rotation;
         rot.z = 0f;
 		charSprite.transform.rotation = rot;
     }
