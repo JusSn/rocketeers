@@ -46,6 +46,19 @@ public class Health : MonoBehaviour {
         FlashHealthBar ();
     }
 
+    public void Repair(float repair_amount) {
+        UpdateHealthByAmount(repair_amount);
+        FlashHealthBar();
+        if (cur_health >= MAX_HEALTH) {
+            Destroy(health_bar);
+            health_bar = null;
+        }
+    }
+
+    public float GetHealth() {
+        return cur_health;
+    }
+
     void CheckToDestroy(){
         if (cur_health <= 0f) {
             // SK: add logic for core ending the game

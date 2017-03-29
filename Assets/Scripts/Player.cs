@@ -186,10 +186,15 @@ public class Player : MonoBehaviour {
 			// Check if a block is within reach
             Collider2D[] blockCols = Physics2D.OverlapCircleAll (transform.position, itemDetectRadius, blockMask);
             if (blockCols.Length != 0){
-                if (Input.GetButtonDown ("Y"+ playerNumStub) && TryToSitInBlock (blockCols)) {
-					aimArrowObject.SetActive(false);
-                    // there's a weapon underneath us, so sit in it
-                    form = PlayerForm.Controlling;
+                if (Input.GetButtonDown ("X"+ playerNumStub)) {
+                    if (TryToSitInBlock(blockCols)) {
+                        aimArrowObject.SetActive(false);
+                        // there's a weapon underneath us, so sit in it
+                        form = PlayerForm.Controlling;
+                    }
+                    else {
+                        TryToRepairBlock(blockCols);
+                    }
                 }
             }
         }
@@ -235,7 +240,7 @@ public class Player : MonoBehaviour {
         transform.position = controlled_block.transform.position;
 
         // Detach from the block if the user wants to
-        if (Input.GetButtonDown("Y" + playerNumStub)){
+        if (Input.GetButtonDown("X" + playerNumStub)){
             DetachFromBlock ();
             return;
         }
@@ -435,6 +440,19 @@ public class Player : MonoBehaviour {
         }
 
         return false;
+    }
+
+    void TryToRepairBlock(Collider2D[] repairable_block) {
+        float closest_dist = Vector3.Distance(repairable_block[0].transform.position, transform.position);
+        GameObject closest_block = repairable_block[0].gameObject;
+        foreach(Collider2D coll in repairable_block) {
+            float temp_dist = Vector3.Distance(coll.transform.position, transform.position);
+            if(coll.gameObject.GetComponent<Health>().GetHealth() < coll.gameObject.GetComponent<Health>().MAX_HEALTH && Mathf.Abs(temp_dist) < Mathf.Abs(closest_dist)) {
+                closest_dist = temp_dist;
+                closest_block = coll.gameObject;
+            }
+        }
+        closest_block.GetComponent<Block>().RepairBlock();
     }
 
     // used when attaching to a controllable block if one is below us

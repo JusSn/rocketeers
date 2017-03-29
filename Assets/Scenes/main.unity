@@ -1257,6 +1257,12 @@ Prefab:
       propertyPath: allBlocksMask.m_Bits
       value: 3934208
       objectReference: {fileID: 0}
+    - target: {fileID: 114694627366464624, guid: 6fa99bba588ee4a328b733bb38f1c774,
+        type: 2}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 441cce3ef5fa2d94fb756a5c60ab8012,
+        type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6fa99bba588ee4a328b733bb38f1c774, type: 2}
   m_IsPrefabParent: 0
@@ -2186,7 +2192,7 @@ MonoBehaviour:
   placedBlocks: []
   flyingSpeed: 0.2
   gravityScale: 1
-  build_time: 45
+  build_time: 10
   battle_time: -1
   rounds_to_play: 3
 --- !u!114 &669842091
@@ -4595,6 +4601,12 @@ Prefab:
       propertyPath: m_Layer
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 114694627366464624, guid: 6fa99bba588ee4a328b733bb38f1c774,
+        type: 2}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 441cce3ef5fa2d94fb756a5c60ab8012,
+        type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6fa99bba588ee4a328b733bb38f1c774, type: 2}
   m_IsPrefabParent: 0

@@ -156,9 +156,12 @@ public class Block : MonoBehaviour {
         health.TakeDamage(dmg_amt);
     }
 
+    public void RepairBlock() {
+        health.Repair(10);
+    }
+
 
     /******************** Utility ********************/
-
 
     void ShowAvailablePlaces(){
 
