@@ -11,6 +11,7 @@ public class Utils {
     }
 
     public static int LEFT_CLICK_BTN = 0;
+    public static float MAX_BUILD_HEIGHT = 9f;
     // Returns the opposite direction
     // North -> South, East -> West
     public static Direction GetOppositeDirection(Direction dir) {

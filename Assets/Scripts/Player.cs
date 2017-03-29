@@ -213,25 +213,13 @@ public class Player : MonoBehaviour {
         bool valid_neighbor = Utils.ValidBlockPlacement (setPos, blockMask);
 
         // show or don't show the valid placement object
-        if (!blocker && valid_neighbor) {
+        if (!blocker && valid_neighbor && setPos.x != 0 && setPos.y < Utils.MAX_BUILD_HEIGHT) {
             highlightObject.SetActive (true);
-        } else {
-            highlightObject.SetActive (false);
-        }
-
-        // JF: Attempt to place block
-        if (Input.GetAxis ("TriggerR" + playerNumStub) > 0) {
-            if (debugMode) {
-                Debug.DrawLine (transform.position, setPos, Color.red);
-            }
-
-            if (blocker || !valid_neighbor || setPos.x == 0) { // Cannot place here
-                // TODO: JF: Play buzzer sound if player attempts to set item here
-                form = PlayerForm.Setting;
-            }
-            else {
+            if (Input.GetAxis ("TriggerR" + playerNumStub) > 0) {
                 SetItem (setPos);
             }
+        } else {
+            highlightObject.SetActive (false);
         }
     }
 
