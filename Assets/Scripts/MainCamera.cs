@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using InControl;
 
 public class MainCamera : MonoBehaviour {
    
@@ -29,7 +30,7 @@ public class MainCamera : MonoBehaviour {
 	}
 
     void CheckForRestart(){
-        if (Input.GetButtonDown ("Restart")) {
+        if (InputManager.ActiveDevice.MenuWasPressed) {
             SceneManager.LoadScene ("Main");
         }
     }

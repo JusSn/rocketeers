@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using InControl;
 
 public enum PlayerForm {
     Normal,        // Running, Jumping, Idle
@@ -84,6 +85,9 @@ public class Player : MonoBehaviour {
     // Internal maps
     private Dictionary<PlayerForm, Action>  stateUpdateMap;
 
+    // CG: input object
+    private InputDevice                     input;
+
     // Use this for initialization
     void Start () {
         // Get GameObject components & children
@@ -132,6 +136,12 @@ public class Player : MonoBehaviour {
         stateUpdateMap.Add (PlayerForm.Normal, NormalUpdate);
         stateUpdateMap.Add (PlayerForm.Setting, SettingUpdate);
         stateUpdateMap.Add (PlayerForm.Controlling, ControllingUpdate);
+        try {
+            input = InputManager.Devices [int.Parse (playerNumStr) - 1];
+        } catch {
+            Debug.Log ("4 controllers are not connected. Assigning extra players to first player");
+            input = InputManager.Devices [0];
+        }
     }
 
     // Update is called once per frame
@@ -173,7 +183,7 @@ public class Player : MonoBehaviour {
 				aimArrowObject.transform.rotation = Quaternion.AngleAxis (angle, Vector3.forward);
 
                 // CG: shooting occurs with right trigger
-                if (Input.GetAxis ("TriggerR" + playerNumStub) > 0) {
+                if (input.RightTrigger > 0){
                     // CG: Shoot gun every projCDTime seconds
                     if (projCDCounter >= projCDTime) {
                         FireBurst ();
@@ -186,7 +196,7 @@ public class Player : MonoBehaviour {
 			// Check if a block is within reach
             Collider2D[] blockCols = Physics2D.OverlapCircleAll (transform.position, itemDetectRadius, blockMask);
             if (blockCols.Length != 0){
-                if (Input.GetButtonDown ("X"+ playerNumStub)) {
+                if (input.Action3.WasPressed) {
                     if (TryToSitInBlock(blockCols)) {
                         aimArrowObject.SetActive(false);
                         // there's a weapon underneath us, so sit in it
@@ -220,7 +230,7 @@ public class Player : MonoBehaviour {
         // show or don't show the valid placement object
         if (!blocker && valid_neighbor && setPos.x != 0 && setPos.y < Utils.MAX_BUILD_HEIGHT) {
             highlightObject.SetActive (true);
-            if (Input.GetAxis ("TriggerR" + playerNumStub) > 0) {
+            if (input.RightTrigger > 0) {
                 SetItem (setPos);
             }
         } else {
@@ -234,13 +244,13 @@ public class Player : MonoBehaviour {
     void ControllingUpdate() {
 
         // used to steer the ship
-        float x_val = Input.GetAxis ("LeftJoyX" + playerNumStub) * DRIVE_SPEED_X;
-        float y_val = -Input.GetAxis ("LeftJoyY" + playerNumStub) * DRIVE_SPEED_Y;
+        float x_val = input.LeftStickX * DRIVE_SPEED_X;
+        float y_val = input.LeftStickY * DRIVE_SPEED_Y;
         controlled_block.GetComponent<Rigidbody2D>().velocity = new Vector3 (x_val, y_val, 0f);
         transform.position = controlled_block.transform.position;
 
         // Detach from the block if the user wants to
-        if (Input.GetButtonDown("X" + playerNumStub)){
+        if (input.Action3.WasPressed){
             DetachFromBlock ();
             return;
         }
@@ -286,7 +296,7 @@ public class Player : MonoBehaviour {
 
     // Calculate and return magnitude of any changes to x velocity from player input
     float GetXInputSpeed(float currentX) {
-        float direction = Input.GetAxis ("LeftJoyX" + playerNumStub);
+        float direction = input.LeftStickX;
 
         float flip = (direction < 0) ? 180f : 0f;
 
@@ -307,8 +317,8 @@ public class Player : MonoBehaviour {
             currentX = Mathf.Lerp(currentX, direction * xSpeed, Time.deltaTime * 2);
         }
 
-        if (Input.GetAxis ("LeftJoyX" + playerNumStub) != 0) {
-			sprite.transform.rotation = Quaternion.Euler (0f, flip, 0f);
+        if (input.LeftStickX != 0) {
+            sprite.transform.rotation = Quaternion.Euler (0f, flip, 0f);
         }
 
         return currentX;
@@ -318,7 +328,7 @@ public class Player : MonoBehaviour {
     // JF: Jump and down-jump
     // AW: Jetpack
     float GetYInputSpeed(float currentY) {
-        if (grounded && Input.GetButtonDown ("A" + playerNumStub)) {
+        if (grounded && input.Action1.WasPressed) {
             // Down jump
             if (ducking && canDownJump) {
                 tt_manager.downJumped = true;
@@ -332,7 +342,7 @@ public class Player : MonoBehaviour {
         }
 
         // Check for double jump
-        if (!doubleJumped && !grounded && Input.GetButtonDown("A" + playerNumStub)){
+        if (!doubleJumped && !grounded && input.Action1.WasPressed){
             tt_manager.doubleJumped = true;
 
             currentY = ySpeed;
@@ -349,8 +359,7 @@ public class Player : MonoBehaviour {
 			}
         }
 		
-		if (Input.GetAxis ("TriggerL" + playerNumStub) > 0
-			&& jetpackFuelCurrent > 0f) {
+        if (input.LeftTrigger > 0 && jetpackFuelCurrent > 0f) {
 			jetpackFuelBar.SetActive (true);
 			jetpackFuelCurrent -= Time.deltaTime;
 			currentY = GetJetpackThrust ();
@@ -375,13 +384,13 @@ public class Player : MonoBehaviour {
 
     // Returns a normalized vector pointed toward the direction of the left joystick
     Vector3 GetLeftJoyDirection() {
-        Vector3 inputDir = new Vector3 (Input.GetAxisRaw ("LeftJoyX" + playerNumStub), -Input.GetAxisRaw ("LeftJoyY" + playerNumStub));
+        Vector3 inputDir = new Vector3 (input.LeftStickX, input.LeftStickY);
         return inputDir.normalized;
     }
 
 	// Returns a normalized vector pointed toward the direction of the left joystick
 	Vector3 GetRightJoyDirection() {
-		Vector3 inputDir = new Vector3 (Input.GetAxisRaw ("RightJoyX" + playerNumStub), -Input.GetAxisRaw ("RightJoyY" + playerNumStub));
+		Vector3 inputDir = new Vector3 (input.RightStickX, input.RightStickY);
 		return inputDir.normalized;
 	}
 
@@ -395,7 +404,7 @@ public class Player : MonoBehaviour {
     }
 
     bool IsRightJoyActive(){
-        return Input.GetAxis ("RightJoyX" + playerNumStub) != 0 || Input.GetAxis ("RightJoyY" + playerNumStub) != 0;
+        return input.RightStickX != 0 || input.RightStickY != 0;
     }
 
     // JF: Return a bool checking if player object is standing on top of a block or ground
@@ -406,7 +415,7 @@ public class Player : MonoBehaviour {
     }
 
     bool IsDucking() {
-        bool val = -Input.GetAxisRaw ("LeftJoyY" + playerNumStub) < 0;
+        bool val = input.LeftStickY < 0;
         animator.SetBool("ducking", val);
         return val;
     }
