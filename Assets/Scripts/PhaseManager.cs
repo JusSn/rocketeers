@@ -89,7 +89,7 @@ public class PhaseManager : MonoBehaviour {
             else {
                 foreach (GameObject player in players) {
                     if (player != null) {
-                        DestroyPlayerIfBelowScreen (player);
+                        RespawnPlayerIfBelowScreen (player);
                     }
                 }
             }
@@ -233,25 +233,9 @@ public class PhaseManager : MonoBehaviour {
     // JF: Calling condition: check and respawn this player if it's fallen too far
     // SK: Changed to respawning and added effects for JUICE
     // Called by: this.Update()
-    private void DestroyPlayerIfBelowScreen(GameObject obj){
+    private void RespawnPlayerIfBelowScreen(GameObject obj){
         if (MainCamera.S.IsBelowScreen (obj.transform.position) && !gameOver) {
-            int teamNum = obj.GetComponent<Player> ().teamNum;
-
-            // Create effects to make it look cool
-            GameObject flash = Instantiate(spawn_flash);
-            flash.transform.position = cores[teamNum - 1].transform.position + new Vector3(-0.1f, 0.5f);
-            flash.GetComponent<LoopingAnimation>().StartAnimation();
-            GameObject sizzle = Instantiate(lightning_fizzle);
-            sizzle.transform.position = cores[teamNum - 1].transform.position;
-            sizzle.GetComponent<LoopingAnimation>().StartAnimation();
-            GameObject smoke = Instantiate(smoke_plume);
-            smoke.transform.position = cores[teamNum - 1].transform.position;
-            smoke.GetComponent<LoopingAnimation>().StartAnimation();
-
-            // Move the player to the core
-            obj.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
-            obj.transform.position = cores[teamNum - 1].transform.position;
-
+            StartCoroutine (RespawnPlayer(obj));
 
             //TeamLives[teamNum - 1]--;
             //Destroy (obj);
@@ -261,9 +245,32 @@ public class PhaseManager : MonoBehaviour {
             //    float damage = cores[teamNum - 1].gameObject.GetComponent<Health> ().MAX_HEALTH;
             //    cores[teamNum - 1].gameObject.GetComponent<Block> ().TakeDamage (damage);
             //}
-
         }
+    }
 
+    private IEnumerator RespawnPlayer (GameObject obj) {
+        int teamNum = obj.GetComponent<Player> ().teamNum;
+
+        // JF: Move player way above screen to prevent this method from being called again
+        obj.transform.position = new Vector3 (0, 1000, 0);
+
+
+        yield return new WaitForSecondsRealtime(5f);
+        print ("teamNum");
+        // Create effects to make it look cool
+        GameObject flash = Instantiate(spawn_flash);
+        flash.transform.position = cores[teamNum - 1].transform.position + new Vector3(-0.1f, 0.5f);
+        flash.GetComponent<LoopingAnimation>().StartAnimation();
+        GameObject sizzle = Instantiate(lightning_fizzle);
+        sizzle.transform.position = cores[teamNum - 1].transform.position;
+        sizzle.GetComponent<LoopingAnimation>().StartAnimation();
+        GameObject smoke = Instantiate(smoke_plume);
+        smoke.transform.position = cores[teamNum - 1].transform.position;
+        smoke.GetComponent<LoopingAnimation>().StartAnimation();
+
+        // Move the player to the core
+        obj.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
+        obj.transform.position = cores[teamNum - 1].transform.position;
     }
 
     // Functions used in "build-to-height" game mode
