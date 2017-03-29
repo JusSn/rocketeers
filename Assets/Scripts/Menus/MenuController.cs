@@ -26,6 +26,7 @@ public class MenuController : MonoBehaviour {
 	private GameObject					battleControlScreen;
 
 	private SwitchSprites[]				checkBoxes;
+	private GameObject[]				players;
 
 	private Dictionary<MenuStage, Action>  tutorialMap;
 
@@ -46,11 +47,19 @@ public class MenuController : MonoBehaviour {
 		checkBoxes [2] = tutorialScreen.transform.Find ("Player3Confirm").GetComponent<SwitchSprites> ();
 		checkBoxes [3] = tutorialScreen.transform.Find ("Player4Confirm").GetComponent<SwitchSprites> ();
 
+		players = new GameObject[4];
+		players [0] = tutorialScreen.transform.Find ("Player1").gameObject;
+		players [1] = tutorialScreen.transform.Find ("Player2").gameObject;
+		players [2] = tutorialScreen.transform.Find ("Player3").gameObject;
+		players [3] = tutorialScreen.transform.Find ("Player4").gameObject;
+
 		tutorialMap = new Dictionary<MenuStage, Action> ();
 		tutorialMap.Add (MenuStage.Objective, InitPlayerControls);
 		tutorialMap.Add (MenuStage.PlayerControls, InitBuildControls);
 		tutorialMap.Add (MenuStage.BuildControls, InitBattleControls);
 		tutorialMap.Add (MenuStage.BattleControls, InitHomeScreen);
+
+		InitHomeScreen ();
 	}
 
 	void Update() {
@@ -72,6 +81,13 @@ public class MenuController : MonoBehaviour {
 
 	/******************** Switch Screen Functions ********************/
 
+	public void InitHomeScreen () {
+		DeactivateTutorial ();
+
+		homeScreen.SetActive (true);
+		stage = MenuStage.Home;
+	}
+
 	public void InitTutorial () {
 		homeScreen.SetActive (false);
 
@@ -80,16 +96,10 @@ public class MenuController : MonoBehaviour {
 		stage = MenuStage.Objective;
 	}
 
-	public void InitHomeScreen () {
-		DeactivateTutorial ();
-
-		homeScreen.SetActive (true);
-		stage = MenuStage.Home;
-	}
-
 	public void InitPlayerControls() {
 		objectiveScreen.SetActive (false);
 
+		TurnOnPlayers ();
 		playerControlScreen.SetActive (true);
 		stage = MenuStage.PlayerControls;
 	}
@@ -114,6 +124,7 @@ public class MenuController : MonoBehaviour {
 		playerControlScreen.SetActive (false);
 		buildControlScreen.SetActive (false);
 		battleControlScreen.SetActive (false);
+		TurnOffPlayers ();
 	}
 
 	public bool AllOn() {
@@ -129,6 +140,36 @@ public class MenuController : MonoBehaviour {
 		checkBoxes [1].SwitchOff ();
 		checkBoxes [2].SwitchOff ();
 		checkBoxes [3].SwitchOff ();
+	}
+
+	public void TurnOnPlayers() {
+		Vector3 pos;
+		players [0].SetActive (true);
+		pos = players [0].transform.localPosition;
+		pos.x = -360f; pos.y = -200f;
+		players [0].transform.localPosition = pos;
+
+		players [1].SetActive (true);
+		pos = players [1].transform.localPosition;
+		pos.x = -180f; pos.y = -200f;
+		players [1].transform.localPosition = pos;
+
+		players [2].SetActive (true);
+		pos = players [2].transform.localPosition;
+		pos.x = 180f; pos.y = -200f;
+		players [2].transform.localPosition = pos;
+
+		players [3].SetActive (true);
+		pos = players [3].transform.localPosition;
+		pos.x = 360f; pos.y = -200f;
+		players [3].transform.localPosition = pos;
+	}
+
+	public void TurnOffPlayers() {
+		players [0].SetActive (false);
+		players [1].SetActive (false);
+		players [2].SetActive (false);
+		players [3].SetActive (false);
 	}
 
 	/******************** Button Functions ********************/
