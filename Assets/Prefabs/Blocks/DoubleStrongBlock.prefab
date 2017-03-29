@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4563489780734514}
   - component: {fileID: 251939422773813176}
   - component: {fileID: 61666426374883474}
-  m_Layer: 15
+  m_Layer: 21
   m_Name: Platform (Lower)
   m_TagString: Block
   m_Icon: {fileID: 0}
@@ -58,7 +58,7 @@ GameObject:
   - component: {fileID: 4601336717468260}
   - component: {fileID: 251621381461930854}
   - component: {fileID: 61536155541728090}
-  m_Layer: 15
+  m_Layer: 21
   m_Name: Platform
   m_TagString: Block
   m_Icon: {fileID: 0}
@@ -72,7 +72,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1480987293945216}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -4.94, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4601336717468260}

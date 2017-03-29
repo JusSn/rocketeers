@@ -90,7 +90,7 @@ public class Block : MonoBehaviour {
         }
         ShowAvailablePlaces ();
         // SK: Don't want rockets and core to add joints
-        if(tag == "Rockets" || tag == "Core") {
+        if (tag == "Rockets" || tag == "Core") {
             state = BlockStates.STILL;
             return;
         }
@@ -161,17 +161,14 @@ public class Block : MonoBehaviour {
 
 
     void ShowAvailablePlaces(){
-        print ("Showing highlights");
 
         HashSet<Direction> all_dirs = Utils.GetAllDirections ();
         foreach (Direction dir in all_dirs) {
             Collider2D blocker = Physics2D.OverlapCircle (transform.position + Utils.DirToVec(dir),
                                                           0.3f,
                                                           placementMask);
-
             // no neighbor here so display the highlight
             if (blocker == null) {
-                print ("Showing highlights");
                 GameObject go = Instantiate<GameObject> (highlight_sprend,
                                                          transform.position + Utils.DirToVec (dir),
                                                          Quaternion.identity);
@@ -237,7 +234,6 @@ public class Block : MonoBehaviour {
         // need to remove the fixedjoint in this direction, not just the direction from the map
         Destroy(connected_neighbors[dir].fixed_joint);
         connected_neighbors.Remove (dir);
-        ShowAvailablePlaces ();
     }
 
 
