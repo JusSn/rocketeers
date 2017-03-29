@@ -308,7 +308,7 @@ public class Player : MonoBehaviour {
         }
 
         if (Input.GetAxis ("LeftJoyX" + playerNumStub) != 0) {
-			charSprite.transform.rotation = Quaternion.Euler (0f, flip, 0f);
+			sprite.transform.rotation = Quaternion.Euler (0f, flip, 0f);
         }
 
         return currentX;
@@ -419,13 +419,13 @@ public class Player : MonoBehaviour {
     // when picking up an item, check to see if we have enough points to be able to
     // pick up the item in the first place
     void TryToHoldBlock(Collider2D itemCol){
-        Item held = itemCol.GetComponent<Item> ();
+        Item itemScript = itemCol.GetComponent<Item> ();
 
-        if (point_manager.UsePoints (held.GetCost ())) {
+        if (point_manager.UsePoints (itemScript.GetCost ())) {
             // show the tooltip of the player spending points on picking up the item
-            tt_manager.SpendPoints(held.GetCost());
-            held.Attach (this);
-            heldItem = held;
+            tt_manager.SpendPoints(itemScript.GetCost());
+            itemScript.Attach (this);
+            heldItem = itemScript;
             form = PlayerForm.Setting;
         }
     }

@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Item : MonoBehaviour {
-	public Vector3 					heldPos = new Vector3 (0f, 0f, 0f);
     // how much this resource costs to pickup/use
     public int                      resource_cost;
 
 	public float					repoolTime = 10f;
 	public bool 					________________;
 	public bool 					held = false;
+	public Vector3 					heldPos = new Vector3 (0f, -1f, 0f);
 	private Rigidbody2D 			rigid;
 	private BoxCollider2D  			boxCollider;
 
@@ -30,6 +30,7 @@ public class Item : MonoBehaviour {
 
 		// JF: Disable collider when held to enable down jumping and disable other people from picking it up
 		boxCollider.enabled = false;
+		held = true;
 
 		CancelInvoke ();
 	}
