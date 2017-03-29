@@ -167,10 +167,11 @@ public class Block : MonoBehaviour {
             Collider2D blocker = Physics2D.OverlapCircle (transform.position + Utils.DirToVec(dir),
                                                           0.3f,
                                                           placementMask);
+            Vector3 to_set_pos = transform.position + Utils.DirToVec (dir);
             // no neighbor here so display the highlight
-            if (blocker == null) {
+            if (blocker == null && to_set_pos.x != 0 && to_set_pos.y < Utils.MAX_BUILD_HEIGHT) {
                 GameObject go = Instantiate<GameObject> (highlight_sprend,
-                                                         transform.position + Utils.DirToVec (dir),
+                                                         to_set_pos,
                                                          Quaternion.identity);
                 highlight_map.Add (dir, go);
             }
