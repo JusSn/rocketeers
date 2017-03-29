@@ -182,8 +182,8 @@ public class PhaseManager : MonoBehaviour {
     public void EndGame(Block destroyedCoreBlock) {
         int winner = (destroyedCoreBlock.teamNum == 1) ? 2 : 1;
 
-        GameObject boom = Instantiate(explosion, destroyedCoreBlock.transform.position, Quaternion.identity);
-        boom.GetComponent<LoopingAnimation>().StartAnimation();
+        StartCoroutine (MichaelBay (destroyedCoreBlock.transform.position));
+
         gameOver = true;
         ui_phase.text = "Team " + winner + " wins!";
 
@@ -193,6 +193,31 @@ public class PhaseManager : MonoBehaviour {
         Destroy(GameObject.Find("Ground (3)"));
 
         Invoke("BackToMenu", 5);
+    }
+
+    // Explodes losing team's Rocket base and shakes the screen
+    private IEnumerator MichaelBay (Vector3 corePos) {
+        Vector3 rocketPosL = new Vector3 (corePos.x -1, corePos.y - 1, corePos.z);
+        Vector3 rocketPosR = new Vector3 (corePos.x + 1, corePos.y - 1, corePos.z);
+
+        GameObject boom0 = Instantiate(explosion, corePos, Quaternion.identity);
+        boom0.GetComponent<LoopingAnimation>().StartAnimation();
+
+        CameraShake.Shake(0.5f, 0.4f);
+
+        yield return new WaitForSecondsRealtime(0.1f);
+
+        GameObject boom1 = Instantiate(explosion, rocketPosL, Quaternion.identity);
+        boom1.GetComponent<LoopingAnimation>().StartAnimation();
+
+        CameraShake.Shake(0.5f, 0.4f);
+
+        yield return new WaitForSecondsRealtime(0.1f);
+
+        GameObject boom2 = Instantiate(explosion, rocketPosR, Quaternion.identity);
+        boom2.GetComponent<LoopingAnimation>().StartAnimation();
+
+        CameraShake.Shake(0.5f, 0.4f);
     }
 
     private void BackToMenu() {
