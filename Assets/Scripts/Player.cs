@@ -44,6 +44,7 @@ public class Player : MonoBehaviour {
     public Item                             heldItem;
     public Controllable                     controlled_block;
     private bool                            doubleJumped;
+	private bool 							buildPhase = true;
 
 
     // Internal Support Variables
@@ -164,9 +165,8 @@ public class Player : MonoBehaviour {
     // Exit to: Setting(pickup)
     void NormalUpdate() {
         CalculateMovement ();
-        if (PhaseManager.S.inBuildPhase) {
+        if (buildPhase) {
             TryToPickUpItem ();
-
         } else {
             // Aiming shot trajectory with the right stick
 			aimArrowObject.SetActive(true);
@@ -282,6 +282,15 @@ public class Player : MonoBehaviour {
             }
         }
     }
+
+	/******************** Public Interface ********************/
+
+	public void SwitchToBattle () {
+		buildPhase = false;
+		if (heldItem)
+			heldItem.Detach (this);		
+	}
+
     /******************** Utility ********************/
 
     // Retrieve and apply any changes to the players movement
@@ -496,7 +505,6 @@ public class Player : MonoBehaviour {
 
             heldItem = duplicate_item.GetComponent<Item> ();
             heldItem.Attach (this);
-           
         }
     }
 

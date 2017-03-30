@@ -145,9 +145,7 @@ public class PhaseManager : MonoBehaviour {
 
         foreach (GameObject player in players) {
             Player player_script = player.GetComponent<Player> ();
-            if (player_script.heldItem) {
-                player_script.heldItem.Detach (player_script);
-            }
+			player_script.SwitchToBattle ();
         }
     }
 

@@ -176,6 +176,7 @@ public class Block : MonoBehaviour {
                 GameObject go = Instantiate<GameObject> (highlight_sprend,
                                                          to_set_pos,
                                                          Quaternion.identity);
+				go.transform.parent = transform;
                 highlight_map.Add (dir, go);
             }
         }
