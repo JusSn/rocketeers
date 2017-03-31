@@ -39,7 +39,6 @@ public class PhaseManager : MonoBehaviour {
     public float                        flyingSpeed = 2f;
     private Vector3                     groundStartPosition;
     public float                        gravityScale = 0.9f;
-    public float                        backgroundGravityScale = 0.2f;
 
     // Timer
     private float                       timeLeft;
@@ -124,13 +123,7 @@ public class PhaseManager : MonoBehaviour {
 
         foreach (GameObject obj in backgroundObjects) {
             
-            // JF: Parallax effect for background 
-            if (obj.name == "GroundBackground") {
-                obj.GetComponent<Rigidbody2D>().gravityScale = backgroundGravityScale;
-            }
-            else {
-                obj.GetComponent<Rigidbody2D>().gravityScale = gravityScale;
-            }
+            obj.GetComponent<Rigidbody2D>().gravityScale = gravityScale;
 
             if(obj.GetComponent<SpaceBackground>() != null) {
                 obj.GetComponent<SpaceBackground>().StartFlying();
