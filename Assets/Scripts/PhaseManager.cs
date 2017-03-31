@@ -17,6 +17,8 @@ public class PhaseManager : MonoBehaviour {
 	public AudioClip					buildBgm;
 	public AudioClip 					battleBgm;
     public AudioClip                    countdownAudio;
+    public int                          numAudioSources = 2;
+
     public GameObject[]                 rockets;
     public GameObject                   explosion;
     public GameObject                   spawn_flash;
@@ -54,7 +56,7 @@ public class PhaseManager : MonoBehaviour {
     public int                         rounds_to_play = 2;
 
 	// Components
-	private AudioSource					audioSource;
+	private AudioSource[]               audioSources;
 
     private void Awake() {
         S = this;
@@ -66,7 +68,19 @@ public class PhaseManager : MonoBehaviour {
         groundDestination = new Vector2(0, -25f);
         groundStartPosition = new Vector2(0, -7f);
 
-		audioSource = GetComponent<AudioSource> ();
+
+        // JF: Set up audiosources: 
+        // [0] background music that loops
+        // [1] sound effects that do not loop
+        audioSources = new AudioSource[numAudioSources];
+        
+        for (int i = 0; i < numAudioSources; ++i) {
+            audioSources[i] = gameObject.AddComponent<AudioSource> ();
+        }
+
+        audioSources[0].clip = buildBgm;
+        audioSources[0].loop = true;
+        audioSources[0].Play ();
     }
 	
 	// Update is called once per frame
@@ -102,7 +116,7 @@ public class PhaseManager : MonoBehaviour {
 
     public void SwitchToCountdownPhase() {
         countdownNotStarted = false;
-        audioSource.PlayOneShot(countdownAudio, 3.0f);
+        audioSources[1].PlayOneShot(countdownAudio, 3.0f);
         Invoke ("SwitchToBattlePhase", 10);
         InvokeRepeating ("FlashCautionUI", 0, 1);
         ui_timeLeft.fontSize = 50;
@@ -126,8 +140,8 @@ public class PhaseManager : MonoBehaviour {
         timeLeft = battle_time;
         ui_phase.text = "BATTLE";
         ui_timeLeft.text = "";
-		audioSource.clip = battleBgm;
-		audioSource.Play ();
+		audioSources[0].clip = battleBgm;
+		audioSources[0].Play ();
 
         foreach (GameObject obj in backgroundObjects) {
             
@@ -280,7 +294,7 @@ public class PhaseManager : MonoBehaviour {
             GameObject sizzle = Instantiate(lightning_fizzle);
             sizzle.transform.position = corePos;
             sizzle.GetComponent<LoopingAnimation>().StartAnimation();
-            
+
             GameObject smoke = Instantiate(smoke_plume);
             smoke.transform.position = corePos;
             smoke.GetComponent<LoopingAnimation>().StartAnimation();
