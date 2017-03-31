@@ -28,6 +28,10 @@ public class PhaseManager : MonoBehaviour {
     public int[]                        TeamLives;
     public GameObject[]                 cores;
 
+    public GameObject                   TopWall;
+    public GameObject                   LeftWall;
+    public GameObject                   RightWall;
+
     // Encapsulated attributes
     public static PhaseManager          S;
     public bool                         inBuildPhase = true;
@@ -115,6 +119,10 @@ public class PhaseManager : MonoBehaviour {
         CancelInvoke ("FlashCautionUI");
 
         StartCoroutine(moveGround(Vector3.down, groundDestination));
+
+        // JF: Expand outer walls to match zoomed out camera
+        ExpandWalls ();
+
         timeLeft = battle_time;
         ui_phase.text = "BATTLE";
         ui_timeLeft.text = "";
@@ -151,19 +159,19 @@ public class PhaseManager : MonoBehaviour {
         }
     }
 
-    public void SwitchToBuildPhase() {
-        inBuildPhase = true;
-        timeLeft = build_time;
-        StartCoroutine(moveGround(Vector3.up, groundStartPosition));
-        ui_phase.text = "BUILD";
-		audioSource.clip = buildBgm;
-		audioSource.Play ();
+    // public void SwitchToBuildPhase() {
+    //     inBuildPhase = true;
+    //     timeLeft = build_time;
+    //     StartCoroutine(moveGround(Vector3.up, groundStartPosition));
+    //     ui_phase.text = "BUILD";
+	// 	audioSource.clip = buildBgm;
+	// 	audioSource.Play ();
 
-        foreach (GameObject obj in backgroundObjects) {
-            obj.GetComponent<Rigidbody2D>().gravityScale = 0;
-        }
+    //     foreach (GameObject obj in backgroundObjects) {
+    //         obj.GetComponent<Rigidbody2D>().gravityScale = 0;
+    //     }
 
-    }
+    // }
 
     IEnumerator moveGround(Vector3 direction, Vector3 destination) {
         float starttime = Time.time;
@@ -191,7 +199,7 @@ public class PhaseManager : MonoBehaviour {
         // SK: Winning ship flies up off the screen
         cores[winner - 1].GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.None;
         cores[winner - 1].GetComponent<Rigidbody2D>().gravityScale = -10;
-        Destroy(GameObject.Find("Ground (3)"));
+        Destroy(GameObject.Find("TopWall"));
 
         Invoke("BackToMenu", 5);
     }
@@ -225,9 +233,14 @@ public class PhaseManager : MonoBehaviour {
         SceneManager.LoadScene("Menu");
     }
 
-
     private void FlashCautionUI () {
         LaunchCautionUI.SetActive(!LaunchCautionUI.activeInHierarchy);
+    }
+
+    private void ExpandWalls () {
+        LeftWall.transform.Translate(-Vector3.right);
+        RightWall.transform.Translate(Vector3.right);
+        TopWall.transform.Translate(Vector3.up);
     }
 
     // JF: Calling condition: check and respawn this player if it's fallen too far

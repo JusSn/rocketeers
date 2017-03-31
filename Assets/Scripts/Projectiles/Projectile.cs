@@ -27,14 +27,6 @@ public class Projectile : MonoBehaviour {
         }
     }
 
-    // changes the collider to be active instead of just a trigger once it
-    // crosses the center line
-    // protected virtual void OnTriggerEnter2D(Collider2D other){
-    //     if (other.gameObject.CompareTag ("ConvertProjectile")) {
-    //         GetComponent<CircleCollider2D> ().isTrigger = false;
-    //     }
-    // }
-
     protected virtual void OnCollisionEnter2D(Collision2D other){
         Destroy(gameObject);
         // check if we came in contact with another block/weaponblock
