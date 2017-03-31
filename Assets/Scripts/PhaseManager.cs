@@ -27,7 +27,7 @@ public class PhaseManager : MonoBehaviour {
 
     // JF: References to core and player objects
     public GameObject[]                 players;
-    public int[]                        TeamLives;
+    // public int[]                        TeamLives;
     public GameObject[]                 cores;
 
     public GameObject                   TopWall;
@@ -38,7 +38,7 @@ public class PhaseManager : MonoBehaviour {
     public static PhaseManager          S;
     public bool                         inBuildPhase = true;
     public bool                         countdownNotStarted = true;
-    public int                          currentRound = 0;
+    // public int                          currentRound = 0;
     public bool                         gameOver = false;
     public List<GameObject>             placedBlocks;
     private Vector3                     groundDestination;
@@ -53,7 +53,7 @@ public class PhaseManager : MonoBehaviour {
     // Gameplay Variables
     public float                       build_time = 5;
     public float                       battle_time = 5;
-    public int                         rounds_to_play = 2;
+    // public int                         rounds_to_play = 2;
 
 	// Components
 	private AudioSource[]               audioSources;
@@ -68,12 +68,11 @@ public class PhaseManager : MonoBehaviour {
         groundDestination = new Vector2(0, -25f);
         groundStartPosition = new Vector2(0, -7f);
 
-
         // JF: Set up audiosources: 
-        // [0] background music that loops
+        // [0] background musics that loop
         // [1] sound effects that do not loop
         audioSources = new AudioSource[numAudioSources];
-        
+
         for (int i = 0; i < numAudioSources; ++i) {
             audioSources[i] = gameObject.AddComponent<AudioSource> ();
         }

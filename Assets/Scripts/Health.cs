@@ -17,6 +17,7 @@ public class Health : MonoBehaviour {
 
     // health_bar attributes
     private GameObject                          health_bar;
+    private Transform                           greenBG;
     private Block                               parent_block;
     private Vector3                             health_bar_pos = new Vector3(0f, -0.25f, 0f);
 
@@ -46,8 +47,8 @@ public class Health : MonoBehaviour {
         FlashHealthBar ();
     }
 
-    public void Repair(float repair_amount) {
-        UpdateHealthByAmount(repair_amount);
+    public void Repair() {
+        UpdateHealthByAmount(MAX_HEALTH / 2);
         FlashHealthBar();
         if (cur_health >= MAX_HEALTH) {
             Destroy(health_bar);
@@ -75,7 +76,7 @@ public class Health : MonoBehaviour {
     // Called by: this.TakeDamage(dmg_amount) and potentially other objects
     // NOTE: This value can be positive or negative (could adjust health up if repaired)
     public void UpdateHealthByAmount(float health){
-        cur_health += health;
+        cur_health = Mathf.Min(cur_health + health, MAX_HEALTH);
     }
 
     // Calling condition: when taking damage the health bar will appear
@@ -89,10 +90,13 @@ public class Health : MonoBehaviour {
             // sets the health bar as being a child of the parent_block gameObject
             health_bar.transform.parent = parent_block.transform;
             health_bar.transform.localPosition = health_bar_pos;
+
+            // JF: Don't have to do a Find every time you want to update green bar
+            greenBG = health_bar.transform.Find("Canvas/GreenBackground");
         }
 
         // adjust the green health bar so that the red background shows
-        health_bar.transform.Find("Canvas/GreenBackground").transform.localScale = new Vector3 (cur_health/MAX_HEALTH, 1f, 0f);
+        greenBG.transform.localScale = new Vector3 (cur_health/MAX_HEALTH, 1f, 0f);
 
         // TODO: IF WE DON'T LIKE HAVING HEALTH BARS AROUND WE CAN MAKE THEM DISAPPEAR AFTER A COUPLE SECONDS
         // OR THEY CAN EXIST ONLY ONCE A BLOCK IS DAMAGED THE FIRST TIME (THIS IS THE CURRENT SITUATION)

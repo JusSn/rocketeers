@@ -158,7 +158,7 @@ public class Block : MonoBehaviour {
     }
 
     public void RepairBlock() {
-        health.Repair(10);
+        health.Repair();
     }
 
 
