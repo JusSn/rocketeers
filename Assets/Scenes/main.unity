@@ -4857,6 +4857,36 @@ Prefab:
       propertyPath: m_TagString
       value: Core
       objectReference: {fileID: 0}
+    - target: {fileID: 212756372705737768, guid: 6fa99bba588ee4a328b733bb38f1c774,
+        type: 2}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: e51caa1e321ffb048b7224f0321e5f13,
+        type: 3}
+    - target: {fileID: 212572161469623872, guid: 6fa99bba588ee4a328b733bb38f1c774,
+        type: 2}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: e1ef1227256bf1f49b46703ca9a962d6,
+        type: 3}
+    - target: {fileID: 212995168874012788, guid: 6fa99bba588ee4a328b733bb38f1c774,
+        type: 2}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: e1ef1227256bf1f49b46703ca9a962d6,
+        type: 3}
+    - target: {fileID: 212113575132310010, guid: 6fa99bba588ee4a328b733bb38f1c774,
+        type: 2}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: e1ef1227256bf1f49b46703ca9a962d6,
+        type: 3}
+    - target: {fileID: 212450552329836034, guid: 6fa99bba588ee4a328b733bb38f1c774,
+        type: 2}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: e07ed9c76dcce3e478788f7c3142f579,
+        type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6fa99bba588ee4a328b733bb38f1c774, type: 2}
   m_IsPrefabParent: 0
