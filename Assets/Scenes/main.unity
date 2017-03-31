@@ -1293,7 +1293,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1560566932841768, guid: 6fa99bba588ee4a328b733bb38f1c774, type: 2}
       propertyPath: m_Layer
-      value: 19
+      value: 23
+      objectReference: {fileID: 0}
+    - target: {fileID: 1560566932841768, guid: 6fa99bba588ee4a328b733bb38f1c774, type: 2}
+      propertyPath: m_TagString
+      value: Core
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6fa99bba588ee4a328b733bb38f1c774, type: 2}
@@ -4506,8 +4510,8 @@ Prefab:
       value: Team1Base
       objectReference: {fileID: 0}
     - target: {fileID: 1560566932841768, guid: 6fa99bba588ee4a328b733bb38f1c774, type: 2}
-      propertyPath: m_Layer
-      value: 18
+      propertyPath: m_TagString
+      value: Core
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6fa99bba588ee4a328b733bb38f1c774, type: 2}
