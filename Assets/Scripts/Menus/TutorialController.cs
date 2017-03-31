@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 using UnityEngine;
+using InControl;
 
 public enum TutorialStage {
 	Objective,       	// 1st page of tutorial
@@ -26,6 +27,7 @@ public class TutorialController : MonoBehaviour {
 
 	private SwitchSprites[]				checkBoxes;
 	private GameObject[]				players;
+	private InputDevice[]               inputDevices;
 
 	private Dictionary<TutorialStage, Action>  tutorialMap;
 
@@ -57,18 +59,27 @@ public class TutorialController : MonoBehaviour {
 		tutorialMap.Add (TutorialStage.BuildControls, InitBattleControls);
 		tutorialMap.Add (TutorialStage.BattleControls, FinishTutorial);
 
+		inputDevices = new InputDevice[4];
+		for (int i = 0; i < 4; ++i) {
+			try {
+				inputDevices[i] = InputManager.Devices [i];
+			} catch {
+				Debug.Log ("4 controllers are not connected. Assigning extra players to first player");
+				inputDevices[i] = InputManager.Devices [0];
+			}
+		}
 		InitTutorial ();
 	}
 
 	void Update() {
-		if (Input.GetButtonDown ("Start_P1"))
-			checkBoxes [0].SwitchOn ();
-		if (Input.GetButtonDown ("Start_P2"))
-			checkBoxes [1].SwitchOn ();
-		if (Input.GetButtonDown ("Start_P3"))
-			checkBoxes [2].SwitchOn ();
-		if (Input.GetButtonDown ("Start_P4"))
-			checkBoxes [3].SwitchOn ();
+		if (Input.GetButtonDown ("Back"))
+			FinishTutorial ();
+
+		for (int i = 0; i < 4; ++i) {
+			if (inputDevices[i].MenuWasPressed)
+				checkBoxes [i].SwitchOn ();
+		}
+
 		if (AllConfirmsOn ()) {
 			SwitchOffConfirms ();
 			tutorialMap [stage] ();
