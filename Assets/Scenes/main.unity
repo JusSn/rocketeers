@@ -3613,6 +3613,9 @@ MonoBehaviour:
   cores:
   - {fileID: 1377274662}
   - {fileID: 1020192379}
+  TopWall: {fileID: 1058703805}
+  LeftWall: {fileID: 1400982034}
+  RightWall: {fileID: 2018797387}
   inBuildPhase: 1
   countdownNotStarted: 1
   currentRound: 0
@@ -5443,7 +5446,7 @@ GameObject:
   - component: {fileID: 1058703808}
   - component: {fileID: 1058703807}
   m_Layer: 0
-  m_Name: Ground (3)
+  m_Name: TopWall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6403,7 +6406,7 @@ GameObject:
   - component: {fileID: 1400982035}
   - component: {fileID: 1400982036}
   m_Layer: 0
-  m_Name: Ground (1)
+  m_Name: LeftWall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6416,7 +6419,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1400982034}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -15.5, y: 0, z: 0}
+  m_LocalPosition: {x: -16, y: 0, z: 0}
   m_LocalScale: {x: 2, y: 20, z: 1}
   m_Children: []
   m_Father: {fileID: 1700467218}
@@ -8656,7 +8659,7 @@ GameObject:
   - component: {fileID: 2018797388}
   - component: {fileID: 2018797389}
   m_Layer: 0
-  m_Name: Ground (2)
+  m_Name: RightWall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8669,7 +8672,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2018797387}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 15.5, y: 0, z: 0}
+  m_LocalPosition: {x: 16, y: 0, z: 0}
   m_LocalScale: {x: 2, y: 20, z: 1}
   m_Children: []
   m_Father: {fileID: 1700467218}

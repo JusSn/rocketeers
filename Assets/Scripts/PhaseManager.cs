@@ -263,25 +263,32 @@ public class PhaseManager : MonoBehaviour {
 
     private IEnumerator RespawnPlayer (GameObject obj) {
         int teamNum = obj.GetComponent<Player> ().teamNum;
+        GameObject core = cores[teamNum - 1];
 
         // JF: Move player way above screen to prevent this method from being called again
         obj.transform.position = new Vector3 (0, 1000, 0);
 
         yield return new WaitForSecondsRealtime(5f);
-        // Create effects to make it look cool
-        GameObject flash = Instantiate(spawn_flash);
-        flash.transform.position = cores[teamNum - 1].transform.position + new Vector3(-0.1f, 0.5f);
-        flash.GetComponent<LoopingAnimation>().StartAnimation();
-        GameObject sizzle = Instantiate(lightning_fizzle);
-        sizzle.transform.position = cores[teamNum - 1].transform.position;
-        sizzle.GetComponent<LoopingAnimation>().StartAnimation();
-        GameObject smoke = Instantiate(smoke_plume);
-        smoke.transform.position = cores[teamNum - 1].transform.position;
-        smoke.GetComponent<LoopingAnimation>().StartAnimation();
 
-        // Move the player to the core
-        obj.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
-        obj.transform.position = cores[teamNum - 1].transform.position;
+        if (core != null) {
+            Vector3 corePos = core.transform.position;
+            // Create effects to make it look cool
+            GameObject flash = Instantiate(spawn_flash);
+            flash.transform.position = corePos + new Vector3(-0.1f, 0.5f);
+            flash.GetComponent<LoopingAnimation>().StartAnimation();
+
+            GameObject sizzle = Instantiate(lightning_fizzle);
+            sizzle.transform.position = corePos;
+            sizzle.GetComponent<LoopingAnimation>().StartAnimation();
+            
+            GameObject smoke = Instantiate(smoke_plume);
+            smoke.transform.position = corePos;
+            smoke.GetComponent<LoopingAnimation>().StartAnimation();
+
+            // Move the player to the core
+            obj.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
+            obj.transform.position = corePos;
+        }
     }
 
     // Functions used in "build-to-height" game mode
