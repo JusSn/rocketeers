@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 50888163648912304}
   - component: {fileID: 114945579628129328}
   m_Layer: 16
-  m_Name: Laser
+  m_Name: LaserRed
   m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -124,7 +124,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -293079361
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: e6baac1f0e351614abae57e1ec65ef17, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b870f2e41108f8f4ea0935db22246191, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
