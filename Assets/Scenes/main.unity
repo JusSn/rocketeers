@@ -3529,7 +3529,6 @@ MonoBehaviour:
   - {fileID: 108485968}
   - {fileID: 963738356}
   - {fileID: 456543714}
-  TeamLives: 0200000002000000
   cores:
   - {fileID: 1377274662}
   - {fileID: 1020192379}
@@ -3538,14 +3537,12 @@ MonoBehaviour:
   RightWall: {fileID: 2018797387}
   inBuildPhase: 1
   countdownNotStarted: 1
-  currentRound: 0
   gameOver: 0
   placedBlocks: []
   flyingSpeed: 0.2
   gravityScale: 1
   build_time: 60
   battle_time: -1
-  rounds_to_play: 3
 --- !u!114 &669842091
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -48,7 +48,6 @@ public class Player : MonoBehaviour {
 
 
     // Internal Support Variables
-    private string                          playerNumStub;
 	private float 							jetpackFuelCurrent;
 
     // GameObject components & child objects
@@ -64,7 +63,7 @@ public class Player : MonoBehaviour {
 
     // JF: Highlight object
     public GameObject                       highlightObject;
-    private SpriteRenderer[]                highlightSprends;
+    // private SpriteRenderer[]                highlightSprends;
 
     // AW: Aim arrow
     private GameObject                      aimArrowObject;
@@ -106,7 +105,7 @@ public class Player : MonoBehaviour {
 
         // JF: Get highlightObject and disable. Enable if item is held later
         highlightObject = transform.Find ("Highlight").gameObject;
-        highlightSprends = highlightObject.GetComponentsInChildren<SpriteRenderer> ();
+        // highlightSprends = highlightObject.GetComponentsInChildren<SpriteRenderer> ();
         highlightObject.SetActive (false);
 
         // AW: Get arrow sprite for aiming shots and proj source
@@ -124,7 +123,6 @@ public class Player : MonoBehaviour {
 		jetpackFuelBar.SetActive (false);
 
         // Initializing internal
-        playerNumStub = "_P" + playerNumStr;
 		jetpackFuelCurrent = jetpackFuelMax;
 
         // Raycast parameters
@@ -143,6 +141,9 @@ public class Player : MonoBehaviour {
             Debug.Log ("4 controllers are not connected. Assigning extra players to first player");
             input = InputManager.Devices [0];
         }
+
+        input.LeftStickX.LowerDeadZone = 0.2f;
+        input.LeftStickY.LowerDeadZone = 0.5f;
     }
 
     // Update is called once per frame
@@ -156,6 +157,18 @@ public class Player : MonoBehaviour {
         canDownJump = CanDownJump ();
         // Call the proper update function
         stateUpdateMap [form] ();
+    }
+
+    /// <summary>
+    /// Sent when an incoming collider makes contact with this object's
+    /// collider (2D physics only).
+    /// </summary>
+    /// <param name="other">The Collision2D data associated with this collision.</param>
+    void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.transform.CompareTag("Bullet")) {
+            animator.SetTrigger("hurt");
+        }
     }
 
     /******************** State Modifiers & Behaviors ********************/
@@ -248,6 +261,10 @@ public class Player : MonoBehaviour {
         controlled_block.GetComponent<Rigidbody2D>().velocity = new Vector3 (x_val, y_val, 0f);
         transform.position = controlled_block.transform.position;
 
+        if (x_val != 0) {
+            sprend.flipX = x_val > 0;
+        }
+
         // Detach from the block if the user wants to
         if (input.Action3.WasPressed){
             DetachFromBlock ();
@@ -269,6 +286,7 @@ public class Player : MonoBehaviour {
             case PlayerForm.Normal:
                 // JF: Toggle highlight guide
                 highlightObject.SetActive(false);
+                animator.SetBool("piloting", false);
                 _form = value;
                 break;
             case PlayerForm.Setting:
@@ -276,7 +294,7 @@ public class Player : MonoBehaviour {
                 _form = value;
                 break;
             case PlayerForm.Controlling:
-                sprend.color = Color.blue;
+                animator.SetBool("piloting", true);
                 _form = value;
                 break;
             }
@@ -313,10 +331,11 @@ public class Player : MonoBehaviour {
             currentX = Mathf.Lerp(currentX, direction * xSpeed, Time.deltaTime * 10);
 
             // JF: enable walking Animation
-            if (Mathf.Abs(currentX) > 0.1f) {
+            if (Mathf.Abs(currentX) > 1f) {
                 animator.SetBool("walking", true);
             }
             else {
+                currentX = 0;
                 animator.SetBool("walking", false);
             }
         }
@@ -373,12 +392,16 @@ public class Player : MonoBehaviour {
 			currentY = GetJetpackThrust ();
 			jetpackFire.SetActive (true);
 
+            animator.SetBool("flying", true);
+
             // JF: Disable tooltip once player has used jetpack a sufficient amount
             if (jetpackFuelCurrent < 3.5f) {
                 tt_manager.jetpacked = true;
             }
 		} else {
 			jetpackFire.SetActive (false);
+
+            animator.SetBool("flying", false);
 		}
         jetpack_bar.SetFuel (jetpackFuelCurrent);
 
