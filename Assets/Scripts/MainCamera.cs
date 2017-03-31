@@ -17,8 +17,15 @@ public class MainCamera : MonoBehaviour {
     private float battlePhaseSize = 9f;
 
 	// Use this for initialization
-	void Start () {
+
+    /// <summary>
+    /// Awake is called when the script instance is being loaded.
+    /// </summary>
+    void Awake()
+    {
         S = this;
+    }
+	void Start () {
         float dist = (transform.position - Camera.main.transform.position).z;
         leftBorder = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, dist)).x;
         rightBorder = Camera.main.ViewportToWorldPoint(new Vector3(1, 0, dist)).x;

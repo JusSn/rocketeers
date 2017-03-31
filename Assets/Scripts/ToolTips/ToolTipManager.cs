@@ -35,47 +35,48 @@ public class ToolTipManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         // JF: Player-centric tool tips
-        // Shows the prompt above the player to place a block
-        // When: Player is holding settable block item and has not set before
-        if (!setted && playerScript.form == PlayerForm.Setting) {
-            tooltipImage.sprite = spritesArray[3]; //Custom set/cancel image
-            tooltipImage.enabled = true;
+        if (playerScript != null) {
+            // Shows the prompt above the player to place a block
+            // When: Player is holding settable block item and has not set before
+            if (!setted && playerScript.form == PlayerForm.Setting) {
+                tooltipImage.sprite = spritesArray[3]; //Custom set/cancel image
+                tooltipImage.enabled = true;
+            }
+            // Shows the prompt above the player to press the jump button 
+            // When: player reaches any set block and has yet to jump once
+            else if (!jumped && isNearBlock ()) {
+                tooltipImage.sprite = spritesArray[0]; //A button
+                tooltipImage.enabled = true;
+            }
+            // Shows the prompt above the player to down jump
+            // When: player first lands on a platform than can be down jumped
+            else if (!downJumped && playerScript.canDownJump) {
+                tooltipImage.sprite = spritesArray[1]; //down A 
+                tooltipImage.enabled = true;
+            }
+            // Shows the prompt above the player to prompt a double jump
+            // When: Player is airborne and has not double jumped
+            else if (!doubleJumped && !playerScript.grounded) {
+                tooltipImage.sprite = spritesArray[0]; //A button
+                tooltipImage.enabled = true;
+            }
+            // Shows the prompt above the player to press the jetpack button
+            // When: Player has doubleJumped
+            // Note: Will be disabled after player depletes fuel to certain amount
+            else if (!jetpacked && doubleJumped) {
+                tooltipImage.sprite = spritesArray[2]; //Left trigger
+                tooltipImage.enabled = true;
+            }
+            // Shows the prompt above the player to press the fire button
+            // When: Battle phase has begun 
+            else if (!fired && !PhaseManager.S.inBuildPhase) {
+                tooltipImage.sprite = spritesArray[4]; //Right trigger
+                tooltipImage.enabled = true;
+            }
+            else {
+                tooltipImage.enabled = false;
+            }
         }
-		// Shows the prompt above the player to press the jump button 
-        // When: player reaches any set block and has yet to jump once
-        else if (!jumped && isNearBlock ()) {
-            tooltipImage.sprite = spritesArray[0]; //A button
-            tooltipImage.enabled = true;
-        }
-        // Shows the prompt above the player to down jump
-        // When: player first lands on a platform than can be down jumped
-        else if (!downJumped && playerScript.canDownJump) {
-            tooltipImage.sprite = spritesArray[1]; //down A 
-            tooltipImage.enabled = true;
-        }
-        // Shows the prompt above the player to prompt a double jump
-        // When: Player is airborne and has not double jumped
-        else if (!doubleJumped && !playerScript.grounded) {
-            tooltipImage.sprite = spritesArray[0]; //A button
-            tooltipImage.enabled = true;
-        }
-        // Shows the prompt above the player to press the jetpack button
-        // When: Player has doubleJumped
-        // Note: Will be disabled after player depletes fuel to certain amount
-        else if (!jetpacked && doubleJumped) {
-            tooltipImage.sprite = spritesArray[2]; //Left trigger
-            tooltipImage.enabled = true;
-        }
-        // Shows the prompt above the player to press the fire button
-        // When: Battle phase has begun 
-        else if (!fired && !PhaseManager.S.inBuildPhase) {
-            tooltipImage.sprite = spritesArray[4]; //Right trigger
-            tooltipImage.enabled = true;
-        }
-        else {
-            tooltipImage.enabled = false;
-        }
-
 	}
 
     // Sets the player gameObject to be of the corresponding
