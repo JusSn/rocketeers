@@ -48,7 +48,7 @@ public class Health : MonoBehaviour {
     }
 
     public void Repair() {
-        UpdateHealthByAmount(MAX_HEALTH / 2);
+        UpdateHealthByAmount(50);
         FlashHealthBar();
         if (cur_health >= MAX_HEALTH) {
             Destroy(health_bar);
