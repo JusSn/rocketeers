@@ -336,7 +336,7 @@ public class Player : MonoBehaviour {
     // JF: Jump and down-jump
     // AW: Jetpack
     float GetYInputSpeed(float currentY) {
-        if (grounded && input.Action1.WasPressed) {
+        if (grounded && input.Action1.IsPressed) {
             // Down jump
             if (ducking && canDownJump) {
                 tt_manager.downJumped = true;
