@@ -204,6 +204,7 @@ MonoBehaviour:
   placementMask:
     serializedVersion: 2
     m_Bits: 0
+  explosion: {fileID: 0}
   ______________________: 0
   teamNum: 0
   being_manipulated: 0
@@ -1683,6 +1684,7 @@ MonoBehaviour:
   placementMask:
     serializedVersion: 2
     m_Bits: 0
+  explosion: {fileID: 0}
   ______________________: 0
   teamNum: 0
   being_manipulated: 0
@@ -2912,6 +2914,7 @@ MonoBehaviour:
   placementMask:
     serializedVersion: 2
     m_Bits: 0
+  explosion: {fileID: 0}
   ______________________: 0
   teamNum: 0
   being_manipulated: 0
@@ -3093,6 +3096,7 @@ MonoBehaviour:
   placementMask:
     serializedVersion: 2
     m_Bits: 0
+  explosion: {fileID: 0}
   ______________________: 0
   teamNum: 0
   being_manipulated: 0
@@ -3934,6 +3938,7 @@ MonoBehaviour:
   placementMask:
     serializedVersion: 2
     m_Bits: 0
+  explosion: {fileID: 0}
   ______________________: 0
   teamNum: 0
   being_manipulated: 0
@@ -4704,6 +4709,7 @@ MonoBehaviour:
   placementMask:
     serializedVersion: 2
     m_Bits: 0
+  explosion: {fileID: 0}
   ______________________: 0
   teamNum: 0
   being_manipulated: 0
@@ -5348,6 +5354,7 @@ MonoBehaviour:
   placementMask:
     serializedVersion: 2
     m_Bits: 837632
+  explosion: {fileID: 0}
   ______________________: 0
   teamNum: 2
   being_manipulated: 0
@@ -6309,6 +6316,7 @@ MonoBehaviour:
   placementMask:
     serializedVersion: 2
     m_Bits: 837632
+  explosion: {fileID: 0}
   ______________________: 0
   teamNum: 1
   being_manipulated: 0
@@ -6838,6 +6846,7 @@ MonoBehaviour:
   placementMask:
     serializedVersion: 2
     m_Bits: 0
+  explosion: {fileID: 0}
   ______________________: 0
   teamNum: 0
   being_manipulated: 0
@@ -7226,6 +7235,7 @@ MonoBehaviour:
   placementMask:
     serializedVersion: 2
     m_Bits: 0
+  explosion: {fileID: 0}
   ______________________: 0
   teamNum: 0
   being_manipulated: 0
@@ -7494,6 +7504,7 @@ MonoBehaviour:
   placementMask:
     serializedVersion: 2
     m_Bits: 0
+  explosion: {fileID: 0}
   ______________________: 0
   teamNum: 0
   being_manipulated: 0
@@ -8525,6 +8536,7 @@ MonoBehaviour:
   placementMask:
     serializedVersion: 2
     m_Bits: 0
+  explosion: {fileID: 0}
   ______________________: 0
   teamNum: 0
   being_manipulated: 0

@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4222100343597006}
   - component: {fileID: 212333510223702714}
   - component: {fileID: 114214444083620584}
+  - component: {fileID: 58102227823840942}
   m_Layer: 0
   m_Name: Explosion
   m_TagString: Untagged
@@ -41,6 +42,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!58 &58102227823840942
+CircleCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1593478875652032}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 1
 --- !u!114 &114214444083620584
 MonoBehaviour:
   m_ObjectHideFlags: 1

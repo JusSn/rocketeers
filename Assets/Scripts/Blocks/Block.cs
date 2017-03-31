@@ -43,6 +43,7 @@ public class Block : MonoBehaviour {
     public float                                snap_radius = 0.75f;
     public GameObject                           highlight_sprend;
     public LayerMask                            placementMask;
+    public GameObject                           explosion;
     public bool                                 ______________________;
 
     // JF: Team this block is assigned to. Inherit from blocks it first connects to
@@ -305,6 +306,12 @@ public class Block : MonoBehaviour {
 
     // removes all FixedJoints
     void Unhinge(){
+
+        // JF: EXPLOSIONS!
+        GameObject boom0 = Instantiate(explosion, transform.position, Quaternion.identity);
+        boom0.transform.localScale = Vector3.one / 2f;
+        boom0.GetComponent<LoopingAnimation>().StartAnimation();
+
         // for each neighbor around us
         foreach (KeyValuePair<Direction, FixedJointContainer> dir in connected_neighbors) {
 

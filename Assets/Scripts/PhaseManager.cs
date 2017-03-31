@@ -206,14 +206,14 @@ public class PhaseManager : MonoBehaviour {
 
         CameraShake.Shake(0.5f, 0.4f);
 
-        yield return new WaitForSecondsRealtime(0.1f);
+        yield return new WaitForSecondsRealtime(0.2f);
 
         GameObject boom1 = Instantiate(explosion, rocketPosL, Quaternion.identity);
         boom1.GetComponent<LoopingAnimation>().StartAnimation();
 
         CameraShake.Shake(0.5f, 0.4f);
 
-        yield return new WaitForSecondsRealtime(0.1f);
+        yield return new WaitForSecondsRealtime(0.2f);
 
         GameObject boom2 = Instantiate(explosion, rocketPosR, Quaternion.identity);
         boom2.GetComponent<LoopingAnimation>().StartAnimation();
@@ -254,9 +254,7 @@ public class PhaseManager : MonoBehaviour {
         // JF: Move player way above screen to prevent this method from being called again
         obj.transform.position = new Vector3 (0, 1000, 0);
 
-
         yield return new WaitForSecondsRealtime(5f);
-        print ("teamNum");
         // Create effects to make it look cool
         GameObject flash = Instantiate(spawn_flash);
         flash.transform.position = cores[teamNum - 1].transform.position + new Vector3(-0.1f, 0.5f);

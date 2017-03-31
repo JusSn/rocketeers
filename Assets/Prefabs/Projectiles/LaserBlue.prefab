@@ -89,9 +89,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bullet_speed: 4
-  damage_amount: 10
+  damage_amount: 7
   teamNum: 0
-  lifeTime: 2.25
+  lifeTime: 1
   hit_effect: {fileID: 1883780633904654, guid: c90bd418384f4f54eb9ce23c4dfc5956, type: 2}
 --- !u!212 &212236008782226768
 SpriteRenderer:
