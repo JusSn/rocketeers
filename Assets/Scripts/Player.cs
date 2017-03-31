@@ -73,6 +73,7 @@ public class Player : MonoBehaviour {
     private SpriteRenderer                  aimSprend;
 
 	// AW: Jetpack objects
+    private GameObject                      jetpackObj;
 	private GameObject 						jetpackFire;
     private JetpackBar                      jetpack_bar;
 	private GameObject 						jetpackFuelBar;
@@ -98,6 +99,8 @@ public class Player : MonoBehaviour {
 		sprend = charSprite.GetComponent<SpriteRenderer> ();
         bodyCollider = GetComponent<BoxCollider2D> ();
         point_manager = GetComponent<PointManager> ();
+
+        jetpackObj = sprite.transform.Find ("Jetpack").gameObject;
         jetpack_bar = GetComponent<JetpackBar> ();
         jetpack_bar.SetMaxFuel (jetpackFuelMax);
         tt_manager = GetComponent<ToolTipManager> ();
@@ -182,7 +185,6 @@ public class Player : MonoBehaviour {
             TryToPickUpItem ();
         } else {
             // Aiming shot trajectory with the right stick
-			aimArrowObject.SetActive(true);
             projCDCounter += Time.deltaTime;
             if (IsRightJoyActive()) {
 				Vector3 trajectory = GetRightJoyDirection ();
@@ -210,7 +212,6 @@ public class Player : MonoBehaviour {
             if (blockCols.Length != 0){
                 if (input.Action3.WasPressed) {
                     if (TryToSitInBlock(blockCols)) {
-                        aimArrowObject.SetActive(false);
                         // there's a weapon underneath us, so sit in it
                         form = PlayerForm.Controlling;
                     }
@@ -254,16 +255,13 @@ public class Player : MonoBehaviour {
     // Entered from: Normal(sit button)
     // Exit to: Normal(sit button)
     void ControllingUpdate() {
-
         // used to steer the ship
         float x_val = input.LeftStickX * DRIVE_SPEED_X;
         float y_val = input.LeftStickY * DRIVE_SPEED_Y;
         controlled_block.GetComponent<Rigidbody2D>().velocity = new Vector3 (x_val, y_val, 0f);
         transform.position = controlled_block.transform.position;
 
-        if (x_val != 0) {
-            sprend.flipX = x_val > 0;
-        }
+        FlipAllSprites (x_val);
 
         // Detach from the block if the user wants to
         if (input.Action3.WasPressed){
@@ -286,6 +284,12 @@ public class Player : MonoBehaviour {
             case PlayerForm.Normal:
                 // JF: Toggle highlight guide
                 highlightObject.SetActive(false);
+                jetpackObj.SetActive(true);
+
+                if (!buildPhase) {
+                    aimArrowObject.SetActive(true);
+                }
+
                 animator.SetBool("piloting", false);
                 _form = value;
                 break;
@@ -295,6 +299,9 @@ public class Player : MonoBehaviour {
                 break;
             case PlayerForm.Controlling:
                 animator.SetBool("piloting", true);
+
+                aimArrowObject.SetActive(false);
+                jetpackObj.SetActive(false);
                 _form = value;
                 break;
             }
@@ -324,7 +331,7 @@ public class Player : MonoBehaviour {
     float GetXInputSpeed(float currentX) {
         float direction = input.LeftStickX;
 
-        float flip = (direction < 0) ? 180f : 0f;
+        FlipAllSprites (direction);
 
         if (grounded) {
             // JF: Provide acceleration to allow finer movement
@@ -342,10 +349,6 @@ public class Player : MonoBehaviour {
         else {
             // JF: Decrease maneuverability while in the air
             currentX = Mathf.Lerp(currentX, direction * xSpeed, Time.deltaTime * 2);
-        }
-
-        if (input.LeftStickX != 0) {
-            sprite.transform.rotation = Quaternion.Euler (0f, flip, 0f);
         }
 
         return currentX;
@@ -553,6 +556,13 @@ public class Player : MonoBehaviour {
 
         controlled_block = null;
         form = PlayerForm.Normal;
+    }
+
+    void FlipAllSprites (float x_dir) {
+        float flip = (x_dir < 0) ? 180f : 0f;
+        if (input.LeftStickX != 0) {
+            sprite.transform.rotation = Quaternion.Euler (0f, flip, 0f);
+        }
     }
 
     IEnumerator SpinSprite(){
