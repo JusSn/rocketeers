@@ -17,6 +17,7 @@ public class Player : MonoBehaviour {
     public float                            xSpeed = 7f;
     public float                            ySpeed = 10f;
     public float                            itemDetectRadius = 0.5f;
+    public float                            blockDetectRadius = 0.1f;
     public float                            placementDetectRadius = 0.3f;
     public float                            throwChargeMax = 2.5f;
     public float                            throwChargeRatio = 10f;
@@ -46,7 +47,8 @@ public class Player : MonoBehaviour {
     private bool                            doubleJumped;
 	private bool 							buildPhase = true;
 
-
+    private GameObject                      nearestBlockObj; 
+    private GameObject                      selectedBlockObj;
     // Internal Support Variables
 	private float 							jetpackFuelCurrent;
 
@@ -57,12 +59,13 @@ public class Player : MonoBehaviour {
     private SpriteRenderer                  sprend;
     private Animator                        animator;
     private PointManager                    point_manager;
-    private ToolTipManager                  tt_manager;
+    // private ToolTipManager                  tt_manager;
 
     private BoxCollider2D                   bodyCollider;
 
     // JF: Highlight object
     public GameObject                       highlightObject;
+    public GameObject                       blockIndicatorObj;
     // private SpriteRenderer[]                highlightSprends;
 
     // AW: Aim arrow
@@ -103,13 +106,16 @@ public class Player : MonoBehaviour {
         jetpackObj = sprite.transform.Find ("Jetpack").gameObject;
         jetpack_bar = GetComponent<JetpackBar> ();
         jetpack_bar.SetMaxFuel (jetpackFuelMax);
-        tt_manager = GetComponent<ToolTipManager> ();
-        tt_manager.SetPlayer (gameObject);
+        // tt_manager = GetComponent<ToolTipManager> ();
+        // tt_manager.SetPlayer (gameObject);
 
         // JF: Get highlightObject and disable. Enable if item is held later
         highlightObject = transform.Find ("Highlight").gameObject;
         // highlightSprends = highlightObject.GetComponentsInChildren<SpriteRenderer> ();
         highlightObject.SetActive (false);
+
+        blockIndicatorObj = transform.Find("BlockIndicator").gameObject;
+        blockIndicatorObj.SetActive (false);
 
         // AW: Get arrow sprite for aiming shots and proj source
         aimArrowObject = transform.Find("Aiming").gameObject;
@@ -182,8 +188,26 @@ public class Player : MonoBehaviour {
     // Exit to: Setting(pickup)
     void NormalUpdate() {
         CalculateMovement ();
+        // Scan all blocks within range of player
+        Collider2D[] blockCols = Physics2D.OverlapCircleAll (transform.position, blockDetectRadius, blockMask);
+        
+        if (blockCols.Length > 0) {
+            nearestBlockObj = GetNearestBlock (blockCols);
+            blockIndicatorObj.transform.position = nearestBlockObj.transform.position;
+            blockIndicatorObj.SetActive (true);
+        }
+        else {
+            blockIndicatorObj.SetActive (false);
+        }
+
         if (buildPhase) {
             TryToPickUpItem ();
+            if (blockCols.Length != 0){
+                if (input.Action4.WasPressed) {
+                    TryToSwapBlock (nearestBlockObj);
+                }
+            }
+
         } else {
             // Aiming shot trajectory with the right stick
             projCDCounter += Time.deltaTime;
@@ -207,9 +231,6 @@ public class Player : MonoBehaviour {
 					projCDCounter = 0f;
 				}
 			}
-
-			// Check if a block is within reach
-            Collider2D[] blockCols = Physics2D.OverlapCircleAll (transform.position, itemDetectRadius, blockMask);
             if (blockCols.Length != 0){
                 if (input.Action3.WasPressed) {
                     if (TryToSitInBlock(blockCols)) {
@@ -218,13 +239,16 @@ public class Player : MonoBehaviour {
 						SFXManager.GetSFXManager ().PlaySFX (SFX.StartPilot);
                     }
                     else {
-                        TryToRepairBlock(blockCols);
+                        RepairBlock (nearestBlockObj);
+                        // TryToRepairBlock(blockCols);
                     }
+                }
+                else if (input.Action4.WasPressed) {
+                    TryToSwapBlock (nearestBlockObj);
                 }
             }
         }
     }
-
 
     // setting update occurs when a player is holding a block
     // in this case it is most of the build phase
@@ -232,6 +256,23 @@ public class Player : MonoBehaviour {
         CalculateMovement ();
         // CG: still need to be able to pick up the other items if we're close to them
         TryToPickUpItem ();
+
+        Collider2D[] blockCols = Physics2D.OverlapCircleAll (transform.position, blockDetectRadius, blockMask);
+        
+        if (blockCols.Length > 0) {
+            nearestBlockObj = GetNearestBlock (blockCols);
+            blockIndicatorObj.transform.position = nearestBlockObj.transform.position;
+            blockIndicatorObj.SetActive (true);
+        }
+        else {
+            blockIndicatorObj.SetActive (false);
+        }
+
+        if (blockCols.Length != 0){
+            if (input.Action4.WasPressed) {
+                TryToSwapBlock (nearestBlockObj);
+            }
+        }
 
         // JF: Change location of highlight guide
         Vector3 setPos = GetGridPosition ();
@@ -270,7 +311,6 @@ public class Player : MonoBehaviour {
             DetachFromBlock ();
             return;
         }
-
     }
 
     // Getting/Setting form property. Modify statespecific values here
@@ -286,6 +326,7 @@ public class Player : MonoBehaviour {
             case PlayerForm.Normal:
                 // JF: Toggle highlight guide
                 highlightObject.SetActive(false);
+
                 jetpackObj.SetActive(true);
 
                 if (!buildPhase) {
@@ -303,6 +344,7 @@ public class Player : MonoBehaviour {
                 animator.SetBool("piloting", true);
 
                 aimArrowObject.SetActive(false);
+                blockIndicatorObj.SetActive (false);
                 jetpackObj.SetActive(false);
                 _form = value;
                 break;
@@ -368,12 +410,12 @@ public class Player : MonoBehaviour {
         if (grounded && input.Action1.IsPressed) {
             // Down jump
             if (ducking && canDownJump) {
-                tt_manager.downJumped = true;
+                // tt_manager.downJumped = true;
                 bodyCollider.isTrigger = true;
                 Invoke ("RestoreCollision", 0.3f);
             } else {
                 // Has jumped  
-                tt_manager.jumped = true;
+                // tt_manager.jumped = true;
                 currentY = ySpeed;
 				SFXManager.GetSFXManager ().PlaySFX (SFX.Jump, 0.25f);
             }
@@ -381,7 +423,7 @@ public class Player : MonoBehaviour {
 
         // Check for double jump
         if (!doubleJumped && !grounded && input.Action1.WasPressed){
-            tt_manager.doubleJumped = true;
+            // tt_manager.doubleJumped = true;
 
             currentY = ySpeed;
 			SFXManager.GetSFXManager ().PlaySFX (SFX.Jump, 0.25f);
@@ -408,7 +450,7 @@ public class Player : MonoBehaviour {
 
             // JF: Disable tooltip once player has used jetpack a sufficient amount
             if (jetpackFuelCurrent < 3.5f) {
-                tt_manager.jetpacked = true;
+                // tt_manager.jetpacked = true;
             }
 		} else {
 			jetpackFire.SetActive (false);
@@ -416,7 +458,6 @@ public class Player : MonoBehaviour {
             animator.SetBool("flying", false);
 		}
         jetpack_bar.SetFuel (jetpackFuelCurrent);
-
 
         return currentY;
     }
@@ -468,6 +509,24 @@ public class Player : MonoBehaviour {
                 && !rigid.IsTouchingLayers (groundLayer);
     }
 
+    // JF: Returns gameobject of closest collider in range of player
+    // Assumes cols_in_range is not empty
+    GameObject GetNearestBlock (Collider2D[] cols_in_range) {
+        if (cols_in_range.Length > 0) {
+            float closest_dist = Vector3.Distance(cols_in_range[0].transform.position, transform.position);
+            GameObject closest_block = cols_in_range[0].gameObject;
+            foreach(Collider2D coll in cols_in_range) {
+                float temp_dist = Vector3.Distance(coll.transform.position, transform.position);
+                if(coll.gameObject.GetComponent<Health>().GetHealth() < coll.gameObject.GetComponent<Health>().MAX_HEALTH && Mathf.Abs(temp_dist) < Mathf.Abs(closest_dist)) {
+                    closest_dist = temp_dist;
+                    closest_block = coll.gameObject;
+                }
+            }
+            return closest_block;
+        }
+        return null;
+    }
+
     // when picking up an item, check to see if we have enough points to be able to
     // pick up the item in the first place
     void TryToHoldBlock(Collider2D itemCol){
@@ -475,7 +534,7 @@ public class Player : MonoBehaviour {
 
         if (point_manager.UsePoints (itemScript.GetCost ())) {
             // show the tooltip of the player spending points on picking up the item
-            tt_manager.SpendPoints(itemScript.GetCost());
+            // tt_manager.SpendPoints(itemScript.GetCost());
             itemScript.Attach (this);
             heldItem = itemScript;
             form = PlayerForm.Setting;
@@ -493,17 +552,43 @@ public class Player : MonoBehaviour {
 
         return false;
     }
+/* 
+    JF: If within range, selects the closest block to the player and enables
+    the player to swap it with another block on their ship. This function handles
+    selection of both the first and second blocks to be moved, and swaps them when 
+    the second block is successfully selected. */
+    void TryToSwapBlock (GameObject blockObj) {
+        // Select block 1
+        if (selectedBlockObj == null) {
+            selectedBlockObj = blockObj;
 
-    void TryToRepairBlock(Collider2D[] repairable_block) {
-        float closest_dist = Vector3.Distance(repairable_block[0].transform.position, transform.position);
-        GameObject closest_block = repairable_block[0].gameObject;
-        foreach(Collider2D coll in repairable_block) {
-            float temp_dist = Vector3.Distance(coll.transform.position, transform.position);
-            if(coll.gameObject.GetComponent<Health>().GetHealth() < coll.gameObject.GetComponent<Health>().MAX_HEALTH && Mathf.Abs(temp_dist) < Mathf.Abs(closest_dist)) {
-                closest_dist = temp_dist;
-                closest_block = coll.gameObject;
+            SpriteRenderer blockSprend = blockObj.GetComponent<SpriteRenderer> ();
+
+            if (blockSprend == null) {
+                blockSprend = blockObj.GetComponentInChildren<SpriteRenderer> ();
             }
+
+            blockSprend.color = Color.cyan;
         }
+        // Swap block 2 with block 1
+        else {
+            Vector3 loc = blockObj.transform.position;
+            blockObj.transform.position = selectedBlockObj.transform.position;
+            selectedBlockObj.transform.position = loc;
+
+            SpriteRenderer blockSprend = selectedBlockObj.GetComponent<SpriteRenderer> ();
+
+            if (blockSprend == null) {
+                blockSprend = selectedBlockObj.GetComponentInChildren<SpriteRenderer> ();
+            }
+
+            blockSprend.color = Color.white;
+
+            selectedBlockObj = null;
+        }
+    }
+
+    void RepairBlock(GameObject closest_block) {
         closest_block.GetComponent<Block>().RepairBlock();
     }
 
@@ -549,7 +634,7 @@ public class Player : MonoBehaviour {
             heldItem.Set (set_pos);
 			SFXManager.GetSFXManager ().PlaySFX (SFX.BlockSet);
             // show the tooltip of the player spending points on picking up the item
-            tt_manager.SpendPoints (heldItem.GetCost ());
+            // tt_manager.SpendPoints (heldItem.GetCost ());
         }
         form = PlayerForm.Setting;
     }
@@ -604,7 +689,7 @@ public class Player : MonoBehaviour {
 
 		SFXManager.GetSFXManager ().PlaySFX (SFX.ShootLaser);
 
-        tt_manager.fired = true;
+        // tt_manager.fired = true;
     }
 
 	float GetJetpackThrust() {
