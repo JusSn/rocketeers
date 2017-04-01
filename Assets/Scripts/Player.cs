@@ -312,6 +312,7 @@ public class Player : MonoBehaviour {
 
 	public void SwitchToBattle () {
 		buildPhase = false;
+        aimArrowObject.SetActive(true);
 		if (heldItem)
 			heldItem.Detach (this);		
 	}
@@ -321,6 +322,15 @@ public class Player : MonoBehaviour {
     // Retrieve and apply any changes to the players movement
     void CalculateMovement() {
         Vector3 vel = rigid.velocity;
+
+        // JF: enable walking Animation
+        if (Mathf.Abs(vel.x) > 0.1f) {
+            animator.SetBool("walking", true);
+        }
+        else if (vel.x == 0) {
+            animator.SetBool("walking", false);
+        }
+
         vel.x = GetXInputSpeed (vel.x);
         vel.y = GetYInputSpeed (vel.y);
 
@@ -337,13 +347,8 @@ public class Player : MonoBehaviour {
             // JF: Provide acceleration to allow finer movement
             currentX = Mathf.Lerp(currentX, direction * xSpeed, Time.deltaTime * 10);
 
-            // JF: enable walking Animation
-            if (Mathf.Abs(currentX) > 1f) {
-                animator.SetBool("walking", true);
-            }
-            else {
+            if (Mathf.Abs(currentX) < 0.5f) {
                 currentX = 0;
-                animator.SetBool("walking", false);
             }
         }
         else {
