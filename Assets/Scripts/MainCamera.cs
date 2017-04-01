@@ -37,8 +37,8 @@ public class MainCamera : MonoBehaviour {
 	}
 
     void CheckForRestart(){
-        if (InputManager.ActiveDevice.MenuWasPressed) {
-            SceneManager.LoadScene ("Main");
+		if (Input.GetButtonDown("Back")) {
+            SceneManager.LoadScene ("menu");
         }
     }
 

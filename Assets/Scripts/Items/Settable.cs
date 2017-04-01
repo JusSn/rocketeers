@@ -14,7 +14,8 @@ public class Settable : Item {
 	public override void Set(Vector3 setPos) {
 		GameObject go = Instantiate<GameObject> (setObject, setPos, Quaternion.identity);
         // SK: keep track of blocks that have been placed
-        PhaseManager.S.placedBlocks.Add(go);
+		if(PhaseManager.S)
+        	PhaseManager.S.placedBlocks.Add(go);
         // JF: push back into pool
 	}
 

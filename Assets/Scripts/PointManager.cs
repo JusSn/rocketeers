@@ -31,15 +31,19 @@ public class PointManager : MonoBehaviour {
     //                    based on how many points their team has
     // Called by: player.Setting()
     public bool UsePoints(int pts_to_be_used){
-        // check if we can use the amount of points we want to
-        if (CanUsePoints (pts_to_be_used)) {
-            // if we can use the points, go ahead and use them
-            SubtractPts (pts_to_be_used);
-            return true;
-        }
-        NotEnoughPoints ();
-        // otherwise return false
-        return false;
+		if (ui_pts_left) {
+			// check if we can use the amount of points we want to
+			if (CanUsePoints (pts_to_be_used)) {
+				// if we can use the points, go ahead and use them
+				SubtractPts (pts_to_be_used);
+				return true;
+			}
+			NotEnoughPoints ();
+			// otherwise return false
+			return false;
+		} else {
+			return true;
+		}
     }
 
     void SubtractPts(int pts_to_be_used){

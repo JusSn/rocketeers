@@ -69,10 +69,10 @@ public class ToolTipManager : MonoBehaviour {
             }
             // Shows the prompt above the player to press the fire button
             // When: Battle phase has begun 
-            else if (!fired && !PhaseManager.S.inBuildPhase) {
+            /*else if (!fired && !PhaseManager.S.inBuildPhase) {
                 tooltipImage.sprite = spritesArray[4]; //Right trigger
                 tooltipImage.enabled = true;
-            }
+            }*/
             else {
                 tooltipImage.enabled = false;
             }

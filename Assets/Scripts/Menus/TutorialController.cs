@@ -68,13 +68,11 @@ public class TutorialController : MonoBehaviour {
 				inputDevices[i] = InputManager.Devices [0];
 			}
 		}
+
 		InitTutorial ();
 	}
 
 	void Update() {
-		if (Input.GetButtonDown ("Back"))
-			FinishTutorial ();
-
 		for (int i = 0; i < 4; ++i) {
 			if (inputDevices[i].MenuWasPressed)
 				checkBoxes [i].SwitchOn ();
