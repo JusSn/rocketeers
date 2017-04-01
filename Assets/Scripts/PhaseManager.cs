@@ -111,7 +111,7 @@ public class PhaseManager : MonoBehaviour {
 		SFXManager.GetSFXManager ().PlaySFX (SFX.NasaCountdown);
         Invoke ("SwitchToBattlePhase", 10);
         InvokeRepeating ("FlashCautionUI", 0, 1);
-        ui_timeLeft.fontSize = 50;
+        ui_timeLeft.fontSize = 60;
         MainCamera.S.SwitchToBattlePhase ();
     }
 
@@ -135,7 +135,7 @@ public class PhaseManager : MonoBehaviour {
 
         timeLeft = battle_time;
         ui_phase.text = "BATTLE";
-        ui_timeLeft.text = "";
+        ui_timeLeft.text = "GO!";
 
         foreach (GameObject obj in backgroundObjects) {
             
