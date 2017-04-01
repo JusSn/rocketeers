@@ -66,6 +66,7 @@ public class Player : MonoBehaviour {
     // JF: Highlight object
     public GameObject                       highlightObject;
     public GameObject                       blockIndicatorObj;
+    public GameObject                       swapArrowIndicator;
     // private SpriteRenderer[]                highlightSprends;
 
     // AW: Aim arrow
@@ -115,7 +116,9 @@ public class Player : MonoBehaviour {
         highlightObject.SetActive (false);
 
         blockIndicatorObj = transform.Find("BlockIndicator").gameObject;
+        swapArrowIndicator = blockIndicatorObj.transform.Find("SwapArrowIndicator").gameObject; 
         blockIndicatorObj.SetActive (false);
+        swapArrowIndicator.SetActive (false);
 
         // AW: Get arrow sprite for aiming shots and proj source
         aimArrowObject = transform.Find("Aiming").gameObject;
@@ -189,22 +192,13 @@ public class Player : MonoBehaviour {
     void NormalUpdate() {
         CalculateMovement ();
         // Scan all blocks within range of player
-        Collider2D[] blockCols = Physics2D.OverlapCircleAll (transform.position, blockDetectRadius, blockMask);
-        
-        if (blockCols.Length > 0) {
-            nearestBlockObj = GetNearestBlock (blockCols);
-            blockIndicatorObj.transform.position = nearestBlockObj.transform.position;
-            blockIndicatorObj.SetActive (true);
-        }
-        else {
-            blockIndicatorObj.SetActive (false);
-        }
+        ScanForBlocks ();
 
         if (buildPhase) {
             TryToPickUpItem ();
-            if (blockCols.Length != 0){
+            if (nearestBlockObj != null){
                 if (input.Action4.WasPressed) {
-                    TryToSwapBlock (nearestBlockObj);
+                    SelectBlockForSwap (nearestBlockObj);
                 }
             }
 
@@ -218,7 +212,6 @@ public class Player : MonoBehaviour {
 
                 // JF: Flip ray gun if aiming to left
                 aimSprend.flipY = trajectory.x < 0;
-
 				aimArrowObject.transform.rotation = Quaternion.AngleAxis (angle, Vector3.forward);
 			}
 
@@ -231,9 +224,9 @@ public class Player : MonoBehaviour {
 					projCDCounter = 0f;
 				}
 			}
-            if (blockCols.Length != 0){
+            if (nearestBlockObj != null){
                 if (input.Action3.WasPressed) {
-                    if (TryToSitInBlock(blockCols)) {
+                    if (TryToSitInBlock()) {
                         // there's a weapon underneath us, so sit in it
                         form = PlayerForm.Controlling;
 						SFXManager.GetSFXManager ().PlaySFX (SFX.StartPilot);
@@ -244,7 +237,7 @@ public class Player : MonoBehaviour {
                     }
                 }
                 else if (input.Action4.WasPressed) {
-                    TryToSwapBlock (nearestBlockObj);
+                    SelectBlockForSwap (nearestBlockObj);
                 }
             }
         }
@@ -257,20 +250,11 @@ public class Player : MonoBehaviour {
         // CG: still need to be able to pick up the other items if we're close to them
         TryToPickUpItem ();
 
-        Collider2D[] blockCols = Physics2D.OverlapCircleAll (transform.position, blockDetectRadius, blockMask);
-        
-        if (blockCols.Length > 0) {
-            nearestBlockObj = GetNearestBlock (blockCols);
-            blockIndicatorObj.transform.position = nearestBlockObj.transform.position;
-            blockIndicatorObj.SetActive (true);
-        }
-        else {
-            blockIndicatorObj.SetActive (false);
-        }
+        ScanForBlocks ();
 
-        if (blockCols.Length != 0){
+        if (nearestBlockObj != null){
             if (input.Action4.WasPressed) {
-                TryToSwapBlock (nearestBlockObj);
+                SelectBlockForSwap (nearestBlockObj);
             }
         }
 
@@ -509,6 +493,38 @@ public class Player : MonoBehaviour {
                 && !rigid.IsTouchingLayers (groundLayer);
     }
 
+    GameObject ScanForBlocks () {
+        Collider2D[] blockCols = Physics2D.OverlapCircleAll (transform.position, blockDetectRadius, blockMask);
+        
+        // Highlight the nearest block
+        nearestBlockObj = GetNearestBlock (blockCols);
+        if (nearestBlockObj != null) {
+            blockIndicatorObj.transform.position = nearestBlockObj.transform.position;
+            blockIndicatorObj.SetActive (true);
+        }
+        else {
+            blockIndicatorObj.SetActive (false);
+        }
+
+        // If already selected a block, update the swapping arrow between it
+        // and nearest block
+        if (selectedBlockObj != null && nearestBlockObj != null) {
+            Vector3 midPos = (nearestBlockObj.transform.position + selectedBlockObj.transform.position) / 2;
+
+            Vector3 difference = nearestBlockObj.transform.position - selectedBlockObj.transform.position;
+            float size = difference.magnitude;
+
+            float angle = Mathf.Atan2 (difference.x, difference.y) * Mathf.Rad2Deg - 90;
+            Quaternion rot = Quaternion.AngleAxis (angle, -Vector3.forward);
+
+            swapArrowIndicator.transform.position = midPos;
+            swapArrowIndicator.transform.localScale = new Vector3(size / 3, size / 2, 1);
+            swapArrowIndicator.transform.rotation = rot;
+        }
+
+        return nearestBlockObj;
+    }
+
     // JF: Returns gameobject of closest collider in range of player
     // Assumes cols_in_range is not empty
     GameObject GetNearestBlock (Collider2D[] cols_in_range) {
@@ -541,10 +557,12 @@ public class Player : MonoBehaviour {
         }
     }
 
-    bool TryToSitInBlock(Collider2D[] potential_controllable){
-        foreach (Collider2D coll in potential_controllable) {
+    bool TryToSitInBlock(){
+        Collider2D[] blockCols = Physics2D.OverlapCircleAll (transform.position, blockDetectRadius, blockMask);
+
+        foreach (Collider2D coll in blockCols) {
             // check if there's a weapon in front of us
-            if (potential_controllable != null && coll.CompareTag ("Core")) {
+            if (coll != null && coll.CompareTag ("Core")) {
                 // returns whether or not we successfully attached to the block
                 return AttachToBlock (coll);
             }
@@ -557,10 +575,13 @@ public class Player : MonoBehaviour {
     the player to swap it with another block on their ship. This function handles
     selection of both the first and second blocks to be moved, and swaps them when 
     the second block is successfully selected. */
-    void TryToSwapBlock (GameObject blockObj) {
+    void SelectBlockForSwap (GameObject blockObj) {
         // Select block 1
         if (selectedBlockObj == null) {
             selectedBlockObj = blockObj;
+
+            // Turn on arrow indicator
+            swapArrowIndicator.SetActive (true);
 
             SpriteRenderer blockSprend = blockObj.GetComponent<SpriteRenderer> ();
 
@@ -585,6 +606,8 @@ public class Player : MonoBehaviour {
             blockSprend.color = Color.white;
 
             selectedBlockObj = null;
+
+            swapArrowIndicator.SetActive (false);
         }
     }
 
