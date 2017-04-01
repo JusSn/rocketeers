@@ -5,7 +5,7 @@ AnimationClip:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: pink_pilot 1
+  m_Name: pink_fly
   serializedVersion: 6
   m_Legacy: 0
   m_Compressed: 0
@@ -19,10 +19,6 @@ AnimationClip:
   m_PPtrCurves:
   - curve:
     - time: 0
-      value: {fileID: 21300000, guid: 2dc7a171b48cb1f4bb84f12f85e9ce90, type: 3}
-    - time: 0.083333336
-      value: {fileID: 21300000, guid: c26393cfbc5728f4783f3b9f6dff1f18, type: 3}
-    - time: 0.16666667
       value: {fileID: 21300000, guid: 96322f547899ff146a006291d5c814e5, type: 3}
     attribute: m_Sprite
     path: 
@@ -42,15 +38,13 @@ AnimationClip:
       customType: 23
       isPPtrCurve: 1
     pptrCurveMapping:
-    - {fileID: 21300000, guid: 2dc7a171b48cb1f4bb84f12f85e9ce90, type: 3}
-    - {fileID: 21300000, guid: c26393cfbc5728f4783f3b9f6dff1f18, type: 3}
     - {fileID: 21300000, guid: 96322f547899ff146a006291d5c814e5, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.25
+    m_StopTime: 0.083333336
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
