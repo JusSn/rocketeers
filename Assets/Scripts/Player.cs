@@ -196,16 +196,16 @@ public class Player : MonoBehaviour {
                 aimSprend.flipY = trajectory.x < 0;
 
 				aimArrowObject.transform.rotation = Quaternion.AngleAxis (angle, Vector3.forward);
+			}
 
-                // CG: shooting occurs with right trigger
-                if (input.RightTrigger > 0){
-                    // CG: Shoot gun every projCDTime seconds
-                    if (projCDCounter >= projCDTime) {
-                        FireBurst ();
-                        // FireProjectile ();
-                        projCDCounter = 0f;
-                    }
-                }
+			// CG: shooting occurs with right trigger
+			if (input.RightTrigger > 0){
+				// CG: Shoot gun every projCDTime seconds
+				if (projCDCounter >= projCDTime) {
+					FireBurst ();
+					// FireProjectile ();
+					projCDCounter = 0f;
+				}
 			}
 
 			// Check if a block is within reach
