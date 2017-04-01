@@ -74,8 +74,10 @@ public class TutorialController : MonoBehaviour {
 
 	void Update() {
 		for (int i = 0; i < 4; ++i) {
-			if (inputDevices[i].MenuWasPressed)
+			if (inputDevices [i].MenuWasPressed) {
+				SFXManager.GetSFXManager ().PlaySFX (SFX.MenuConfirm);
 				checkBoxes [i].SwitchOn ();
+			}
 		}
 
 		if (AllConfirmsOn ()) {

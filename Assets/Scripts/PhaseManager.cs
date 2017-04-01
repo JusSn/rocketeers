@@ -16,8 +16,6 @@ public class PhaseManager : MonoBehaviour {
     public GameObject                   LaunchCautionUI;
 	public AudioClip					buildBgm;
 	public AudioClip 					battleBgm;
-    public AudioClip                    countdownAudio;
-    public int                          numAudioSources = 2;
 
     public GameObject[]                 rockets;
     public GameObject                   explosion;
@@ -56,7 +54,7 @@ public class PhaseManager : MonoBehaviour {
     // public int                         rounds_to_play = 2;
 
 	// Components
-	private AudioSource[]               audioSources;
+	private AudioSource               audioSource;
 
     private void Awake() {
         S = this;
@@ -71,15 +69,10 @@ public class PhaseManager : MonoBehaviour {
         // JF: Set up audiosources: 
         // [0] background musics that loop
         // [1] sound effects that do not loop
-        audioSources = new AudioSource[numAudioSources];
-
-        for (int i = 0; i < numAudioSources; ++i) {
-            audioSources[i] = gameObject.AddComponent<AudioSource> ();
-        }
-
-        audioSources[0].clip = buildBgm;
-        audioSources[0].loop = true;
-        audioSources[0].Play ();
+		audioSource = GetComponent<AudioSource>();
+		audioSource.clip = buildBgm;
+		audioSource.loop = true;
+		audioSource.Play ();
     }
 	
 	// Update is called once per frame
@@ -115,7 +108,7 @@ public class PhaseManager : MonoBehaviour {
 
     public void SwitchToCountdownPhase() {
         countdownNotStarted = false;
-        audioSources[1].PlayOneShot(countdownAudio, 3.0f);
+		SFXManager.GetSFXManager ().PlaySFX (SFX.NasaCountdown);
         Invoke ("SwitchToBattlePhase", 10);
         InvokeRepeating ("FlashCautionUI", 0, 1);
         ui_timeLeft.fontSize = 50;
@@ -127,6 +120,10 @@ public class PhaseManager : MonoBehaviour {
     public void SwitchToBattlePhase() {
         inBuildPhase = false;
         
+		audioSource.clip = battleBgm;
+		audioSource.loop = true;
+		audioSource.Play ();
+
         // JF: Stop caution UI from flashing
         LaunchCautionUI.SetActive(false);
         CancelInvoke ("FlashCautionUI");
@@ -139,8 +136,6 @@ public class PhaseManager : MonoBehaviour {
         timeLeft = battle_time;
         ui_phase.text = "BATTLE";
         ui_timeLeft.text = "";
-		audioSources[0].clip = battleBgm;
-		audioSources[0].Play ();
 
         foreach (GameObject obj in backgroundObjects) {
             
@@ -261,6 +256,7 @@ public class PhaseManager : MonoBehaviour {
     // Called by: this.Update()
     private void RespawnPlayerIfBelowScreen(GameObject obj){
         if (MainCamera.S.IsBelowScreen (obj.transform.position) && !gameOver) {
+			SFXManager.GetSFXManager ().PlaySFX (SFX.PlayerDied);
             StartCoroutine (RespawnPlayer(obj));
 
             //TeamLives[teamNum - 1]--;

@@ -155,6 +155,7 @@ public class Block : MonoBehaviour {
     // Called by: Projectile.OnTriggerEnter2D()
     public virtual void TakeDamage(float dmg_amt){
         health.TakeDamage(dmg_amt);
+		SFXManager.GetSFXManager ().PlaySFX (SFX.BlockHit);
     }
 
     public void RepairBlock() {
