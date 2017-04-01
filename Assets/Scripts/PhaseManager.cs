@@ -301,6 +301,8 @@ public class PhaseManager : MonoBehaviour {
             // Move the player to the core
             obj.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
             obj.transform.position = corePos;
+
+            obj.GetComponent<Player> ().form = PlayerForm.Normal;
         }
     }
 
