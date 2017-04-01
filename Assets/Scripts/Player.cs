@@ -177,6 +177,7 @@ public class Player : MonoBehaviour {
     {
         if (other.transform.CompareTag("Bullet")) {
             animator.SetTrigger("hurt");
+			SFXManager.GetSFXManager ().PlaySFX (SFX.HitPlayer);
         }
     }
 
@@ -219,22 +220,23 @@ public class Player : MonoBehaviour {
                 aimSprend.flipY = trajectory.x < 0;
 
 				aimArrowObject.transform.rotation = Quaternion.AngleAxis (angle, Vector3.forward);
+			}
 
-                // CG: shooting occurs with right trigger
-                if (input.RightTrigger > 0){
-                    // CG: Shoot gun every projCDTime seconds
-                    if (projCDCounter >= projCDTime) {
-                        FireBurst ();
-                        // FireProjectile ();
-                        projCDCounter = 0f;
-                    }
-                }
+			// CG: shooting occurs with right trigger
+			if (input.RightTrigger > 0){
+				// CG: Shoot gun every projCDTime seconds
+				if (projCDCounter >= projCDTime) {
+					FireBurst ();
+					// FireProjectile ();
+					projCDCounter = 0f;
+				}
 			}
             if (blockCols.Length != 0){
                 if (input.Action3.WasPressed) {
                     if (TryToSitInBlock(blockCols)) {
                         // there's a weapon underneath us, so sit in it
                         form = PlayerForm.Controlling;
+						SFXManager.GetSFXManager ().PlaySFX (SFX.StartPilot);
                     }
                     else {
                         RepairBlock (nearestBlockObj);
@@ -415,6 +417,7 @@ public class Player : MonoBehaviour {
                 // Has jumped  
                 // tt_manager.jumped = true;
                 currentY = ySpeed;
+				SFXManager.GetSFXManager ().PlaySFX (SFX.Jump, 0.25f);
             }
         }
 
@@ -423,6 +426,7 @@ public class Player : MonoBehaviour {
             // tt_manager.doubleJumped = true;
 
             currentY = ySpeed;
+			SFXManager.GetSFXManager ().PlaySFX (SFX.Jump, 0.25f);
             StartCoroutine("SpinSprite");
             doubleJumped = true;
         }
@@ -628,6 +632,7 @@ public class Player : MonoBehaviour {
     void SetItem(Vector3 set_pos){
         if (point_manager.UsePoints (heldItem.GetCost ())) {
             heldItem.Set (set_pos);
+			SFXManager.GetSFXManager ().PlaySFX (SFX.BlockSet);
             // show the tooltip of the player spending points on picking up the item
             // tt_manager.SpendPoints (heldItem.GetCost ());
         }
@@ -646,6 +651,7 @@ public class Player : MonoBehaviour {
 
         controlled_block = null;
         form = PlayerForm.Normal;
+		SFXManager.GetSFXManager ().PlaySFX (SFX.StopPilot);
     }
 
     void FlipAllSprites (float x_dir) {
@@ -680,6 +686,8 @@ public class Player : MonoBehaviour {
         proj.GetComponent<Projectile>().teamNum = teamNum;
         proj.layer = LayerMask.NameToLayer("Team" + teamNum + "Projectiles");
         proj.GetComponent<Rigidbody2D> ().velocity = projSource.transform.right * projSpeed;
+
+		SFXManager.GetSFXManager ().PlaySFX (SFX.ShootLaser);
 
         // tt_manager.fired = true;
     }

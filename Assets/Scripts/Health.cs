@@ -63,6 +63,7 @@ public class Health : MonoBehaviour {
     void CheckToDestroy(){
         if (cur_health <= 0f) {
             // SK: add logic for core ending the game
+			SFXManager.GetSFXManager().PlaySFX(SFX.BlockDestroyed);
             if (is_core) {
                 PhaseManager.S.EndGame(parent_block);
                 // JF: Destroy entire base
