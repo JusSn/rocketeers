@@ -202,7 +202,8 @@ public class PhaseManager : MonoBehaviour {
         StartCoroutine (MichaelBay (destroyedCoreBlock.transform.position));
 
         gameOver = true;
-        ui_phase.text = "Team " + winner + " wins!";
+        ui_phase.text = "Team " + winner;
+		ui_timeLeft.text = "Wins";
 
         // SK: Winning ship flies up off the screen
         cores[winner - 1].GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.None;
