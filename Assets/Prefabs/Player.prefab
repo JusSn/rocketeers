@@ -612,6 +612,7 @@ MonoBehaviour:
   xSpeed: 8
   ySpeed: 9.5
   itemDetectRadius: 0.5
+  blockDetectRadius: 0.1
   placementDetectRadius: 0.3
   throwChargeMax: 2.5
   throwChargeRatio: 10
@@ -619,7 +620,7 @@ MonoBehaviour:
     type: 2}
   projSpeed: 20
   projCDCounter: 73.25124
-  projCDTime: 1
+  projCDTime: 0.5
   DRIVE_SPEED_X: 4
   DRIVE_SPEED_Y: 4
   jetpackMaxSpeed: 8
@@ -643,6 +644,7 @@ MonoBehaviour:
   heldItem: {fileID: 0}
   controlled_block: {fileID: 0}
   highlightObject: {fileID: 1745316203295132}
+  blockIndicatorObj: {fileID: 0}
 --- !u!114 &114239489246610058
 MonoBehaviour:
   m_ObjectHideFlags: 1

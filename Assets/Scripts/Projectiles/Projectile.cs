@@ -25,9 +25,11 @@ public class Projectile : MonoBehaviour {
         }
         */
 
+		/*
 		if(!GetComponent<SpriteRenderer>().isVisible) {
             Destroy(gameObject);
-        }
+        } 
+		*/
     }
 
     protected virtual void OnCollisionEnter2D(Collision2D other){
