@@ -3255,7 +3255,7 @@ RectTransform:
   m_GameObject: {fileID: 511621285}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.75, y: 0.75, z: 1}
   m_Children:
   - {fileID: 384238977}
   - {fileID: 2000002833}
@@ -3818,7 +3818,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 0.45
+  m_Volume: 0.3
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -3949,7 +3949,7 @@ MonoBehaviour:
   placedBlocks: []
   flyingSpeed: 0.2
   gravityScale: 1
-  build_time: 15
+  build_time: 60
   battle_time: -1
 --- !u!114 &669842091
 MonoBehaviour:
@@ -6630,6 +6630,11 @@ Prefab:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114587598149821344, guid: f490112fcfea1c24a907ccd0a88ddeba,
+        type: 2}
+      propertyPath: laserShoot
+      value: 
+      objectReference: {fileID: 8300000, guid: 37c98173dd1006047b202780d5284150, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f490112fcfea1c24a907ccd0a88ddeba, type: 2}
   m_IsPrefabParent: 0

@@ -63,7 +63,7 @@ public class PhaseManager : MonoBehaviour {
     void Start () {
         placedBlocks = new List<GameObject>();
         timeLeft = build_time;
-        groundDestination = new Vector2(0, -25f);
+        groundDestination = new Vector2(0, -50f);
         groundStartPosition = new Vector2(0, -7f);
 
         // JF: Set up audiosources: 
@@ -183,7 +183,7 @@ public class PhaseManager : MonoBehaviour {
 
     IEnumerator moveGround(Vector3 direction, Vector3 destination) {
         float starttime = Time.time;
-        while (ground.transform.position != destination) {
+        while (ground.transform.position.y > destination.y) {
             // CG: 0.5f is the screen shake magnitude at the time of switching to battle phase
             // so the magnitude function here goes from 0.5f to 0 and subtracted by the amount of time
             // we've been in the battle phase divided by 5f. 5f acts as a scaling value since Time.time - starttime
