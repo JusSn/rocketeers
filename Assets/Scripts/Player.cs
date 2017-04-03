@@ -241,6 +241,11 @@ public class Player : MonoBehaviour {
                 }
             }
         }
+
+        // JF: Cancel block swap with B button
+        if (selectedBlockObj != null && input.Action2.WasPressed) {
+            EndBlockSwap ();
+        }
     }
 
     // setting update occurs when a player is holding a block
@@ -256,6 +261,11 @@ public class Player : MonoBehaviour {
             if (input.Action4.WasPressed) {
                 SelectBlockForSwap (nearestBlockObj);
             }
+        }
+
+        // JF: Cancel block swap with B button
+        if (selectedBlockObj != null && input.Action2.WasPressed) {
+            EndBlockSwap ();
         }
 
         // JF: Change location of highlight guide
@@ -597,18 +607,24 @@ public class Player : MonoBehaviour {
             blockObj.transform.position = selectedBlockObj.transform.position;
             selectedBlockObj.transform.position = loc;
 
-            SpriteRenderer blockSprend = selectedBlockObj.GetComponent<SpriteRenderer> ();
-
-            if (blockSprend == null) {
-                blockSprend = selectedBlockObj.GetComponentInChildren<SpriteRenderer> ();
-            }
-
-            blockSprend.color = Color.white;
-
-            selectedBlockObj = null;
-
-            swapArrowIndicator.SetActive (false);
+            EndBlockSwap ();
         }
+    }
+
+    // JF: Resets color of block 1 in swap and removes the player's reference to it
+    // Assumes that selectedBlockObj is not null
+    void EndBlockSwap () {
+        SpriteRenderer blockSprend = selectedBlockObj.GetComponent<SpriteRenderer> ();
+
+        if (blockSprend == null) {
+            blockSprend = selectedBlockObj.GetComponentInChildren<SpriteRenderer> ();
+        }
+
+        blockSprend.color = Color.white;
+
+        selectedBlockObj = null;
+
+        swapArrowIndicator.SetActive (false);
     }
 
     void RepairBlock(GameObject closest_block) {
@@ -621,6 +637,11 @@ public class Player : MonoBehaviour {
         // check if someone is already in the weapon
         if (controlled_block.IsOccupied()) {
             return false;
+        }
+
+        // JF: Cancel block swap before controlling block
+        if (selectedBlockObj != null) {
+            EndBlockSwap ();
         }
 
         controlled_block.AttachUser(this);
