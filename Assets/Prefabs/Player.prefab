@@ -650,7 +650,7 @@ MonoBehaviour:
     type: 2}
   projSpeed: 20
   projCDCounter: 73.25124
-  projCDTime: 1
+  projCDTime: 0.5
   DRIVE_SPEED_X: 4
   DRIVE_SPEED_Y: 4
   jetpackMaxSpeed: 8

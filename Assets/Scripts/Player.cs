@@ -710,7 +710,7 @@ public class Player : MonoBehaviour {
         proj.layer = LayerMask.NameToLayer("Team" + teamNum + "Projectiles");
         proj.GetComponent<Rigidbody2D> ().velocity = projSource.transform.right * projSpeed;
 
-		SFXManager.GetSFXManager ().PlaySFX (SFX.ShootLaser);
+		SFXManager.GetSFXManager ().PlaySFX (SFX.ShootLaser, 0.5f);
 
         // tt_manager.fired = true;
     }

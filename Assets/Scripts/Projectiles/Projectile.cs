@@ -25,13 +25,14 @@ public class Projectile : MonoBehaviour {
         }
         */
 
+		/*
 		if(!GetComponent<SpriteRenderer>().isVisible) {
             Destroy(gameObject);
-        }
+        } 
+		*/
     }
 
     protected virtual void OnCollisionEnter2D(Collision2D other){
-		print ("Call me in OnCollision");
         Destroy(gameObject);
         // check if we came in contact with another block/weaponblock
         if (other.gameObject.CompareTag ("Block") || other.gameObject.CompareTag("Core")) {
@@ -47,7 +48,6 @@ public class Projectile : MonoBehaviour {
     }
 
     protected void DestroyThis() {
-		print ("Call me in DestroyThis");
         Destroy(gameObject);
     }
 }

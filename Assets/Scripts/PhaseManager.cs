@@ -63,7 +63,7 @@ public class PhaseManager : MonoBehaviour {
     void Start () {
         placedBlocks = new List<GameObject>();
         timeLeft = build_time;
-        groundDestination = new Vector2(0, -25f);
+        groundDestination = new Vector2(0, -50f);
         groundStartPosition = new Vector2(0, -7f);
 
         // JF: Set up audiosources: 
@@ -111,7 +111,7 @@ public class PhaseManager : MonoBehaviour {
 		SFXManager.GetSFXManager ().PlaySFX (SFX.NasaCountdown);
         Invoke ("SwitchToBattlePhase", 10);
         InvokeRepeating ("FlashCautionUI", 0, 1);
-        ui_timeLeft.fontSize = 50;
+        ui_timeLeft.fontSize = 60;
         MainCamera.S.SwitchToBattlePhase ();
     }
 
@@ -135,7 +135,7 @@ public class PhaseManager : MonoBehaviour {
 
         timeLeft = battle_time;
         ui_phase.text = "BATTLE";
-        ui_timeLeft.text = "";
+        ui_timeLeft.text = "GO!";
 
         foreach (GameObject obj in backgroundObjects) {
             
@@ -183,7 +183,7 @@ public class PhaseManager : MonoBehaviour {
 
     IEnumerator moveGround(Vector3 direction, Vector3 destination) {
         float starttime = Time.time;
-        while (ground.transform.position != destination) {
+        while (ground.transform.position.y > destination.y) {
             // CG: 0.5f is the screen shake magnitude at the time of switching to battle phase
             // so the magnitude function here goes from 0.5f to 0 and subtracted by the amount of time
             // we've been in the battle phase divided by 5f. 5f acts as a scaling value since Time.time - starttime
@@ -202,7 +202,8 @@ public class PhaseManager : MonoBehaviour {
         StartCoroutine (MichaelBay (destroyedCoreBlock.transform.position));
 
         gameOver = true;
-        ui_phase.text = "Team " + winner + " wins!";
+        ui_phase.text = "Team " + winner;
+		ui_timeLeft.text = "Wins";
 
         // SK: Winning ship flies up off the screen
         cores[winner - 1].GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.None;
