@@ -216,7 +216,7 @@ public class Player : MonoBehaviour {
 			}
 
 			// CG: shooting occurs with right trigger
-			if (input.RightTrigger > 0){
+			if (input.RightBumper.WasPressed){
 				// CG: Shoot gun every projCDTime seconds
 				if (projCDCounter >= projCDTime) {
 					FireBurst ();
@@ -280,7 +280,7 @@ public class Player : MonoBehaviour {
         // show or don't show the valid placement object
         if (!blocker && valid_neighbor && setPos.x != 0 && setPos.y < Utils.MAX_BUILD_HEIGHT) {
             highlightObject.SetActive (true);
-            if (input.RightTrigger > 0) {
+            if (input.RightBumper.WasPressed > 0) {
                 SetItem (setPos);
             }
         } else {
@@ -434,7 +434,7 @@ public class Player : MonoBehaviour {
 			}
         }
 		
-        if (input.LeftTrigger > 0 && jetpackFuelCurrent > 0f) {
+        if (input.LeftBumper.WasPressed && jetpackFuelCurrent > 0f) {
 			jetpackFuelBar.SetActive (true);
 			jetpackFuelCurrent -= Time.deltaTime;
 			currentY = GetJetpackThrust ();
