@@ -280,7 +280,7 @@ public class Player : MonoBehaviour {
         // show or don't show the valid placement object
         if (!blocker && valid_neighbor && setPos.x != 0 && setPos.y < Utils.MAX_BUILD_HEIGHT) {
             highlightObject.SetActive (true);
-            if (input.RightBumper.WasPressed > 0) {
+            if (input.RightBumper.WasPressed) {
                 SetItem (setPos);
             }
         } else {
