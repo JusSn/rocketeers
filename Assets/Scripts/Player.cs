@@ -434,7 +434,7 @@ public class Player : MonoBehaviour {
 			}
         }
 		
-        if (input.LeftBumper.WasPressed && jetpackFuelCurrent > 0f) {
+        if (input.LeftBumper.IsPressed && jetpackFuelCurrent > 0f) {
 			jetpackFuelBar.SetActive (true);
 			jetpackFuelCurrent -= Time.deltaTime;
 			currentY = GetJetpackThrust ();
