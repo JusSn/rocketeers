@@ -278,7 +278,7 @@ public class Player : MonoBehaviour {
         bool valid_neighbor = Utils.ValidBlockPlacement (setPos, blockMask);
 
         // show or don't show the valid placement object
-        if (!blocker && valid_neighbor && setPos.x != 0 && setPos.y < Utils.MAX_BUILD_HEIGHT) {
+        if (!blocker && valid_neighbor && Utils.ValidBlockLocation(setPos)) {
             highlightObject.SetActive (true);
             if (input.RightBumper.WasPressed) {
                 SetItem (setPos);

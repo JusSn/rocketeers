@@ -174,7 +174,7 @@ public class Block : MonoBehaviour {
                                                           placementMask);
             Vector3 to_set_pos = transform.position + Utils.DirToVec (dir);
             // no neighbor here so display the highlight
-            if (blocker == null && to_set_pos.x != 0 && to_set_pos.y < Utils.MAX_BUILD_HEIGHT) {
+            if (blocker == null && Utils.ValidBlockLocation(to_set_pos)) {
                 GameObject go = Instantiate<GameObject> (highlight_sprend,
                                                          to_set_pos,
                                                          Quaternion.identity);
@@ -243,6 +243,21 @@ public class Block : MonoBehaviour {
         connected_neighbors.Remove (dir);
     }
 
+    // removes all connections from this block and the connections to other neighbors around us
+    public void DeleteAllNeighboringConnections(){
+        // for each neighbor around us
+        foreach (KeyValuePair<Direction, FixedJointContainer> dir in connected_neighbors) {
+
+            // when the ground is removed, the 'block' value is null
+            if (dir.Value.block) {
+                // since we're removing ourself from our neighbors, the directions
+                // are reversed
+                dir.Value.block.DeleteNeighboringConnection (Utils.GetOppositeDirection (dir.Key));
+            }
+            // Destroy our own FixedJoint2D
+            Destroy (dir.Value.fixed_joint);
+        }
+    }
 
     // Calling condition: When a block falls. The direction passed in is not
     //                    already present in the direction map
@@ -315,18 +330,8 @@ public class Block : MonoBehaviour {
             boom0.GetComponent<LoopingAnimation>().StartAnimation();
         }
 
-        // for each neighbor around us
-        foreach (KeyValuePair<Direction, FixedJointContainer> dir in connected_neighbors) {
+        DeleteAllNeighboringConnections ();
 
-            // when the ground is removed, the 'block' value is null
-            if (dir.Value.block) {
-                // since we're removing ourself from our neighbors, the directions
-                // are reversed
-                dir.Value.block.DeleteNeighboringConnection (Utils.GetOppositeDirection (dir.Key));
-            }
-            // Destroy our own FixedJoint2D
-            Destroy (dir.Value.fixed_joint);
-        }
     }
 
     // causes the block to lose it's constraints and fall through other layers

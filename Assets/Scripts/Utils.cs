@@ -12,6 +12,9 @@ public class Utils {
 
     public static int LEFT_CLICK_BTN = 0;
     public static float MAX_BUILD_HEIGHT = 9f;
+    private static int LEFT_SCREEN_X = -15;
+    private static int RIGHT_SCREEN_X = 15;
+
     // Returns the opposite direction
     // North -> South, East -> West
     public static Direction GetOppositeDirection(Direction dir) {
@@ -101,6 +104,14 @@ public class Utils {
         }
 
         return false;
+    }
+
+    // [CG]
+    // Calling Condition: Called when placing a block to see if the x and y coordinates of the block are valid
+    // Called by: Block.ShowAvailablePlaces(), Player.SettingUpdate()
+    // Returns true if this is a valid block location
+    public static bool ValidBlockLocation(Vector3 setPos){
+        return (setPos.x != 0 && setPos.y < Utils.MAX_BUILD_HEIGHT && setPos.x > Utils.LEFT_SCREEN_X && setPos.x < Utils.RIGHT_SCREEN_X);
     }
 
     // [CG]
