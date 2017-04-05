@@ -8,6 +8,7 @@ public enum PlayerForm {
     Normal,        // Running, Jumping, Idle
     Setting,       // Placing settable object
     Controlling,   // Used when driving or firing a block weapon
+    Respawning,
 }
 
 public class Player : MonoBehaviour {
@@ -46,6 +47,7 @@ public class Player : MonoBehaviour {
     public Controllable                     controlled_block;
     private bool                            doubleJumped;
 	private bool 							buildPhase = true;
+    private UFOManager                      ufo_manager;
 
     private GameObject                      nearestBlockObj; 
     private GameObject                      selectedBlockObj;
@@ -59,7 +61,6 @@ public class Player : MonoBehaviour {
     private SpriteRenderer                  sprend;
     private Animator                        animator;
     private PointManager                    point_manager;
-    // private ToolTipManager                  tt_manager;
 
     private BoxCollider2D                   bodyCollider;
 
@@ -67,7 +68,6 @@ public class Player : MonoBehaviour {
     public GameObject                       highlightObject;
     public GameObject                       blockIndicatorObj;
     public GameObject                       swapArrowIndicator;
-    // private SpriteRenderer[]                highlightSprends;
 
     // AW: Aim arrow
     private GameObject                      aimArrowObject;
@@ -103,6 +103,7 @@ public class Player : MonoBehaviour {
 		sprend = charSprite.GetComponent<SpriteRenderer> ();
         bodyCollider = GetComponent<BoxCollider2D> ();
         point_manager = GetComponent<PointManager> ();
+        ufo_manager = GetComponent<UFOManager> ();
 
         jetpackObj = sprite.transform.Find ("Jetpack").gameObject;
         jetpack_bar = GetComponent<JetpackBar> ();
@@ -147,6 +148,8 @@ public class Player : MonoBehaviour {
         stateUpdateMap.Add (PlayerForm.Normal, NormalUpdate);
         stateUpdateMap.Add (PlayerForm.Setting, SettingUpdate);
         stateUpdateMap.Add (PlayerForm.Controlling, ControllingUpdate);
+        stateUpdateMap.Add (PlayerForm.Respawning, RespawningUpdate);
+
         try {
             input = InputManager.Devices [int.Parse (playerNumStr) - 1];
         } catch {
@@ -167,6 +170,7 @@ public class Player : MonoBehaviour {
         }
         ducking = IsDucking ();
         canDownJump = CanDownJump ();
+        RespawnPlayerIfBelowScreen ();
         // Call the proper update function
         stateUpdateMap [form] ();
     }
@@ -304,6 +308,13 @@ public class Player : MonoBehaviour {
         }
     }
 
+
+    // Calling Condition: when player falls out of the camera and is being respawned by UFOLakitu
+    // Exits to: Player.NormalUpdate()
+    void RespawningUpdate(){
+        // do nothing while we respawn since the UFOManager takes care of everything
+    }
+
     // Getting/Setting form property. Modify statespecific values here
     // e.g. Variables, Animations, etc.
     public PlayerForm form {
@@ -337,6 +348,10 @@ public class Player : MonoBehaviour {
                 aimArrowObject.SetActive(false);
                 blockIndicatorObj.SetActive (false);
                 jetpackObj.SetActive(false);
+                _form = value;
+                break;
+
+            case PlayerForm.Respawning:
                 _form = value;
                 break;
             }
@@ -562,8 +577,6 @@ public class Player : MonoBehaviour {
         Item itemScript = itemCol.GetComponent<Item> ();
 
         if (point_manager.UsePoints (itemScript.GetCost ())) {
-            // show the tooltip of the player spending points on picking up the item
-            // tt_manager.SpendPoints(itemScript.GetCost());
             itemScript.Attach (this);
             heldItem = itemScript;
             form = PlayerForm.Setting;
@@ -750,4 +763,26 @@ public class Player : MonoBehaviour {
 		}
 		return magnitude;
 	}
+
+    public bool IsRespawning(){
+        return form == PlayerForm.Respawning;
+    }
+
+    // Respawns the player
+    public void Respawn(){
+        form = PlayerForm.Respawning;
+        rigid.gravityScale = 0f;
+        rigid.velocity = Vector2.zero;
+        ufo_manager.SetPlayerToRespawn (this);
+    }
+
+    // JF: Calling condition: check and respawn this player if it's fallen too far
+    // SK: Changed to respawning and added effects for JUICE
+    // Called by: this.Update()
+    void RespawnPlayerIfBelowScreen(){
+        if (MainCamera.S.IsBelowScreen (transform.position) && !IsRespawning() && !PhaseManager.S.gameOver) {
+            SFXManager.GetSFXManager ().PlaySFX (SFX.PlayerDied);
+            Respawn ();
+        }
+    }
 }

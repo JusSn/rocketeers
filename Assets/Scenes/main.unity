@@ -1188,6 +1188,12 @@ Prefab:
       propertyPath: DRIVE_SPEED_Y
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 114503214241377472, guid: d5f3f8a3bac4ba4479ce70f034a940ec,
+        type: 2}
+      propertyPath: UFOLakitu
+      value: 
+      objectReference: {fileID: 1923554983700856, guid: 68869d999bf8743bd9cdc33a61efd0aa,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d5f3f8a3bac4ba4479ce70f034a940ec, type: 2}
   m_IsPrefabParent: 0
@@ -3757,6 +3763,12 @@ Prefab:
       propertyPath: DRIVE_SPEED_Y
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 114503214241377472, guid: d5f3f8a3bac4ba4479ce70f034a940ec,
+        type: 2}
+      propertyPath: UFOLakitu
+      value: 
+      objectReference: {fileID: 1923554983700856, guid: 022e4ec5058044f2087648910b22d756,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d5f3f8a3bac4ba4479ce70f034a940ec, type: 2}
   m_IsPrefabParent: 0
@@ -6368,7 +6380,8 @@ Prefab:
       propertyPath: DRIVE_SPEED_Y
       value: 10
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 114503214241377472, guid: d5f3f8a3bac4ba4479ce70f034a940ec, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: d5f3f8a3bac4ba4479ce70f034a940ec, type: 2}
   m_IsPrefabParent: 0
 --- !u!4 &843972460 stripped
@@ -6381,6 +6394,18 @@ GameObject:
   m_PrefabParentObject: {fileID: 1749041598868772, guid: d5f3f8a3bac4ba4479ce70f034a940ec,
     type: 2}
   m_PrefabInternal: {fileID: 843972459}
+--- !u!114 &843972462
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 843972461}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c6a37baeef7f4f9e91d44d9c342bc26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UFOLakitu: {fileID: 1923554983700856, guid: 75c6db2bd5f5c4eacb3954f816404b1a, type: 2}
 --- !u!4 &849361260 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4955202862010842, guid: 2107cd28cf6effb44837da31344beaf5,
@@ -7575,6 +7600,12 @@ Prefab:
       propertyPath: DRIVE_SPEED_Y
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 114503214241377472, guid: d5f3f8a3bac4ba4479ce70f034a940ec,
+        type: 2}
+      propertyPath: UFOLakitu
+      value: 
+      objectReference: {fileID: 1923554983700856, guid: 05f823836a167486496b9d975b0fa7ae,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d5f3f8a3bac4ba4479ce70f034a940ec, type: 2}
   m_IsPrefabParent: 0
@@ -12376,6 +12407,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 1709373713}
+  - component: {fileID: 1709373714}
   m_Layer: 0
   m_Name: Players
   m_TagString: Untagged
@@ -12400,6 +12432,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1709373714
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1709373712}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c6a37baeef7f4f9e91d44d9c342bc26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UFOLakitu: {fileID: 0}
 --- !u!1001 &1721641219
 Prefab:
   m_ObjectHideFlags: 0

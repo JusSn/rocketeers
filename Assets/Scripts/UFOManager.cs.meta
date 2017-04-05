@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 9c6a37baeef7f4f9e91d44d9c342bc26
+timeCreated: 1491366609
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - UFOLakitu: {fileID: 1923554983700856, guid: 75c6db2bd5f5c4eacb3954f816404b1a,
+      type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
