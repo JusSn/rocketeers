@@ -11,15 +11,19 @@ public class Controllable : Block {
 
     private Player                               controller = null;
     private LayerMask                            original_player_layer;
+    private Transform                            original_parent;
     // Calling condition: when a user is near a block and
     //                    presses the correct button to use
     //                    the controllable block
     // Called by: Player.CanSitInBlock()
     public void AttachUser(Player user){
         original_player_layer = user.gameObject.layer;
+        original_parent = user.transform.parent;
+        user.GetComponent<Rigidbody2D> ().gravityScale = 0f;
         user.gameObject.layer = LayerMask.NameToLayer ("TransparentFX");
-        user.transform.position = this.transform.position;
+        // let the core move freely
         rigid.constraints = RigidbodyConstraints2D.None;
+        user.transform.SetParent (transform);
         SetUser (user);
     }
 
@@ -29,6 +33,8 @@ public class Controllable : Block {
     // Called by: Player.SittingUpdate(release button)
     public void DetachUser(){
         controller.gameObject.layer = original_player_layer;
+        controller.transform.SetParent (original_parent);
+        controller.GetComponent<Rigidbody2D> ().gravityScale = 2f;
         controller.gameObject.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
         controller = null;
         rigid.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY;

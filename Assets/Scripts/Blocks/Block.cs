@@ -224,12 +224,12 @@ public class Block : MonoBehaviour {
     // Calling condition: when a block is placed, it could be on the
     //                    ground and a rigid body attachment needs to be made
     // Called by: this.CheckAndConnectToNeighbor()
-    void CheckForGround(){
-        Collider2D obj = Utils.CheckForObj (transform.position + Vector3.down, ground_mask);
-        if (obj != null && obj.gameObject.CompareTag("Ground")) {
-            ConnectToGround (Direction.SOUTH, obj.gameObject);
-        }
-    }
+    // void CheckForGround(){
+    //     Collider2D obj = Utils.CheckForObj (transform.position + Vector3.down, ground_mask);
+    //     if (obj != null && obj.gameObject.CompareTag("Ground")) {
+    //         ConnectToGround (Direction.SOUTH, obj.gameObject);
+    //     }
+    // }
 
 
     // Calling condition: A neighboring block dies
