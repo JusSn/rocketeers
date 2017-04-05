@@ -197,7 +197,7 @@ public class Player : MonoBehaviour {
         if (buildPhase) {
             TryToPickUpItem ();
             if (nearestBlockObj != null){
-                if (input.Action4.WasPressed) {
+                if (input.Action3.WasPressed) {
                     SelectBlockForSwap (nearestBlockObj);
                 }
             }
@@ -236,9 +236,6 @@ public class Player : MonoBehaviour {
                         // TryToRepairBlock(blockCols);
                     }
                 }
-                else if (input.Action4.WasPressed) {
-                    SelectBlockForSwap (nearestBlockObj);
-                }
             }
         }
 
@@ -258,7 +255,7 @@ public class Player : MonoBehaviour {
         ScanForBlocks ();
 
         if (nearestBlockObj != null){
-            if (input.Action4.WasPressed) {
+            if (input.Action3.WasPressed) {
                 SelectBlockForSwap (nearestBlockObj);
             }
         }
@@ -351,8 +348,14 @@ public class Player : MonoBehaviour {
 	public void SwitchToBattle () {
 		buildPhase = false;
         aimArrowObject.SetActive(true);
-		if (heldItem)
-			heldItem.Detach (this);		
+		if (heldItem) {
+			heldItem.Detach (this);
+        }
+
+        // JF: Cancel block swap before controlling block
+        if (selectedBlockObj != null) {
+            EndBlockSwap ();
+        }
 	}
 
     /******************** Utility ********************/
@@ -637,11 +640,6 @@ public class Player : MonoBehaviour {
         // check if someone is already in the weapon
         if (controlled_block.IsOccupied()) {
             return false;
-        }
-
-        // JF: Cancel block swap before controlling block
-        if (selectedBlockObj != null) {
-            EndBlockSwap ();
         }
 
         controlled_block.AttachUser(this);
