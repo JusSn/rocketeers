@@ -10,12 +10,18 @@ public class MenuController : MonoBehaviour {
 	public AutoBackgroundScroller		bg;
 
 	private GameObject					homeScreen;
+	private GameObject					charSelectScreen;
+	private GameObject					teamSelectScreen;
+	private GameObject 					settingsScreen;
 
 	private SwitchSprites[]				checkBoxes;
 	private GameObject[]				players;
 
 	void Start() {
 		homeScreen = transform.Find ("Home").gameObject;
+		charSelectScreen = transform.Find ("CharacterSelect").gameObject;
+		teamSelectScreen = transform.Find ("TeamSelect").gameObject;
+		settingsScreen = transform.Find ("Settings").gameObject;
 
 		InitHomeScreen ();
 	}
