@@ -31,6 +31,7 @@ public class PhaseManager : MonoBehaviour {
     public GameObject                   TopWall;
     public GameObject                   LeftWall;
     public GameObject                   RightWall;
+    public GameObject                   BottomWall;
 
     // Encapsulated attributes
     public static PhaseManager          S;
@@ -208,7 +209,6 @@ public class PhaseManager : MonoBehaviour {
         // SK: Winning ship flies up off the screen
         cores[winner - 1].GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.None;
         cores[winner - 1].GetComponent<Rigidbody2D>().gravityScale = -10;
-        Destroy(GameObject.Find("TopWall"));
 
         Invoke("BackToMenu", 5);
     }
@@ -247,9 +247,10 @@ public class PhaseManager : MonoBehaviour {
     }
 
     private void ExpandWalls () {
-        LeftWall.transform.Translate(-Vector3.right);
-        RightWall.transform.Translate(Vector3.right);
-        TopWall.transform.Translate(Vector3.up);
+        Destroy (TopWall);
+        Destroy (LeftWall);
+        Destroy (RightWall);
+        Destroy (BottomWall);
     }
 
     // JF: Calling condition: check and respawn this player if it's fallen too far
