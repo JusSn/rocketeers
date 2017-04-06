@@ -7,13 +7,18 @@ using InControl;
 public class MainCamera : MonoBehaviour {
    
     public static MainCamera S;
-    public float leftBorder;
-    public float rightBorder;
 
     private float RATIO_MULTIPLIER = 1.875f;
 
+    //SK: camera zoom variables
+    private float camera_buffer;
+    private float desiredCamSize;
+    public float zoomSpeed;
+
     // JF: Determines how far objects can fall off screen during battle before being destroyed
     private int CAMERA_LOWER_LEEWAY = 5;
+    private float minFOV = 8.5f;
+    private float maxFOV = 18f;
     private float battlePhaseSize = 9f;
 
 	// Use this for initialization
@@ -26,15 +31,20 @@ public class MainCamera : MonoBehaviour {
         S = this;
     }
 	void Start () {
-        float dist = (transform.position - Camera.main.transform.position).z;
-        leftBorder = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, dist)).x;
-        rightBorder = Camera.main.ViewportToWorldPoint(new Vector3(1, 0, dist)).x;
 	}
 	
 	// Update is called once per frame
 	void Update () {
         CheckForRestart ();
+        CalculateCamSize();
 	}
+
+    private void LateUpdate() {
+        if (!PhaseManager.S.inBuildPhase && !PhaseManager.S.gameOver) {
+            float newSize = Mathf.Lerp(Camera.main.orthographicSize, desiredCamSize, Time.deltaTime * zoomSpeed);
+            Camera.main.orthographicSize = newSize;
+        }
+    }
 
     void CheckForRestart(){
 		if (Input.GetButtonDown("Back")) {
@@ -116,5 +126,36 @@ public class MainCamera : MonoBehaviour {
 
     float GetHalfHeightOfCamera(){
         return GetComponent<Camera> ().orthographicSize;
+    }
+
+    // SK: Checks if ships are within the camera viewport (with a buffer) and adjusts
+    //     desiredCamSize in order to keep them on screen
+    void CalculateCamSize() {
+        camera_buffer = Camera.main.orthographicSize * .3f;
+
+        float leftBorder = GetWestCameraBound();
+        float rightBorder = GetEastCameraBound();
+        float topBorder = GetNorthCameraBound();
+        float bottomBorder = GetSouthCameraBound();
+
+        Vector3 pos0 = PhaseManager.S.cores[0].transform.position;
+        Vector3 pos1 = PhaseManager.S.cores[1].transform.position;
+
+        if(pos0.x < leftBorder + camera_buffer || rightBorder - camera_buffer < pos0.x ||
+           pos0.y < bottomBorder + camera_buffer || topBorder - camera_buffer < pos0.y ||
+           pos1.x < leftBorder + camera_buffer || rightBorder - camera_buffer < pos1.x ||
+           pos1.y < bottomBorder + camera_buffer || topBorder - camera_buffer < pos1.y) {
+            //Debug.Log("Moving offscreen");
+            desiredCamSize = Camera.main.orthographicSize + .75f;
+        }
+        else if(pos0.x > leftBorder + camera_buffer * 2 && rightBorder - (camera_buffer * 2) > pos0.x &&
+                pos0.y > bottomBorder + camera_buffer * 2 && topBorder - (camera_buffer * 2) > pos0.y ||
+                pos1.x > leftBorder + camera_buffer * 2 && rightBorder - (camera_buffer * 2) > pos1.x &&
+                pos1.y > bottomBorder + camera_buffer * 2 && topBorder - (camera_buffer * 2) > pos1.y) {
+            //Debug.Log("Moving back onscreen");
+            desiredCamSize = Camera.main.orthographicSize - .5f;
+        }
+        
+        desiredCamSize = Mathf.Clamp(desiredCamSize, minFOV, maxFOV);
     }
 }
