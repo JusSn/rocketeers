@@ -17,6 +17,7 @@ public class MenuController : MonoBehaviour {
 	private static MenuController		singleton;
 
 	public AutoBackgroundScroller		bg;
+	public CharacterSettings[]			characters;
 
 	private GameObject					homeScreen;
 	private GameObject					charSelectScreen;

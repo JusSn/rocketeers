@@ -10,7 +10,6 @@ public enum CharacterSelectState {
 }
 
 public class CharacterSelectBar : MonoBehaviour {	
-	public CharacterSettings[]		playerOptions;
 	public GameObject 				smokeEffect;
 
 	private GameObject 				ufo;
@@ -27,7 +26,7 @@ public class CharacterSelectBar : MonoBehaviour {
 
 
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 		ufo = transform.Find ("UFO").gameObject;
 		beam = ufo.transform.Find ("selection").gameObject;
 		sprite = beam.transform.Find ("sprite").GetComponent<SpriteRenderer> ();
@@ -66,20 +65,25 @@ public class CharacterSelectBar : MonoBehaviour {
 
 	void SwitchCharacter(bool right) {
 		if (right) {
-			++playerChoice;
-			if (playerChoice >= playerOptions.Length)
-				playerChoice = 0;
+			do {
+				++playerChoice;
+				if (playerChoice >= MenuController.GetMenuController().characters.Length)
+					playerChoice = 0;
+			} while(MenuController.GetMenuController().characters[playerChoice].selected);
 		} else {
-			--playerChoice;
-			if (playerChoice < 0)
-				playerChoice = playerOptions.Length - 1;
+			do {
+				--playerChoice;
+				if (playerChoice < 0)
+					playerChoice = MenuController.GetMenuController().characters.Length - 1;
+		
+			} while (MenuController.GetMenuController().characters[playerChoice].selected);
 		}
 		switched = true;
 		UpdateSprite ();
 	}
 
 	void UpdateSprite () {
-		sprite.sprite = playerOptions [playerChoice].sprite;
+		sprite.sprite = MenuController.GetMenuController().characters [playerChoice].sprite;
 	}
 
 	public bool	CharacterSelected () {
@@ -106,15 +110,20 @@ public class CharacterSelectBar : MonoBehaviour {
 				switched = false;
 			}
 
-			if (input.Action1.WasPressed) {
+			if (input.Action1.WasPressed
+				&& !MenuController.GetMenuController ().characters [playerChoice].selected) {
 				selecting.SetActive (false);
 				confirm.SetActive (true);
+				SFXManager.GetSFXManager ().PlaySFX (SFX.StartPilot);
+				MenuController.GetMenuController ().characters [playerChoice].selected = true;
 				StartCoroutine ("RetractBeam");
 			}
 		} else if (state == CharacterSelectState.Confirmed) {
 			if (input.Action2.WasPressed) {
 				selecting.SetActive (true);
 				confirm.SetActive (false);
+				SFXManager.GetSFXManager ().PlaySFX (SFX.StopPilot);
+				MenuController.GetMenuController ().characters [playerChoice].selected = false;
 				StartCoroutine ("ExtendBeam");
 			}
 		}
@@ -123,9 +132,14 @@ public class CharacterSelectBar : MonoBehaviour {
 	IEnumerator ExtendBeam () {
 		SpriteRenderer domeSprite = ufo.transform.Find("dome").Find("sprite").GetComponent<SpriteRenderer>();
 		domeSprite.sprite = null;
-		Vector3 skinny = new Vector3 (1f, 1f, 1f);
+
+		Vector3 scale = beam.transform.localScale;
+		scale.x = 0f;
+		beam.transform.localScale = scale;
+		beam.SetActive (true);
+
 		while (beam.transform.localScale.x < .99f) {
-			beam.transform.localScale = Vector3.Lerp (beam.transform.localScale, skinny, 0.75f);
+			beam.transform.localScale = Vector3.Lerp (beam.transform.localScale, Vector3.one, 0.5f);
 			yield return null;
 		}
 		beam.transform.localScale = Vector3.one;
@@ -137,17 +151,18 @@ public class CharacterSelectBar : MonoBehaviour {
 	IEnumerator RetractBeam () {
 		Vector3 skinny = new Vector3 (0f, 1f, 1f);
 		while (beam.transform.localScale.x > .01f) {
-			beam.transform.localScale = Vector3.Lerp (beam.transform.localScale, skinny, 0.75f);
+			beam.transform.localScale = Vector3.Lerp (beam.transform.localScale, skinny, 0.5f);
 			yield return null;
 		}
-		beam.transform.localScale = new Vector3 (0f, 1f, 1f);
+		beam.SetActive (false);
+		beam.transform.localScale = new Vector3 (1f, 1f, 1f);
 
 		SpriteRenderer domeSprite = ufo.transform.Find("dome").Find("sprite").GetComponent<SpriteRenderer>();
-		domeSprite.sprite = playerOptions[playerChoice].sprite;
+		domeSprite.sprite = MenuController.GetMenuController().characters[playerChoice].sprite;
 		GameObject smoke = Instantiate(smokeEffect, domeSprite.transform.position, Quaternion.identity);
 		smoke.GetComponent<LoopingAnimation>().StartAnimation();
 
 		state = CharacterSelectState.Confirmed;
-		MenuController.GetMenuController ().SetDeviceCharacter (input, playerOptions [playerChoice]);
+		MenuController.GetMenuController ().SetDeviceCharacter (input, MenuController.GetMenuController().characters [playerChoice]);
 	}
 }

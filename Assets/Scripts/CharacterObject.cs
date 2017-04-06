@@ -7,4 +7,5 @@ public class CharacterSettings : ScriptableObject {
 	public Sprite						sprite;
 	public RuntimeAnimatorController	animatorController;
 	public int 							teamNumber;
+	public bool							selected = false;
 }
