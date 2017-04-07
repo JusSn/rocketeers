@@ -14,3 +14,4 @@ MonoBehaviour:
   sprite: {fileID: 21300000, guid: 38ec754aef65d36408d426f2abc72eca, type: 3}
   animatorController: {fileID: 9100000, guid: 7efa412cfbecf7645bfcab390b5f644d, type: 2}
   teamNumber: 0
+  selected: 0

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using InControl;
@@ -20,9 +21,11 @@ public class CharacterSelectBar : MonoBehaviour {
 	private GameObject				confirm;
 
 	private int 					playerChoice = 0;
-	public CharacterSelectState	state;
+	public CharacterSelectState		state;
 	private InputDevice				input;
 	public bool 					switched = false;
+	private Dictionary<CharacterSelectState, Action>  stateUpdateMap;
+	private bool 					beaming = false;
 
 
 	// Use this for initialization
@@ -34,34 +37,127 @@ public class CharacterSelectBar : MonoBehaviour {
 		selecting = transform.Find ("Selecting").gameObject;
 		confirm = transform.Find ("Confirm").gameObject;
 
-
 		ufo.SetActive (false);
 		waiting.SetActive (true);
 		selecting.SetActive (false);
 		confirm.SetActive (false);
+
 		state = CharacterSelectState.Waiting;
+		stateUpdateMap = new Dictionary<CharacterSelectState, Action> ();
+		stateUpdateMap.Add(CharacterSelectState.Waiting, WaitingUpdate);
+		stateUpdateMap.Add(CharacterSelectState.Selecting, SelectingUpdate);
+		stateUpdateMap.Add(CharacterSelectState.Confirmed, ConfirmedUpdate);
 	}
 
-	public void AssignPlayer (InputDevice controller) {
-		input = controller;
-		state = CharacterSelectState.Selecting;
-
-		waiting.SetActive (false);
-		selecting.SetActive (true);
-
-		ufo.SetActive (true);
-		UpdateSprite ();
+	// Update is called once per frame
+	void Update () {
+		if (!beaming) {
+			stateUpdateMap [state] ();
+		}
 	}
 
-	public void RemovePlayer () {
+	void WaitingUpdate() {
+		if (input != null) {
+			if (input.Action1.WasPressed) {
+				state = CharacterSelectState.Selecting;
+				SFXManager.GetSFXManager ().PlaySFX (SFX.StartPilot);
+				StartCoroutine ("ExtendBeam");
+
+				waiting.SetActive (false);
+				selecting.SetActive (true);
+
+				ufo.SetActive (true);
+				UpdateSprite ();
+			}
+		}
+	}
+
+	void SelectingUpdate() {
+		if (input.Action2.WasPressed) {
+			state = CharacterSelectState.Waiting;
+			waiting.SetActive (true);
+			selecting.SetActive (false);
+			confirm.SetActive (false);
+			ufo.SetActive (false);
+			SFXManager.GetSFXManager ().PlaySFX (SFX.StopPilot);
+		}
+
+		if (input.Action1.WasPressed
+			&& !MenuController.GetMenuController ().characters [playerChoice].selected) {
+			selecting.SetActive (false);
+			confirm.SetActive (true);
+			SFXManager.GetSFXManager ().PlaySFX (SFX.StartPilot);
+			MenuController.GetMenuController ().characters [playerChoice].selected = true;
+
+			SpriteRenderer domeSprite = ufo.transform.Find("dome").Find("sprite").GetComponent<SpriteRenderer>();
+			domeSprite.sprite = MenuController.GetMenuController().characters[playerChoice].sprite;
+			GameObject smoke = Instantiate(smokeEffect, domeSprite.transform.position, Quaternion.identity);
+			smoke.GetComponent<LoopingAnimation>().StartAnimation();
+			state = CharacterSelectState.Confirmed;
+			StartCoroutine ("RetractBeam");
+			return;
+		}
+
+		if (!switched) {
+			if (input.LeftStick.Left) {
+				SwitchCharacter (false);
+			} else if (input.LeftStick.Right) {
+				SwitchCharacter (true);
+			} 
+		} else if (input.LeftStickX == 0) {
+			switched = false;
+		}
+	}
+
+	void ConfirmedUpdate() {
+		if (input.Action2.WasPressed) {
+			selecting.SetActive (true);
+			confirm.SetActive (false);
+			SFXManager.GetSFXManager ().PlaySFX (SFX.StopPilot);
+			MenuController.GetMenuController ().characters [playerChoice].selected = false;
+			state = CharacterSelectState.Selecting;
+			StartCoroutine ("ExtendBeam");
+		}
+	}
+
+	/**************** Public Interface ****************/
+
+	public void ResetPlayerSelect () {
 		input = null;
 		state = CharacterSelectState.Waiting;
+		beaming = false;
 
 		ufo.SetActive (false);
 		selecting.SetActive (false);
 		confirm.SetActive (false);
 		waiting.SetActive (true);
 	}
+
+	// Assumes ResetPlayerSelect as been called
+	public void AssignPlayer (InputDevice controller) {
+		input = controller;
+	}
+
+	void UpdateSprite () {
+		sprite.sprite = MenuController.GetMenuController().characters [playerChoice].sprite;
+	}
+
+	public CharacterSettings GetSelectedCharacter () {
+		if (state == CharacterSelectState.Confirmed)
+			return MenuController.GetMenuController ().characters [playerChoice];
+		else
+			return null;
+	}
+
+	public bool WaitingForPlayer () {
+		return state == CharacterSelectState.Waiting;
+	}
+
+	public InputDevice GetDevice() {
+		return input;
+	}
+
+	/**************** Internal Interface ****************/
 
 	void SwitchCharacter(bool right) {
 		if (right) {
@@ -75,61 +171,15 @@ public class CharacterSelectBar : MonoBehaviour {
 				--playerChoice;
 				if (playerChoice < 0)
 					playerChoice = MenuController.GetMenuController().characters.Length - 1;
-		
+
 			} while (MenuController.GetMenuController().characters[playerChoice].selected);
 		}
 		switched = true;
 		UpdateSprite ();
 	}
 
-	void UpdateSprite () {
-		sprite.sprite = MenuController.GetMenuController().characters [playerChoice].sprite;
-	}
-
-	public bool	CharacterSelected () {
-		return state == CharacterSelectState.Confirmed;
-	}
-	public bool WaitingForPlayer () {
-		return state == CharacterSelectState.Waiting;
-	}
-
-	public InputDevice GetDevice() {
-		return input;
-	}
-
-	// Update is called once per frame
-	void Update () {
-		if (state == CharacterSelectState.Selecting) {
-			if (!switched) {
-				if (input.LeftStick.Left) {
-					SwitchCharacter (false);
-				} else if (input.LeftStick.Right) {
-					SwitchCharacter (true);
-				} 
-			} else if (input.LeftStickX == 0) {
-				switched = false;
-			}
-
-			if (input.Action1.WasPressed
-				&& !MenuController.GetMenuController ().characters [playerChoice].selected) {
-				selecting.SetActive (false);
-				confirm.SetActive (true);
-				SFXManager.GetSFXManager ().PlaySFX (SFX.StartPilot);
-				MenuController.GetMenuController ().characters [playerChoice].selected = true;
-				StartCoroutine ("RetractBeam");
-			}
-		} else if (state == CharacterSelectState.Confirmed) {
-			if (input.Action2.WasPressed) {
-				selecting.SetActive (true);
-				confirm.SetActive (false);
-				SFXManager.GetSFXManager ().PlaySFX (SFX.StopPilot);
-				MenuController.GetMenuController ().characters [playerChoice].selected = false;
-				StartCoroutine ("ExtendBeam");
-			}
-		}
-	}
-
 	IEnumerator ExtendBeam () {
+		beaming = true;
 		SpriteRenderer domeSprite = ufo.transform.Find("dome").Find("sprite").GetComponent<SpriteRenderer>();
 		domeSprite.sprite = null;
 
@@ -143,12 +193,11 @@ public class CharacterSelectBar : MonoBehaviour {
 			yield return null;
 		}
 		beam.transform.localScale = Vector3.one;
-
-		state = CharacterSelectState.Selecting;
-		MenuController.GetMenuController ().ResetDeviceCharacter (input);
+		beaming = false;
 	}
 
 	IEnumerator RetractBeam () {
+		beaming = true;
 		Vector3 skinny = new Vector3 (0f, 1f, 1f);
 		while (beam.transform.localScale.x > .01f) {
 			beam.transform.localScale = Vector3.Lerp (beam.transform.localScale, skinny, 0.5f);
@@ -156,13 +205,6 @@ public class CharacterSelectBar : MonoBehaviour {
 		}
 		beam.SetActive (false);
 		beam.transform.localScale = new Vector3 (1f, 1f, 1f);
-
-		SpriteRenderer domeSprite = ufo.transform.Find("dome").Find("sprite").GetComponent<SpriteRenderer>();
-		domeSprite.sprite = MenuController.GetMenuController().characters[playerChoice].sprite;
-		GameObject smoke = Instantiate(smokeEffect, domeSprite.transform.position, Quaternion.identity);
-		smoke.GetComponent<LoopingAnimation>().StartAnimation();
-
-		state = CharacterSelectState.Confirmed;
-		MenuController.GetMenuController ().SetDeviceCharacter (input, MenuController.GetMenuController().characters [playerChoice]);
+		beaming = false;
 	}
 }
