@@ -50,7 +50,7 @@ public class Player : MonoBehaviour {
     private UFOManager                      ufo_manager;
 
     private GameObject                      nearestBlockObj; 
-    private GameObject                      selectedBlockObj;
+    private Block                           selectedBlock;
     // Internal Support Variables
 	private float 							jetpackFuelCurrent;
 
@@ -244,7 +244,7 @@ public class Player : MonoBehaviour {
         }
 
         // JF: Cancel block swap with B button
-        if (selectedBlockObj != null && input.Action2.WasPressed) {
+        if (selectedBlock != null && input.Action2.WasPressed) {
             EndBlockSwap ();
         }
     }
@@ -265,7 +265,7 @@ public class Player : MonoBehaviour {
         }
 
         // JF: Cancel block swap with B button
-        if (selectedBlockObj != null && input.Action2.WasPressed) {
+        if (selectedBlock != null && input.Action2.WasPressed) {
             EndBlockSwap ();
         }
 
@@ -368,7 +368,7 @@ public class Player : MonoBehaviour {
         }
 
         // JF: Cancel block swap before controlling block
-        if (selectedBlockObj != null) {
+        if (selectedBlock != null) {
             EndBlockSwap ();
         }
 	}
@@ -536,10 +536,10 @@ public class Player : MonoBehaviour {
 
         // If already selected a block, update the swapping arrow between it
         // and nearest block
-        if (selectedBlockObj != null && nearestBlockObj != null) {
-            Vector3 midPos = (nearestBlockObj.transform.position + selectedBlockObj.transform.position) / 2;
+        if (selectedBlock != null && nearestBlockObj != null) {
+            Vector3 midPos = (nearestBlockObj.transform.position + selectedBlock.transform.position) / 2;
 
-            Vector3 difference = nearestBlockObj.transform.position - selectedBlockObj.transform.position;
+            Vector3 difference = nearestBlockObj.transform.position - selectedBlock.transform.position;
             float size = difference.magnitude;
 
             float angle = Mathf.Atan2 (difference.x, difference.y) * Mathf.Rad2Deg - 90;
@@ -603,8 +603,9 @@ public class Player : MonoBehaviour {
     the second block is successfully selected. */
     void SelectBlockForSwap (GameObject blockObj) {
         // Select block 1
-        if (selectedBlockObj == null) {
-            selectedBlockObj = blockObj;
+        Block blockScript = blockObj.GetComponent<Block> ();
+        if (selectedBlock == null && blockScript != null) {
+            selectedBlock = blockScript;
 
             // Turn on arrow indicator
             swapArrowIndicator.SetActive (true);
@@ -619,9 +620,9 @@ public class Player : MonoBehaviour {
         }
         // Swap block 2 with block 1
         else {
-            Vector3 loc = blockObj.transform.position;
-            blockObj.transform.position = selectedBlockObj.transform.position;
-            selectedBlockObj.transform.position = loc;
+            if (blockScript != null) {
+                selectedBlock.SwapWithBlock(blockScript);
+            }
 
             EndBlockSwap ();
         }
@@ -630,15 +631,15 @@ public class Player : MonoBehaviour {
     // JF: Resets color of block 1 in swap and removes the player's reference to it
     // Assumes that selectedBlockObj is not null
     void EndBlockSwap () {
-        SpriteRenderer blockSprend = selectedBlockObj.GetComponent<SpriteRenderer> ();
+        SpriteRenderer blockSprend = selectedBlock.GetComponent<SpriteRenderer> ();
 
         if (blockSprend == null) {
-            blockSprend = selectedBlockObj.GetComponentInChildren<SpriteRenderer> ();
+            blockSprend = selectedBlock.GetComponentInChildren<SpriteRenderer> ();
         }
 
         blockSprend.color = Color.white;
 
-        selectedBlockObj = null;
+        selectedBlock = null;
 
         swapArrowIndicator.SetActive (false);
     }

@@ -194,7 +194,7 @@ public class Block : MonoBehaviour {
 
     // Calling condition: Checking for any block in all four directions to connect to
     // Called by: this.Start()
-    void CheckForAnyNeighbors(){
+    public void CheckForAnyNeighbors(){
         HashSet<Direction> all_dirs = Utils.GetAllDirections ();
         foreach (Direction dir in all_dirs) {
             CheckAndConnectToNeighbor (dir);
@@ -290,6 +290,22 @@ public class Block : MonoBehaviour {
             Destroy (highlight_map [dir]);
             highlight_map.Remove (dir);
         }
+    }
+
+    // JF: Swaps this block with another 
+    public void SwapWithBlock(Block otherBlock) {
+        // Detach both from their neighbors
+        DeleteAllNeighboringConnections ();
+        otherBlock.DeleteAllNeighboringConnections ();
+
+        // Swap their positions
+        Vector3 loc = otherBlock.transform.position;
+        otherBlock.transform.position = transform.position;
+        transform.position = loc;
+
+        // Check for new neighbors
+        CheckForAnyNeighbors ();
+        otherBlock.CheckForAnyNeighbors ();
     }
 
     // JF: Assigns block to a team and modifies its layers to match
