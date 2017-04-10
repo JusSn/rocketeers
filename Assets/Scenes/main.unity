@@ -5207,6 +5207,8 @@ MonoBehaviour:
   LeftWall: {fileID: 1400982034}
   RightWall: {fileID: 2018797387}
   BottomWall: {fileID: 1182667299}
+  TopBattleWall: {fileID: 436091221}
+  TimerDisplay: {fileID: 511621285}
   inBuildPhase: 1
   countdownNotStarted: 1
   gameOver: 0

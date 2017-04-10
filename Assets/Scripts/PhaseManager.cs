@@ -31,8 +31,8 @@ public class PhaseManager : MonoBehaviour {
     public GameObject                   LeftWall;
     public GameObject                   RightWall;
     public GameObject                   BottomWall;
-
     public GameObject                   TopBattleWall;
+    public GameObject                   TimerDisplay;
 
     // Encapsulated attributes
     public static PhaseManager          S;
@@ -102,6 +102,7 @@ public class PhaseManager : MonoBehaviour {
         countdownNotStarted = false;
 		SFXManager.GetSFXManager ().PlaySFX (SFX.NasaCountdown);
         Invoke ("SwitchToBattlePhase", 10);
+        Invoke ("EraseTimer", 13);
         InvokeRepeating ("FlashCautionUI", 0, 1);
         ui_timeLeft.fontSize = 60;
         MainCamera.S.SwitchToBattlePhase ();
@@ -183,6 +184,7 @@ public class PhaseManager : MonoBehaviour {
         StartCoroutine (MichaelBay (destroyedCoreBlock.transform.position));
 
         gameOver = true;
+        TimerDisplay.SetActive (true);
         ui_phase.text = "Team " + winner;
         ui_timeLeft.text = "Wins";
 
@@ -231,5 +233,9 @@ public class PhaseManager : MonoBehaviour {
         Destroy (LeftWall);
         Destroy (RightWall);
         Destroy (BottomWall);
+    }
+
+    void EraseTimer(){
+        TimerDisplay.SetActive (false);
     }
 }

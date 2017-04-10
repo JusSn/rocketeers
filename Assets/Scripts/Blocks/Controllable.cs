@@ -70,10 +70,10 @@ public class Controllable : Block {
     }
 
     public void SetGameOver(){
-        rigid.constraints = RigidbodyConstraints2D.None;
-        rigid.gravityScale = -10;
         if (controller != null) {
             controller.DetachFromBlock ();
         }
+        rigid.constraints = RigidbodyConstraints2D.None;
+        rigid.gravityScale = -10;
     }
 }
