@@ -12,11 +12,15 @@ public class Controllable : Block {
     private Player                               controller = null;
     private LayerMask                            original_player_layer;
     private Transform                            original_parent;
+
     // Calling condition: when a user is near a block and
     //                    presses the correct button to use
     //                    the controllable block
     // Called by: Player.CanSitInBlock()
     public void AttachUser(Player user){
+        if (PhaseManager.S.gameOver) {
+            return;
+        }
         original_player_layer = user.gameObject.layer;
         original_parent = user.transform.parent;
         user.GetComponent<Rigidbody2D> ().gravityScale = 0f;
@@ -52,7 +56,7 @@ public class Controllable : Block {
 
     /****************** Utility **********************/
     // Called by: this.AttachUser(user);
-    void SetUser(Player user){
+    void SetUser(Player user) {
         controller = user;
     }
 
@@ -63,5 +67,13 @@ public class Controllable : Block {
             controller.DetachFromBlock ();
         }
         base.UnhingeAndFall ();
+    }
+
+    public void SetGameOver(){
+        rigid.constraints = RigidbodyConstraints2D.None;
+        rigid.gravityScale = -10;
+        if (controller != null) {
+            controller.DetachFromBlock ();
+        }
     }
 }

@@ -36,7 +36,9 @@ public class MainCamera : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         CheckForRestart ();
-        CalculateCamSize();
+        if (!PhaseManager.S.gameOver) {
+            CalculateCamSize ();
+        }
 	}
 
     private void LateUpdate() {

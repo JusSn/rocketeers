@@ -32,6 +32,8 @@ public class PhaseManager : MonoBehaviour {
     public GameObject                   RightWall;
     public GameObject                   BottomWall;
 
+    public GameObject                   TopBattleWall;
+
     // Encapsulated attributes
     public static PhaseManager          S;
     public bool                         inBuildPhase = true;
@@ -174,23 +176,25 @@ public class PhaseManager : MonoBehaviour {
 
     // Sets gameOver to true and creates an explosion at the losing team's core
     public void EndGame(Block destroyedCoreBlock) {
+        Destroy (TopBattleWall);
+
         int winner = (destroyedCoreBlock.teamNum == 1) ? 2 : 1;
 
         StartCoroutine (MichaelBay (destroyedCoreBlock.transform.position));
 
         gameOver = true;
         ui_phase.text = "Team " + winner;
-		ui_timeLeft.text = "Wins";
+        ui_timeLeft.text = "Wins";
 
         // SK: Winning ship flies up off the screen
-        cores[winner - 1].GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.None;
-        cores[winner - 1].GetComponent<Rigidbody2D>().gravityScale = -10;
+        cores [winner - 1].GetComponent<Controllable> ().SetGameOver ();
 
         Invoke("BackToMenu", 5);
     }
 
     // Explodes losing team's Rocket base and shakes the screen
     private IEnumerator MichaelBay (Vector3 corePos) {
+
         Vector3 rocketPosL = new Vector3 (corePos.x -1, corePos.y - 1, corePos.z);
         Vector3 rocketPosR = new Vector3 (corePos.x + 1, corePos.y - 1, corePos.z);
 

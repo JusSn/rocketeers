@@ -293,6 +293,7 @@ public class Player : MonoBehaviour {
     // Entered from: Normal(sit button)
     // Exit to: Normal(sit button)
     void ControllingUpdate() {
+
         // used to steer the ship
         float x_val = input.LeftStickX * DRIVE_SPEED_X;
         float y_val = input.LeftStickY * DRIVE_SPEED_Y;
@@ -302,7 +303,7 @@ public class Player : MonoBehaviour {
         FlipAllSprites (x_val);
 
         // Detach from the block if the user wants to
-        if (input.Action3.WasPressed){
+        if (!input.Action3.IsPressed){
             DetachFromBlock ();
             return;
         }
@@ -652,7 +653,7 @@ public class Player : MonoBehaviour {
     bool AttachToBlock(Collider2D potential_controllable){
         controlled_block = potential_controllable.gameObject.GetComponent<Controllable>();
         // check if someone is already in the weapon
-        if (controlled_block.IsOccupied()) {
+        if (controlled_block.IsOccupied() || PhaseManager.S.gameOver) {
             return false;
         }
 

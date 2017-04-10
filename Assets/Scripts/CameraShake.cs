@@ -7,21 +7,11 @@ public class CameraShake : MonoBehaviour {
 	public static CameraShake instance;
 
     private Vector3 _originalPos;
-	private float _timeAtCurrentFrame;
-	private float _timeAtLastFrame;
-	private float _fakeDelta;
 	private bool shaking = false;
 
 	void Awake()
 	{
 		instance = this;
-	}
-
-	void Update() {
-		// Calculate a fake delta time, so we can Shake while game is paused.
-		_timeAtCurrentFrame = Time.realtimeSinceStartup;
-		_fakeDelta = _timeAtCurrentFrame - _timeAtLastFrame;
-		_timeAtLastFrame = _timeAtCurrentFrame; 
 	}
 
 	public static bool IsShaking(){
@@ -44,7 +34,7 @@ public class CameraShake : MonoBehaviour {
 		while (duration > 0) {
 			transform.localPosition = _originalPos + Random.insideUnitSphere * magnitude;
 
-			duration -= _fakeDelta;
+            duration -= Time.deltaTime;
 
 			yield return null;
 		}
