@@ -6,18 +6,23 @@ using InControl;
 
 public enum CharacterSelectState {
 	Waiting,
-	Selecting,
+	Character,
+	Team,
 	Confirmed
 }
 
 public class CharacterSelectBar : MonoBehaviour {	
 	public GameObject 				smokeEffect;
+	public float 					ufoStartHeight = 2.75f;
+	public float 					ufoBottomHeight = -2.75f;
 
 	private GameObject 				ufo;
+	private SpriteRenderer 			ufoSprend;
 	private GameObject				beam;
 	private SpriteRenderer			sprite;
 	private GameObject 				waiting;
 	private GameObject				selecting;
+	private GameObject				team;
 	private GameObject				confirm;
 
 	private int 					playerChoice = 0;
@@ -25,33 +30,37 @@ public class CharacterSelectBar : MonoBehaviour {
 	private InputDevice				input;
 	public bool 					switched = false;
 	private Dictionary<CharacterSelectState, Action>  stateUpdateMap;
-	private bool 					beaming = false;
+	private bool 					animating = false;
 
 
 	// Use this for initialization
 	void Awake () {
 		ufo = transform.Find ("UFO").gameObject;
+		ufoSprend = ufo.GetComponent<SpriteRenderer> ();
 		beam = ufo.transform.Find ("selection").gameObject;
 		sprite = beam.transform.Find ("sprite").GetComponent<SpriteRenderer> ();
 		waiting = transform.Find ("Waiting").gameObject;
 		selecting = transform.Find ("Selecting").gameObject;
+		team = transform.Find ("Team").gameObject;
 		confirm = transform.Find ("Confirm").gameObject;
 
 		ufo.SetActive (false);
 		waiting.SetActive (true);
 		selecting.SetActive (false);
+		team.SetActive (false);
 		confirm.SetActive (false);
 
 		state = CharacterSelectState.Waiting;
 		stateUpdateMap = new Dictionary<CharacterSelectState, Action> ();
 		stateUpdateMap.Add(CharacterSelectState.Waiting, WaitingUpdate);
-		stateUpdateMap.Add(CharacterSelectState.Selecting, SelectingUpdate);
+		stateUpdateMap.Add(CharacterSelectState.Character, CharacterUpdate);
+		stateUpdateMap.Add (CharacterSelectState.Team, TeamUpdate);
 		stateUpdateMap.Add(CharacterSelectState.Confirmed, ConfirmedUpdate);
 	}
 
 	// Update is called once per frame
 	void Update () {
-		if (!beaming) {
+		if (!animating) {
 			stateUpdateMap [state] ();
 		}
 	}
@@ -59,9 +68,9 @@ public class CharacterSelectBar : MonoBehaviour {
 	void WaitingUpdate() {
 		if (input != null) {
 			if (input.Action1.WasPressed) {
-				state = CharacterSelectState.Selecting;
 				SFXManager.GetSFXManager ().PlaySFX (SFX.StartPilot);
 				StartCoroutine ("ExtendBeam");
+				state = CharacterSelectState.Character;
 
 				waiting.SetActive (false);
 				selecting.SetActive (true);
@@ -72,7 +81,7 @@ public class CharacterSelectBar : MonoBehaviour {
 		}
 	}
 
-	void SelectingUpdate() {
+	void CharacterUpdate() {
 		if (input.Action2.WasPressed) {
 			state = CharacterSelectState.Waiting;
 			waiting.SetActive (true);
@@ -85,16 +94,18 @@ public class CharacterSelectBar : MonoBehaviour {
 		if (input.Action1.WasPressed
 			&& !MenuController.GetMenuController ().characters [playerChoice].selected) {
 			selecting.SetActive (false);
-			confirm.SetActive (true);
-			SFXManager.GetSFXManager ().PlaySFX (SFX.StartPilot);
 			MenuController.GetMenuController ().characters [playerChoice].selected = true;
 
 			SpriteRenderer domeSprite = ufo.transform.Find("dome").Find("sprite").GetComponent<SpriteRenderer>();
 			domeSprite.sprite = MenuController.GetMenuController().characters[playerChoice].sprite;
 			GameObject smoke = Instantiate(smokeEffect, domeSprite.transform.position, Quaternion.identity);
 			smoke.GetComponent<LoopingAnimation>().StartAnimation();
-			state = CharacterSelectState.Confirmed;
+			SFXManager.GetSFXManager ().PlaySFX (SFX.StartPilot);
 			StartCoroutine ("RetractBeam");
+
+			ufoSprend.color = Color.red;
+			state = CharacterSelectState.Team;
+			team.SetActive (true);
 			return;
 		}
 
@@ -109,14 +120,54 @@ public class CharacterSelectBar : MonoBehaviour {
 		}
 	}
 
+	void TeamUpdate () {
+		if (input.Action2.WasPressed) {
+			MenuController.GetMenuController ().characters [playerChoice].selected = false;
+			selecting.SetActive (true);
+			team.SetActive (false);
+
+			SFXManager.GetSFXManager ().PlaySFX (SFX.StopPilot);
+			StartCoroutine ("Ascend");
+			StartCoroutine ("ExtendBeam");
+			ufoSprend.color = Color.white;
+			state = CharacterSelectState.Character;
+		}
+
+		if (input.Action1.WasPressed) {
+			team.SetActive (false);
+			SFXManager.GetSFXManager ().PlaySFX (SFX.StartPilot);
+			if (ufoSprend.color.b == 1f) // blue team
+				MenuController.GetMenuController ().characters [playerChoice].teamNumber = 1;
+			else // red team
+				MenuController.GetMenuController().characters[playerChoice].teamNumber = 2;
+
+			state = CharacterSelectState.Confirmed;
+			confirm.SetActive (true);
+			return;
+		}
+
+		if (!switched) {
+			if (input.LeftStick.Up) {
+				ufoSprend.color = Color.red;
+				StartCoroutine ("Ascend");
+				switched = true;
+			} else if (input.LeftStick.Down) {
+				ufoSprend.color = Color.blue;
+				StartCoroutine ("Descend");
+				switched = true;
+			}
+		} else if (input.LeftStickX == 0) {
+			switched = false;
+		}
+	}
+
 	void ConfirmedUpdate() {
 		if (input.Action2.WasPressed) {
-			selecting.SetActive (true);
+			team.SetActive (true);
 			confirm.SetActive (false);
 			SFXManager.GetSFXManager ().PlaySFX (SFX.StopPilot);
-			MenuController.GetMenuController ().characters [playerChoice].selected = false;
-			state = CharacterSelectState.Selecting;
-			StartCoroutine ("ExtendBeam");
+			MenuController.GetMenuController ().characters [playerChoice].teamNumber = 0;
+			state = CharacterSelectState.Team;
 		}
 	}
 
@@ -125,10 +176,13 @@ public class CharacterSelectBar : MonoBehaviour {
 	public void ResetPlayerSelect () {
 		input = null;
 		state = CharacterSelectState.Waiting;
-		beaming = false;
+		animating = false;
+		ufoSprend.color = Color.white;
+		ufo.transform.position = new Vector3 (ufo.transform.position.x, ufoStartHeight, ufo.transform.position.z);
 
 		ufo.SetActive (false);
 		selecting.SetActive (false);
+		team.SetActive (false);
 		confirm.SetActive (false);
 		waiting.SetActive (true);
 	}
@@ -151,6 +205,10 @@ public class CharacterSelectBar : MonoBehaviour {
 
 	public bool WaitingForPlayer () {
 		return state == CharacterSelectState.Waiting;
+	}
+
+	public int GetSelectedTeam () {
+		return MenuController.GetMenuController().characters[playerChoice].teamNumber;
 	}
 
 	public InputDevice GetDevice() {
@@ -178,8 +236,34 @@ public class CharacterSelectBar : MonoBehaviour {
 		UpdateSprite ();
 	}
 
+	IEnumerator Descend () {
+		animating = true;
+
+		Vector3 pos = new Vector3 (ufo.transform.position.x, ufoBottomHeight, ufo.transform.position.z);
+		while (ufo.transform.position.y > ufoBottomHeight + 0.01f) {
+			ufo.transform.position = Vector3.Lerp (ufo.transform.position, pos, 0.5f);
+			yield return null;
+		}
+		ufo.transform.position = pos;
+
+		animating = false;
+	}
+
+	IEnumerator Ascend () {
+		animating = true;
+
+		Vector3 pos = new Vector3 (ufo.transform.position.x, ufoStartHeight, ufo.transform.position.z);
+		while (ufo.transform.position.y < ufoStartHeight - 0.01f) {
+			ufo.transform.position = Vector3.Lerp (ufo.transform.position, pos, 0.5f);
+			yield return null;
+		}
+		ufo.transform.position = pos;
+
+		animating = false;
+	}
+
 	IEnumerator ExtendBeam () {
-		beaming = true;
+		animating = true;
 		SpriteRenderer domeSprite = ufo.transform.Find("dome").Find("sprite").GetComponent<SpriteRenderer>();
 		domeSprite.sprite = null;
 
@@ -193,11 +277,11 @@ public class CharacterSelectBar : MonoBehaviour {
 			yield return null;
 		}
 		beam.transform.localScale = Vector3.one;
-		beaming = false;
+		animating = false;
 	}
 
 	IEnumerator RetractBeam () {
-		beaming = true;
+		animating = true;
 		Vector3 skinny = new Vector3 (0f, 1f, 1f);
 		while (beam.transform.localScale.x > .01f) {
 			beam.transform.localScale = Vector3.Lerp (beam.transform.localScale, skinny, 0.5f);
@@ -205,6 +289,6 @@ public class CharacterSelectBar : MonoBehaviour {
 		}
 		beam.SetActive (false);
 		beam.transform.localScale = new Vector3 (1f, 1f, 1f);
-		beaming = false;
+		animating = false;
 	}
 }

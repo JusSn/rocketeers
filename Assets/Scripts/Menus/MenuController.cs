@@ -106,8 +106,10 @@ public class MenuController : MonoBehaviour {
 			if (state == MenuState.Character) {
 				foreach (CharacterSelectBar bar in charSelecters) {
 					if (bar.GetDevice () == device) {
-						if (bar.GetSelectedCharacter ())
+						if (bar.GetSelectedCharacter ()) {
 							bar.GetSelectedCharacter ().selected = false;
+							bar.GetSelectedCharacter ().teamNumber = 0;
+						}
 						bar.ResetPlayerSelect ();
 					}
 				}
@@ -133,19 +135,28 @@ public class MenuController : MonoBehaviour {
 		}
 
 		int ready = 0;
+		int team1 = 0;
+		int team2 = 0;
 		foreach (CharacterSelectBar bar in charSelecters) {
-			if (bar.GetSelectedCharacter ())
+			if (!bar.GetSelectedCharacter () && !bar.WaitingForPlayer ())
+				return;
+			if (bar.GetSelectedCharacter () && bar.GetSelectedTeam () > 0) {
 				++ready;
+				if (bar.GetSelectedTeam() == 1)
+					++team1;
+				else if (bar.GetSelectedTeam() == 2)
+					++team2;
+			}
 		}
 
-		if (ready >= 2) {
+		if (ready >= 2 && team1 > 0 && team2 > 0) {
 			// TODO: Display "Press A to Continue"
 			if (InputManager.ActiveDevice.Action1.WasPressed) {
 				foreach (CharacterSelectBar bar in charSelecters) {
 					if (bar.GetSelectedCharacter ())
 						devices [bar.GetDevice ()] = bar.GetSelectedCharacter ();
 				}
-				InitTeamScreen ();
+				InitConfirmScreen ();
 				return;
 			}
 		}
@@ -180,7 +191,7 @@ public class MenuController : MonoBehaviour {
 
 	void ConfirmUpdate () {
 		if (InputManager.ActiveDevice.Action2.WasPressed) {
-			InitTeamScreen ();
+			InitCharacterScreen ();
 			return;
 		}
 	}
