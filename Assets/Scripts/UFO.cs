@@ -14,7 +14,7 @@ public class UFO : MonoBehaviour {
     private UFOForm             state;
     private Transform           players_original_parent;
     private LayerMask           players_original_layer;
-    private Vector3             spawn_pos;
+    private Vector3             spawn_pos = new Vector3(0f, 30f, 0f); // default UFO pos
 
 
 	// Use this for initialization
@@ -22,7 +22,6 @@ public class UFO : MonoBehaviour {
         state_map.Add (UFOForm.FlyingTowards, FlyingTowardsUpdate);
         state_map.Add (UFOForm.Towing, TowingUpdate);
         state_map.Add (UFOForm.FlyingAway, FlyingAwayUpdate);
-        spawn_pos = transform.position;
 	}
 	
 	// Update is called once per frame

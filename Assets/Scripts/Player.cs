@@ -161,6 +161,10 @@ public class Player : MonoBehaviour {
 
         input.LeftStickX.LowerDeadZone = 0.2f;
         input.LeftStickY.LowerDeadZone = 0.5f;
+
+        // Have the UFOs bring in the players!
+        Respawn (transform.position);
+        Invoke ("EndIntroCutscene", 3f);
     }
 
     // Update is called once per frame
@@ -768,16 +772,20 @@ public class Player : MonoBehaviour {
         return form == PlayerForm.Respawning;
     }
 
+    public void Respawn(Vector3 spawn_pos){
+        SetRespawnSettings ();
+        ufo_manager.SetPlayerToRespawn (this, spawn_pos);
+    }
     // Respawns the player
     public void Respawn(){
+        SetRespawnSettings ();
+        ufo_manager.SetPlayerToRespawn (this);
+    }
+
+    void SetRespawnSettings(){
         form = PlayerForm.Respawning;
-        // move the player so they're out of the range of the camera, even if it's all the way zoomed out
-        Vector3 pos = transform.position;
-        pos.y = ABSOLUTE_LOWER_BOUND;
-        transform.position = pos;
         rigid.gravityScale = 0f;
         rigid.velocity = Vector2.zero;
-        ufo_manager.SetPlayerToRespawn (this);
     }
 
     // JF: Calling condition: check and respawn this player if it's fallen too far
@@ -786,11 +794,19 @@ public class Player : MonoBehaviour {
     void RespawnPlayerIfBelowScreen(){
         if (MainCamera.S.IsBelowScreen (transform.position) && !IsRespawning() && !PhaseManager.S.gameOver) {
             SFXManager.GetSFXManager ().PlaySFX (SFX.PlayerDied);
+            // move the player so they're out of the range of the camera, even if it's all the way zoomed out
+            Vector3 pos = transform.position;
+            pos.y = ABSOLUTE_LOWER_BOUND;
+            transform.position = pos;
             Respawn ();
         }
     }
 
     public GameObject GetSprite(){
         return sprite;
+    }
+
+    void EndIntroCutscene(){
+        PhaseManager.S.EndIntroCutscene ();
     }
 }

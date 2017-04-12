@@ -1004,11 +1004,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4116526857445798, guid: d5f3f8a3bac4ba4479ce70f034a940ec, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 2.75
+      value: -22.22
       objectReference: {fileID: 0}
     - target: {fileID: 4116526857445798, guid: d5f3f8a3bac4ba4479ce70f034a940ec, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -6
+      value: 8.26
       objectReference: {fileID: 0}
     - target: {fileID: 4116526857445798, guid: d5f3f8a3bac4ba4479ce70f034a940ec, type: 2}
       propertyPath: m_LocalPosition.z
@@ -3566,11 +3566,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4116526857445798, guid: d5f3f8a3bac4ba4479ce70f034a940ec, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 11.5
+      value: 24.32
       objectReference: {fileID: 0}
     - target: {fileID: 4116526857445798, guid: d5f3f8a3bac4ba4479ce70f034a940ec, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -6
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 4116526857445798, guid: d5f3f8a3bac4ba4479ce70f034a940ec, type: 2}
       propertyPath: m_LocalPosition.z
@@ -5226,8 +5226,9 @@ MonoBehaviour:
   placedBlocks: []
   flyingSpeed: 0.2
   gravityScale: 1
-  build_time: 11
+  build_time: 60
   battle_time: -1
+  in_cutscene: 1
 --- !u!114 &669842091
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5240,6 +5241,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   zoomSpeed: 4.5
+  ABSOLUTE_LOWER_BOUND: -23.5
 --- !u!81 &669842092
 AudioListener:
   m_ObjectHideFlags: 0
@@ -6346,11 +6348,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4116526857445798, guid: d5f3f8a3bac4ba4479ce70f034a940ec, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -11.5
+      value: -25.82
       objectReference: {fileID: 0}
     - target: {fileID: 4116526857445798, guid: d5f3f8a3bac4ba4479ce70f034a940ec, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -6
+      value: 8.3
       objectReference: {fileID: 0}
     - target: {fileID: 4116526857445798, guid: d5f3f8a3bac4ba4479ce70f034a940ec, type: 2}
       propertyPath: m_LocalPosition.z
@@ -7425,11 +7427,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4116526857445798, guid: d5f3f8a3bac4ba4479ce70f034a940ec, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -2.75
+      value: 21.5
       objectReference: {fileID: 0}
     - target: {fileID: 4116526857445798, guid: d5f3f8a3bac4ba4479ce70f034a940ec, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -6
+      value: 8.9
       objectReference: {fileID: 0}
     - target: {fileID: 4116526857445798, guid: d5f3f8a3bac4ba4479ce70f034a940ec, type: 2}
       propertyPath: m_LocalPosition.z

@@ -50,12 +50,13 @@ public class PhaseManager : MonoBehaviour {
     private string                      seconds;
 
     // Gameplay Variables
-    public float                       build_time = 5;
-    public float                       battle_time = 5;
+    public float                        build_time = 5;
+    public float                        battle_time = 5;
+    public bool                         in_cutscene = true;
     // public int                         rounds_to_play = 2;
 
 	// Components
-	private AudioSource               audioSource;
+	private AudioSource                 audioSource;
 
     private void Awake() {
         S = this;
@@ -77,7 +78,7 @@ public class PhaseManager : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-        if (gameOver) {
+        if (gameOver || in_cutscene) {
             return;
         }
 
@@ -239,5 +240,9 @@ public class PhaseManager : MonoBehaviour {
 
     void EraseTimer(){
         TimerDisplay.SetActive (false);
+    }
+
+    public void EndIntroCutscene(){
+        in_cutscene = false;
     }
 }
