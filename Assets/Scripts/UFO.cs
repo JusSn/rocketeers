@@ -46,10 +46,10 @@ public class UFO : MonoBehaviour {
     // when the UFO is towing a player back to the core of the ship
     void TowingUpdate(){
         transform.position = Vector3.Lerp (transform.position,
-                                           GetCorePosition(),
+                                           Utils.GetCorePosition(player_to_respawn.teamNum),
                                            Time.deltaTime * 1.5f);
         
-        if (Vector3.Distance (transform.position, GetCorePosition()) <= DROPPING_THRESHOLD) {
+        if (Vector3.Distance (transform.position, Utils.GetCorePosition(player_to_respawn.teamNum)) <= DROPPING_THRESHOLD) {
             player_to_respawn.transform.SetParent (players_original_parent);
             player_to_respawn.gameObject.layer = players_original_layer;
             player_to_respawn.GetComponent<Rigidbody2D>().gravityScale = 2f;
@@ -66,17 +66,6 @@ public class UFO : MonoBehaviour {
 
         if (Vector3.Distance (transform.position, spawn_pos) <= DISAPPEARING_THRESHOLD) {
             Destroy (gameObject);
-        }
-    }
-
-    // returns the position of the core of this players team
-    Vector3 GetCorePosition(){
-        try {
-            return PhaseManager.S.cores [player_to_respawn.teamNum - 1].transform.position + (Vector3.up * 3f);
-        } catch {
-            // the core was probably destroyed while the player was respawning,
-            // so just take them way up off the screen
-            return new Vector3 (0f, 30f, 0f);
         }
     }
 

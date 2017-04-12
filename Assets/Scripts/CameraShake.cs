@@ -19,26 +19,47 @@ public class CameraShake : MonoBehaviour {
 	}
 
     // CG: Shake the screen for a specific duration and a certain magnitude
-	public static void Shake (float duration, float magnitude) {
+    public static void Shake (float duration, float magnitude, bool win_shake = false) {
 		if (IsShaking ()) {
 			return;
 		}
 		instance._originalPos = instance.gameObject.transform.localPosition;
 		instance.StopAllCoroutines();
-		instance.StartCoroutine(instance.cShake(duration, magnitude));
+        instance.StartCoroutine (instance.cShake (duration, magnitude, win_shake));
 	}
 
     // used for internal class purposes
-	private IEnumerator cShake (float duration, float magnitude) {
+    private IEnumerator cShake (float duration, float magnitude, bool win_shake) {
 		shaking = true;
 		while (duration > 0) {
-			transform.localPosition = _originalPos + Random.insideUnitSphere * magnitude;
+            Vector3 offset = GetOffset (win_shake);
+            Vector3 new_pos = offset + Random.insideUnitSphere * magnitude;
+            new_pos.z = -10f;
+            transform.localPosition = new_pos;
 
             duration -= Time.deltaTime;
 
 			yield return null;
 		}
 		shaking = false;
-		transform.localPosition = _originalPos;
+        // if we are win shaking we don't want to return to the original position,
+        // since this messes up the zooming effect
+        if (!win_shake){
+            transform.localPosition = _originalPos;
+        }
 	}
+
+    Vector3 GetOffset(bool win_shake){
+        // if we are win shaking we don't want to return to the original position,
+        // since this messes up the zooming effect
+        if (win_shake){
+            return GetCurPosition ();
+        } else {
+            return _originalPos;
+        }
+    }
+
+    Vector3 GetCurPosition(){
+        return instance.gameObject.transform.position;
+    }
 }

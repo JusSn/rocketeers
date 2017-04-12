@@ -120,4 +120,16 @@ public class Utils {
     public static Collider2D CheckForObj(Vector3 pos, LayerMask mask){
         return Physics2D.OverlapPoint(pos, mask);
     }
+
+
+    // returns the position of the core of this players team
+    public static Vector3 GetCorePosition(int team_num){
+        try {
+            return PhaseManager.S.cores [team_num - 1].transform.position + (Vector3.up * 3f);
+        } catch {
+            // the core was probably destroyed while the player was respawning,
+            // so just take them way up off the screen
+            return new Vector3 (0f, 45f, 0f);
+        }
+    }
 }

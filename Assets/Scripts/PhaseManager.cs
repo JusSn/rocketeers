@@ -180,7 +180,8 @@ public class PhaseManager : MonoBehaviour {
         Destroy (TopBattleWall);
 
         int winner = (destroyedCoreBlock.teamNum == 1) ? 2 : 1;
-
+        float slow_mo_speed = 0.2f;
+        SlowMo.Begin (slow_mo_speed, destroyedCoreBlock.transform.position);
         StartCoroutine (MichaelBay (destroyedCoreBlock.transform.position));
 
         gameOver = true;
@@ -203,21 +204,22 @@ public class PhaseManager : MonoBehaviour {
         GameObject boom0 = Instantiate(explosion, corePos, Quaternion.identity);
         boom0.GetComponent<LoopingAnimation>().StartAnimation();
 
-        CameraShake.Shake(0.5f, 0.4f);
+        CameraShake.Shake(0.5f, 0.4f, true);
 
-        yield return new WaitForSecondsRealtime(0.2f);
+        yield return new WaitForSeconds(0.2f);
 
         GameObject boom1 = Instantiate(explosion, rocketPosL, Quaternion.identity);
         boom1.GetComponent<LoopingAnimation>().StartAnimation();
 
-        CameraShake.Shake(0.5f, 0.4f);
+        CameraShake.Shake(0.5f, 0.4f, true);
 
-        yield return new WaitForSecondsRealtime(0.2f);
+        yield return new WaitForSeconds(0.2f);
 
         GameObject boom2 = Instantiate(explosion, rocketPosR, Quaternion.identity);
         boom2.GetComponent<LoopingAnimation>().StartAnimation();
 
-        CameraShake.Shake(0.5f, 0.4f);
+        CameraShake.Shake(0.5f, 0.4f, true);
+        SlowMo.End ();
     }
 
     private void BackToMenu() {
