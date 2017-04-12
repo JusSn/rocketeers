@@ -18,7 +18,7 @@ public class MainCamera : MonoBehaviour {
     // JF: Determines how far objects can fall off screen during battle before being destroyed
     private int CAMERA_LOWER_LEEWAY = 5;
     // CG: When the camera is fully zoomed out this is a point where the lower edge cannot be seen
-    private float ABSOLUTE_LOWER_BOUND = -23.5f;
+    public float ABSOLUTE_LOWER_BOUND = -23.5f;
     private float minFOV = 8.5f;
     private float maxFOV = 18f;
     private float battlePhaseSize = 9f;
@@ -100,10 +100,6 @@ public class MainCamera : MonoBehaviour {
     // JF: Gameplay check to destroy objects and players if they fall too far below the rocket
     public bool IsBelowScreen(Vector3 pos) {
         return (pos.y < GetSouthCameraBound () - CAMERA_LOWER_LEEWAY);
-    }
-
-    public bool IsBelowAbsoluteScreen(Vector3 pos){
-        return pos.y < ABSOLUTE_LOWER_BOUND;
     }
 
     // returns the west bound of the camera

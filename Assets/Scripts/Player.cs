@@ -32,6 +32,8 @@ public class Player : MonoBehaviour {
 	public float 							jetpackAccel = 40f;
 	public float							jetpackFuelMax = 5f;
 	public float 							jetpackRefuelRate = 5f;
+    public float                            ABSOLUTE_LOWER_BOUND = -23.5f;
+
 	public bool                             debugMode = false;
 
     public LayerMask                        placementMask;
@@ -769,6 +771,10 @@ public class Player : MonoBehaviour {
     // Respawns the player
     public void Respawn(){
         form = PlayerForm.Respawning;
+        // move the player so they're out of the range of the camera, even if it's all the way zoomed out
+        Vector3 pos = transform.position;
+        pos.y = ABSOLUTE_LOWER_BOUND;
+        transform.position = pos;
         rigid.gravityScale = 0f;
         rigid.velocity = Vector2.zero;
         ufo_manager.SetPlayerToRespawn (this);
@@ -778,7 +784,7 @@ public class Player : MonoBehaviour {
     // SK: Changed to respawning and added effects for JUICE
     // Called by: this.Update()
     void RespawnPlayerIfBelowScreen(){
-        if (MainCamera.S.IsBelowAbsoluteScreen (transform.position) && !IsRespawning() && !PhaseManager.S.gameOver) {
+        if (MainCamera.S.IsBelowScreen (transform.position) && !IsRespawning() && !PhaseManager.S.gameOver) {
             SFXManager.GetSFXManager ().PlaySFX (SFX.PlayerDied);
             Respawn ();
         }
