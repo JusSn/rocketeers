@@ -779,7 +779,7 @@ public class Player : MonoBehaviour {
     // SK: Changed to respawning and added effects for JUICE
     // Called by: this.Update()
     void RespawnPlayerIfBelowScreen(){
-        if (MainCamera.S.IsBelowScreen (transform.position) && !IsRespawning() && !PhaseManager.S.gameOver) {
+        if (MainCamera.S.IsBelowAbsoluteScreen (transform.position) && !IsRespawning() && !PhaseManager.S.gameOver) {
             SFXManager.GetSFXManager ().PlaySFX (SFX.PlayerDied);
             Respawn ();
         }
