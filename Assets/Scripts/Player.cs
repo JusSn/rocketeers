@@ -417,18 +417,17 @@ public class Player : MonoBehaviour {
     // JF: Jump and down-jump
     // AW: Jetpack
     float GetYInputSpeed(float currentY) {
+        // Down jump
+        if (grounded && input.LeftStick.Down && canDownJump){
+            // tt_manager.downJumped = true;
+            bodyCollider.isTrigger = true;
+            Invoke ("RestoreCollision", 0.3f);
+        }
+
+        // Regular jump
         if (grounded && input.Action1.IsPressed) {
-            // Down jump
-            if (ducking && canDownJump) {
-                // tt_manager.downJumped = true;
-                bodyCollider.isTrigger = true;
-                Invoke ("RestoreCollision", 0.3f);
-            } else {
-                // Has jumped  
-                // tt_manager.jumped = true;
-                currentY = ySpeed;
-				SFXManager.GetSFXManager ().PlaySFX (SFX.Jump, 0.25f);
-            }
+            currentY = ySpeed;
+            SFXManager.GetSFXManager ().PlaySFX (SFX.Jump, 0.25f);
         }
 
         // Check for double jump
