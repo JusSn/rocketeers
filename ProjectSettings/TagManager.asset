@@ -39,8 +39,8 @@ TagManager:
   - Team2Platform
   - Team1Core
   - Team2Core
-  - 
-  - 
+  - ImpenetrableToTeam1
+  - ImpenetrableToTeam2
   - 
   - 
   - 

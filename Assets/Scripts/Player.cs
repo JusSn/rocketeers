@@ -516,7 +516,7 @@ public class Player : MonoBehaviour {
 
     bool CanDownJump () {
         return rigid.IsTouchingLayers (platformsMask)
-                && !rigid.IsTouchingLayers (groundLayer);
+               && !rigid.IsTouchingLayers (groundLayer);
     }
 
     GameObject ScanForBlocks () {

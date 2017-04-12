@@ -320,6 +320,9 @@ public class Block : MonoBehaviour {
         foreach (Transform t in block.transform) {
             t.gameObject.layer = LayerMask.NameToLayer ("Team" + teamNum + "Platform");
         }
+        // CG: Make blocks impenetrable to the other team
+        int opposite_team_num = Utils.GetOppositeTeamNum (teamNum);
+        block.transform.Find ("BlockerCollider").gameObject.layer = LayerMask.NameToLayer ("ImpenetrableToTeam" + opposite_team_num);
     }
 
     void ConnectToGround(Direction dir, GameObject ground){

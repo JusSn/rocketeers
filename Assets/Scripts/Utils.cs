@@ -132,4 +132,9 @@ public class Utils {
             return new Vector3 (0f, 45f, 0f);
         }
     }
+
+    // CG: Return the opposite team number
+    public static int GetOppositeTeamNum(int team_num){
+        return (team_num == 1) ? 2 : 1;
+    }
 }
