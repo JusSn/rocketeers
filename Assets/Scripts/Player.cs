@@ -217,10 +217,7 @@ public class Player : MonoBehaviour {
                 // JF: Flip ray gun if aiming to left
                 aimSprend.flipY = trajectory.x < 0;
 				aimArrowObject.transform.rotation = Quaternion.AngleAxis (angle, Vector3.forward);
-			}
 
-			// CG: shooting occurs with right trigger
-			if (input.RightBumper.WasPressed){
 				// CG: Shoot gun every projCDTime seconds
 				if (projCDCounter >= projCDTime) {
 					FireBurst ();
