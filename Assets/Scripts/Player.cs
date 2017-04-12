@@ -784,4 +784,8 @@ public class Player : MonoBehaviour {
             Respawn ();
         }
     }
+
+    public GameObject GetSprite(){
+        return sprite;
+    }
 }

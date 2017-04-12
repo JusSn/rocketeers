@@ -9,7 +9,7 @@ public class Item : MonoBehaviour {
 	public float					repoolTime = 10f;
 	public bool 					________________;
 	public bool 					held = false;
-	public Vector3 					heldPos = new Vector3 (0f, -1f, 0f);
+	protected Vector3               heldPos = new Vector3 (0.25f, -0.2f, 0f);
 	private Rigidbody2D 			rigid;
 	private BoxCollider2D  			boxCollider;
 
@@ -23,7 +23,7 @@ public class Item : MonoBehaviour {
 	public void Attach(Player _player) {
 		rigid.velocity = Vector3.zero;
 		rigid.isKinematic = true;
-		transform.parent = _player.transform;
+        transform.SetParent (_player.GetSprite ().transform);
 		transform.localPosition = heldPos;
         transform.localScale = Vector3.one / 2f;
         _player.form = PlayerForm.Setting;

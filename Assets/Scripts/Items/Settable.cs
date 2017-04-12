@@ -27,7 +27,10 @@ public class Settable : Item {
 		// JF: Move item sprite around to match building highlight guide
 		if (held) {
 			if (highlightObj == null) {
-				highlightObj = transform.parent.Find("Highlight").gameObject;
+                // CG: the blocks are now children of the sprite of the character so
+                // they flip when the character does. So now we have to find the parent
+                // of a parent to get the 'Highlight' object
+                highlightObj = transform.parent.parent.Find ("Highlight").gameObject;
 				transform.localPosition = heldPos;
 			}
 			else if (highlightObj.activeInHierarchy) {
