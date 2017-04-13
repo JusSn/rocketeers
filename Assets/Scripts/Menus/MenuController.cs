@@ -303,8 +303,9 @@ public class MenuController : MonoBehaviour {
 	/******************** Button Functions ********************/
 
 	public void StartButton(){
-		if (!switching)
-			InitCharacterScreen ();
+		//if (!switching)
+			//InitCharacterScreen ();
+		SceneManager.LoadScene ("main");
 	}
 
 	public void HowToPlayButton(){
