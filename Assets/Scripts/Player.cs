@@ -234,7 +234,7 @@ public class Player : MonoBehaviour {
 				}
 			}
             if (nearestBlockObj != null){
-                if (input.Action3.WasPressed) {
+                if (input.RightBumper.WasPressed) {
                     if (TryToSitInBlock()) {
                         // there's a weapon underneath us, so sit in it
                         form = PlayerForm.Controlling;
@@ -308,7 +308,7 @@ public class Player : MonoBehaviour {
         FlipAllSprites (x_val);
 
         // Detach from the block if the user wants to
-        if (!input.Action3.IsPressed){
+        if (!input.RightBumper.IsPressed){
             DetachFromBlock ();
             return;
         }
