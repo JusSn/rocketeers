@@ -121,9 +121,9 @@ public class Player : MonoBehaviour {
         highlightObject.SetActive (false);
 
         blockIndicatorObj = transform.Find("BlockIndicator").gameObject;
-        swapArrowIndicator = blockIndicatorObj.transform.Find("SwapArrowIndicator").gameObject; 
+        // swapArrowIndicator = blockIndicatorObj.transform.Find("SwapArrowIndicator").gameObject; 
         blockIndicatorObj.SetActive (false);
-        swapArrowIndicator.SetActive (false);
+        // swapArrowIndicator.SetActive (false);
 
         // AW: Get arrow sprite for aiming shots and proj source
         aimArrowObject = transform.Find("Aiming").gameObject;
@@ -208,11 +208,11 @@ public class Player : MonoBehaviour {
 
         if (buildPhase) {
             TryToPickUpItem ();
-            if (nearestBlockObj != null){
-                if (input.Action3.WasPressed) {
-                    SelectBlockForSwap (nearestBlockObj);
-                }
-            }
+            // if (nearestBlockObj != null){
+            //     if (input.Action3.WasPressed) {
+            //         SelectBlockForSwap (nearestBlockObj);
+            //     }
+            // }
 
         } else {
             // Aiming shot trajectory with the right stick
@@ -248,10 +248,10 @@ public class Player : MonoBehaviour {
             }
         }
 
-        // JF: Cancel block swap with B button
-        if (selectedBlock != null && input.Action2.WasPressed) {
-            EndBlockSwap ();
-        }
+        // // JF: Cancel block swap with B button
+        // if (selectedBlock != null && input.Action2.WasPressed) {
+        //     EndBlockSwap ();
+        // }
     }
 
     // setting update occurs when a player is holding a block
@@ -263,16 +263,16 @@ public class Player : MonoBehaviour {
 
         ScanForBlocks ();
 
-        if (nearestBlockObj != null){
-            if (input.Action3.WasPressed) {
-                SelectBlockForSwap (nearestBlockObj);
-            }
-        }
+        // if (nearestBlockObj != null){
+        //     if (input.Action3.WasPressed) {
+        //         SelectBlockForSwap (nearestBlockObj);
+        //     }
+        // }
 
         // JF: Cancel block swap with B button
-        if (selectedBlock != null && input.Action2.WasPressed) {
-            EndBlockSwap ();
-        }
+        // if (selectedBlock != null && input.Action2.WasPressed) {
+        //     EndBlockSwap ();
+        // }
 
         // JF: Change location of highlight guide
         Vector3 setPos = GetGridPosition ();
@@ -374,9 +374,9 @@ public class Player : MonoBehaviour {
         }
 
         // JF: Cancel block swap before controlling block
-        if (selectedBlock != null) {
-            EndBlockSwap ();
-        }
+        // if (selectedBlock != null) {
+        //     EndBlockSwap ();
+        // }
 	}
 
     /******************** Utility ********************/
