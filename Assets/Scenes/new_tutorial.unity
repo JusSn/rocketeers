@@ -1154,7 +1154,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 152139894}
   m_LocalRotation: {x: 1, y: -0, z: -0, w: 0}
-  m_LocalPosition: {x: -57.36, y: 945, z: 0}
+  m_LocalPosition: {x: -61.21, y: 945, z: 0}
   m_LocalScale: {x: 13, y: 20, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -6543,6 +6543,12 @@ MonoBehaviour:
   - {fileID: 584863172}
   - {fileID: 445156983}
   - {fileID: 581015798}
+  - {fileID: 152139894}
+  - {fileID: 1181559566}
+  - {fileID: 1389481806}
+  - {fileID: 1094144420}
+  - {fileID: 1926275713}
+  - {fileID: 782739498}
   LaunchCautionUI: {fileID: 1251842318}
   buildBgm: {fileID: 8300000, guid: 47947567e53940f46ab1e09cc3af2350, type: 3}
   battleBgm: {fileID: 8300000, guid: b6bf1b86025b95e4eae19f0035a9e704, type: 3}
@@ -10241,7 +10247,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1181559566}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -57.36, y: 850, z: 0}
+  m_LocalPosition: {x: -61.8, y: 850, z: 0}
   m_LocalScale: {x: 13, y: 20, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
