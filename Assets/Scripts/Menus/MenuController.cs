@@ -309,7 +309,7 @@ public class MenuController : MonoBehaviour {
 	}
 
 	public void HowToPlayButton(){
-		SceneManager.LoadScene ("tutorial");
+		SceneManager.LoadScene ("new_tutorial");
 	}
 
 	public void ConfirmButton() {
