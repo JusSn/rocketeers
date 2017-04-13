@@ -121,9 +121,9 @@ public class Player : MonoBehaviour {
         highlightObject.SetActive (false);
 
         blockIndicatorObj = transform.Find("BlockIndicator").gameObject;
-        // swapArrowIndicator = blockIndicatorObj.transform.Find("SwapArrowIndicator").gameObject; 
+        swapArrowIndicator = blockIndicatorObj.transform.Find("SwapArrowIndicator").gameObject; 
         blockIndicatorObj.SetActive (false);
-        // swapArrowIndicator.SetActive (false);
+        swapArrowIndicator.SetActive (false);
 
         // AW: Get arrow sprite for aiming shots and proj source
         aimArrowObject = transform.Find("Aiming").gameObject;
@@ -240,10 +240,10 @@ public class Player : MonoBehaviour {
                         form = PlayerForm.Controlling;
 						SFXManager.GetSFXManager ().PlaySFX (SFX.StartPilot);
                     }
-                    else {
-                        RepairBlock (nearestBlockObj);
-                        // TryToRepairBlock(blockCols);
-                    }
+                    // else {
+                    //     RepairBlock (nearestBlockObj);
+                    //     // TryToRepairBlock(blockCols);
+                    // }
                 }
             }
         }
@@ -433,20 +433,20 @@ public class Player : MonoBehaviour {
         }
 
         // Regular jump
-        if (grounded && input.Action1.IsPressed) {
-            currentY = ySpeed;
-            SFXManager.GetSFXManager ().PlaySFX (SFX.Jump, 0.25f);
-        }
+        // if (grounded && input.Action1.IsPressed) {
+        //     currentY = ySpeed;
+        //     SFXManager.GetSFXManager ().PlaySFX (SFX.Jump, 0.25f);
+        // }
 
         // Check for double jump
-        if (!doubleJumped && !grounded && input.Action1.WasPressed){
-            // tt_manager.doubleJumped = true;
+        // if (!doubleJumped && !grounded && input.Action1.WasPressed){
+        //     // tt_manager.doubleJumped = true;
 
-            currentY = ySpeed;
-			SFXManager.GetSFXManager ().PlaySFX (SFX.Jump, 0.25f);
-            StartCoroutine("SpinSprite");
-            doubleJumped = true;
-        }
+        //     currentY = ySpeed;
+		// 	SFXManager.GetSFXManager ().PlaySFX (SFX.Jump, 0.25f);
+        //     StartCoroutine("SpinSprite");
+        //     doubleJumped = true;
+        // }
 
 		// Jetpack calculations
 		if (grounded) {
