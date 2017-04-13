@@ -70,7 +70,7 @@ public class Player : MonoBehaviour {
 
     // JF: Highlight object
     public GameObject                       highlightObject;
-    public GameObject                       blockIndicatorObj;
+//    public GameObject                       blockIndicatorObj;
     public GameObject                       swapArrowIndicator;
 
     // AW: Aim arrow
@@ -120,10 +120,10 @@ public class Player : MonoBehaviour {
         // highlightSprends = highlightObject.GetComponentsInChildren<SpriteRenderer> ();
         highlightObject.SetActive (false);
 
-        blockIndicatorObj = transform.Find("BlockIndicator").gameObject;
-        swapArrowIndicator = blockIndicatorObj.transform.Find("SwapArrowIndicator").gameObject; 
-        blockIndicatorObj.SetActive (false);
-        swapArrowIndicator.SetActive (false);
+//        blockIndicatorObj = transform.Find("BlockIndicator").gameObject;
+//        swapArrowIndicator = blockIndicatorObj.transform.Find("SwapArrowIndicator").gameObject; 
+//        blockIndicatorObj.SetActive (false);
+//        swapArrowIndicator.SetActive (false);
 
         // AW: Get arrow sprite for aiming shots and proj source
         aimArrowObject = transform.Find("Aiming").gameObject;
@@ -166,7 +166,6 @@ public class Player : MonoBehaviour {
 
         // Have the UFOs bring in the players!
         Respawn (transform.position);
-        Invoke ("EndIntroCutscene", 3f);
     }
 
     // Update is called once per frame
@@ -208,11 +207,6 @@ public class Player : MonoBehaviour {
 
         if (buildPhase) {
             TryToPickUpItem ();
-            // if (nearestBlockObj != null){
-            //     if (input.Action3.WasPressed) {
-            //         SelectBlockForSwap (nearestBlockObj);
-            //     }
-            // }
 
         } else {
             // Aiming shot trajectory with the right stick
@@ -240,10 +234,6 @@ public class Player : MonoBehaviour {
                         form = PlayerForm.Controlling;
 						SFXManager.GetSFXManager ().PlaySFX (SFX.StartPilot);
                     }
-                    // else {
-                    //     RepairBlock (nearestBlockObj);
-                    //     // TryToRepairBlock(blockCols);
-                    // }
                 }
             }
         }
@@ -262,17 +252,6 @@ public class Player : MonoBehaviour {
         TryToPickUpItem ();
 
         ScanForBlocks ();
-
-        // if (nearestBlockObj != null){
-        //     if (input.Action3.WasPressed) {
-        //         SelectBlockForSwap (nearestBlockObj);
-        //     }
-        // }
-
-        // JF: Cancel block swap with B button
-        // if (selectedBlock != null && input.Action2.WasPressed) {
-        //     EndBlockSwap ();
-        // }
 
         // JF: Change location of highlight guide
         Vector3 setPos = GetGridPosition ();
@@ -352,7 +331,6 @@ public class Player : MonoBehaviour {
                 animator.SetBool("piloting", true);
 
                 aimArrowObject.SetActive(false);
-                blockIndicatorObj.SetActive (false);
                 jetpackObj.SetActive(false);
                 _form = value;
                 break;
@@ -372,11 +350,6 @@ public class Player : MonoBehaviour {
 		if (heldItem) {
 			heldItem.Detach (this);
         }
-
-        // JF: Cancel block swap before controlling block
-        // if (selectedBlock != null) {
-        //     EndBlockSwap ();
-        // }
 	}
 
     /******************** Utility ********************/
@@ -432,22 +405,6 @@ public class Player : MonoBehaviour {
             Invoke ("RestoreCollision", 0.3f);
         }
 
-        // Regular jump
-        // if (grounded && input.Action1.IsPressed) {
-        //     currentY = ySpeed;
-        //     SFXManager.GetSFXManager ().PlaySFX (SFX.Jump, 0.25f);
-        // }
-
-        // Check for double jump
-        // if (!doubleJumped && !grounded && input.Action1.WasPressed){
-        //     // tt_manager.doubleJumped = true;
-
-        //     currentY = ySpeed;
-		// 	SFXManager.GetSFXManager ().PlaySFX (SFX.Jump, 0.25f);
-        //     StartCoroutine("SpinSprite");
-        //     doubleJumped = true;
-        // }
-
 		// Jetpack calculations
 		if (grounded) {
 			jetpackFuelCurrent += jetpackRefuelRate * Time.deltaTime;
@@ -464,11 +421,7 @@ public class Player : MonoBehaviour {
 			jetpackFire.SetActive (true);
 
             animator.SetBool("flying", true);
-
-            // JF: Disable tooltip once player has used jetpack a sufficient amount
-            if (jetpackFuelCurrent < 3.5f) {
-                // tt_manager.jetpacked = true;
-            }
+ 
 		} else {
 			jetpackFire.SetActive (false);
 
@@ -531,13 +484,6 @@ public class Player : MonoBehaviour {
         
         // Highlight the nearest block
         nearestBlockObj = GetNearestBlock (blockCols);
-        if (nearestBlockObj != null) {
-            blockIndicatorObj.transform.position = nearestBlockObj.transform.position;
-            blockIndicatorObj.SetActive (true);
-        }
-        else {
-            blockIndicatorObj.SetActive (false);
-        }
 
         // If already selected a block, update the swapping arrow between it
         // and nearest block
@@ -550,9 +496,6 @@ public class Player : MonoBehaviour {
             float angle = Mathf.Atan2 (difference.x, difference.y) * Mathf.Rad2Deg - 90;
             Quaternion rot = Quaternion.AngleAxis (angle, -Vector3.forward);
 
-            swapArrowIndicator.transform.position = midPos;
-            swapArrowIndicator.transform.localScale = new Vector3(size / 3, size / 2, 1);
-            swapArrowIndicator.transform.rotation = rot;
         }
 
         return nearestBlockObj;
@@ -694,8 +637,6 @@ public class Player : MonoBehaviour {
         if (point_manager.UsePoints (heldItem.GetCost ())) {
             heldItem.Set (set_pos);
 			SFXManager.GetSFXManager ().PlaySFX (SFX.BlockSet);
-            // show the tooltip of the player spending points on picking up the item
-            // tt_manager.SpendPoints (heldItem.GetCost ());
         }
         form = PlayerForm.Setting;
     }
@@ -806,9 +747,5 @@ public class Player : MonoBehaviour {
 
     public GameObject GetSprite(){
         return sprite;
-    }
-
-    void EndIntroCutscene(){
-        PhaseManager.S.EndIntroCutscene ();
     }
 }

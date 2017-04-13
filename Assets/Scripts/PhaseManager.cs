@@ -52,7 +52,8 @@ public class PhaseManager : MonoBehaviour {
     // Gameplay Variables
     public float                        build_time = 5;
     public float                        battle_time = 5;
-    public bool                         in_cutscene = true;
+    public bool                         in_tutorial = false;
+    private bool                        begin_game = false;
     // public int                         rounds_to_play = 2;
 
 	// Components
@@ -63,22 +64,20 @@ public class PhaseManager : MonoBehaviour {
     }
     // Use this for initialization
     void Start () {
-        placedBlocks = new List<GameObject>();
+        placedBlocks = new List<GameObject> ();
         timeLeft = build_time;
-        groundDestination = new Vector2(0, -50f);
+        groundDestination = new Vector2 (0, -50f);
 
         // JF: Set up audiosources:
         // [0] background musics that loop
         // [1] sound effects that do not loop
-		audioSource = GetComponent<AudioSource>();
-		audioSource.clip = buildBgm;
-		audioSource.loop = true;
-		audioSource.Play ();
+        audioSource = GetComponent<AudioSource> ();
+        Invoke ("PlayMusic", 3f);
     }
 
 	// Update is called once per frame
 	void Update () {
-        if (gameOver || in_cutscene) {
+        if (gameOver || in_tutorial || !begin_game) {
             return;
         }
 
@@ -114,9 +113,11 @@ public class PhaseManager : MonoBehaviour {
     public void SwitchToBattlePhase() {
         inBuildPhase = false;
 
-		audioSource.clip = battleBgm;
-		audioSource.loop = true;
-		audioSource.Play ();
+        if (!in_tutorial) {
+            audioSource.clip = battleBgm;
+            audioSource.loop = true;
+            audioSource.Play ();
+        }
 
         // JF: Stop caution UI from flashing
         LaunchCautionUI.SetActive(false);
@@ -186,7 +187,9 @@ public class PhaseManager : MonoBehaviour {
         StartCoroutine (MichaelBay (destroyedCoreBlock.transform.position));
 
         gameOver = true;
-        TimerDisplay.SetActive (true);
+        if (!in_tutorial) {
+            TimerDisplay.SetActive (true);
+        }
         ui_phase.text = "Team " + winner;
         ui_timeLeft.text = "Wins";
 
@@ -242,7 +245,24 @@ public class PhaseManager : MonoBehaviour {
         TimerDisplay.SetActive (false);
     }
 
-    public void EndIntroCutscene(){
-        in_cutscene = false;
+
+    public void SetInTutorial(){
+        in_tutorial = true;
+    }
+
+    void PlayMusic(){
+        if (!in_tutorial) {
+            begin_game = true;
+            audioSource.clip = buildBgm;
+            audioSource.loop = true;
+            audioSource.Play ();
+        }
+    }
+
+    public void AddBlock(GameObject go, GameObject settableBlock){
+        PhaseManager.S.placedBlocks.Add(go);
+        if (in_tutorial) {
+            TutorialController.GetTutorialController ().DecreaseBlocksToGo (settableBlock);
+        }
     }
 }

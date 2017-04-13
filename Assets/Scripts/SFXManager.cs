@@ -72,8 +72,9 @@ public class SFXManager : MonoBehaviour {
 
  	}
 		
-	public void PlaySFX(SFX sfx, float volume = 1f) {
-		if (singleton)
-			source.PlayOneShot(sfxMap[sfx], volume);
+    public void PlaySFX(SFX sfx, float volume = 1f) {
+        if (singleton) {
+            source.PlayOneShot (sfxMap [sfx], volume);
+        }
 	}
 }
