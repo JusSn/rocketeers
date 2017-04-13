@@ -45,6 +45,9 @@ public class PhaseManager : MonoBehaviour {
     public float                        flyingSpeed = 2f;
     public float                        gravityScale = 0.9f;
 
+    // used for switching to battle phase early
+    private int                         numPlayersOutOfPoints = 0;
+
     // Timer
     private float                       timeLeft;
     private string                      seconds;
@@ -263,6 +266,15 @@ public class PhaseManager : MonoBehaviour {
         PhaseManager.S.placedBlocks.Add(go);
         if (in_tutorial) {
             TutorialController.GetTutorialController ().DecreaseBlocksToGo (settableBlock);
+        }
+    }
+
+    public void ReportTeamOutOfPoints(int teamNum){
+        numPlayersOutOfPoints |= teamNum;
+        print ("Num players out of points: " + numPlayersOutOfPoints);
+        if (numPlayersOutOfPoints == 3) {
+            SwitchToCountdownPhase ();
+            timeLeft = 10f;
         }
     }
 }
