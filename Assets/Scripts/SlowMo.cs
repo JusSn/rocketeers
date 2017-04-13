@@ -23,14 +23,7 @@ public class SlowMo : MonoBehaviour {
         camera = MainCamera.S.GetComponent<Camera> ();
     }
 
-    public static bool IsSlowMo (){
-        return Time.timeScale != NORMAL_SPEED;
-    }
-
     public static void Begin (float slow_mo_speed, Vector3 target_core){
-        if (IsSlowMo ()) {
-            return;
-        }
         // the Z value would cause the camera to clip and not show up properly,
         // so we permanently set the z value to -10f
         target_core.z = -10f;
@@ -45,9 +38,6 @@ public class SlowMo : MonoBehaviour {
     }
 
     public static void End(){
-        if (!IsSlowMo ()) {
-            return;
-        }
         instance.StopAllCoroutines();
         instance.StartCoroutine (
                 instance.LerpSlowMo (NORMAL_SPEED, instance.original_cam_pos, -ZOOM_SPEED));
