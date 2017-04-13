@@ -28,6 +28,8 @@ public class Player : MonoBehaviour {
 	public float							projCDTime = 0.5f;
     public float                            DRIVE_SPEED_X = 4f;
     public float                            DRIVE_SPEED_Y = 4f;
+    public float                            DOWN_JUMP_THRESHOLD = 0.3f;
+    public float                            JETPACK_ACTIVE_THRESHOLD = 0.3f;
 	public float							jetpackMaxSpeed = 8f;
 	public float 							jetpackAccel = 40f;
 	public float							jetpackFuelMax = 5f;
@@ -424,7 +426,7 @@ public class Player : MonoBehaviour {
     // AW: Jetpack
     float GetYInputSpeed(float currentY) {
         // Down jump
-        if (grounded && input.LeftStick.Down && canDownJump){
+        if (grounded && input.LeftStick.Down > DOWN_JUMP_THRESHOLD && canDownJump){
             // tt_manager.downJumped = true;
             bodyCollider.isTrigger = true;
             Invoke ("RestoreCollision", 0.3f);
@@ -455,7 +457,7 @@ public class Player : MonoBehaviour {
 			}
         }
 		
-        if (input.LeftBumper.IsPressed && jetpackFuelCurrent > 0f) {
+        if (input.LeftStickY > JETPACK_ACTIVE_THRESHOLD && jetpackFuelCurrent > 0f) {
 			jetpackFuelBar.SetActive (true);
 			jetpackFuelCurrent -= Time.deltaTime;
 			currentY = GetJetpackThrust ();
