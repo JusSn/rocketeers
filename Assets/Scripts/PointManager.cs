@@ -20,6 +20,7 @@ public class PointManager : MonoBehaviour {
 
     // used to control how long the main points text blinks red and black
     private float                       blink_length = 2f;
+    private bool                        reported = false;
 
     void Start () {
         InitializePoints ();
@@ -36,6 +37,7 @@ public class PointManager : MonoBehaviour {
 			if (CanUsePoints (pts_to_be_used)) {
 				// if we can use the points, go ahead and use them
 				SubtractPts (pts_to_be_used);
+                ReportOutOfPoints ();
 				return true;
 			}
 			NotEnoughPoints ();
@@ -75,6 +77,14 @@ public class PointManager : MonoBehaviour {
             // sets the text to be black for 0.5 seconds
             ui_pts_left.color = Color.white;
             yield return new WaitForSeconds (0.25f);
+        }
+    }
+
+    void ReportOutOfPoints(){
+        if (int.Parse(ui_pts_left.text) <= 0 && !reported){
+            reported = true;
+            int teamNum = GetComponent<Player> ().teamNum;
+            PhaseManager.S.ReportTeamOutOfPoints (teamNum);
         }
     }
 }
