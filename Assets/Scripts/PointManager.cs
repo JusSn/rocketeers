@@ -81,7 +81,7 @@ public class PointManager : MonoBehaviour {
     }
 
     void ReportOutOfPoints(){
-        if (int.Parse(ui_pts_left.text) <= 0 && !reported){
+        if (int.Parse(ui_pts_left.text) <= 50 && !reported){
             reported = true;
             int teamNum = GetComponent<Player> ().teamNum;
             PhaseManager.S.ReportTeamOutOfPoints (teamNum);
