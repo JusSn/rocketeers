@@ -19,6 +19,8 @@ public class GameManager : MonoBehaviour {
 
 	void Awake() {
 		singleton = this;
+
+		Cursor.visible = false;
 	}
 
 
