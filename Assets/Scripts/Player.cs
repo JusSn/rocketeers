@@ -719,6 +719,7 @@ public class Player : MonoBehaviour {
         SetRespawnSettings ();
         ufo_manager.SetPlayerToRespawn (this, spawn_pos);
     }
+
     // Respawns the player
     public void Respawn(){
         SetRespawnSettings ();
@@ -726,6 +727,7 @@ public class Player : MonoBehaviour {
     }
 
     void SetRespawnSettings(){
+        jetpackFuelCurrent = jetpackFuelMax;
         form = PlayerForm.Respawning;
         rigid.gravityScale = 0f;
         rigid.velocity = Vector2.zero;
