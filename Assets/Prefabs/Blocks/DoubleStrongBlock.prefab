@@ -294,7 +294,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8231b0c45c81a4bc4ba43a7c2e1e14f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MAX_HEALTH: 200
+  MAX_HEALTH: 100
+  DAMAGE_FROM_LASER: 7
+  BASE_DAMAGE_FROM_RAM: 0
   is_core: 0
   health_bar_prefab: {fileID: 1344433025396718, guid: 7ce92948e3d8941b4805e1c164364c13,
     type: 2}
@@ -330,7 +332,7 @@ SpriteRenderer:
   m_SortingLayerID: -293079361
   m_SortingLayer: 1
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 549a39858fbba32488c5c739d39f3207, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b364442afe3898f44bc4651c1d8b2358, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

@@ -6,13 +6,16 @@ public class Projectile : MonoBehaviour {
 
     // inspector tunables
     public float                    bullet_speed = 4f;
-    public float                    damage_amount = 15f;
+    // public float                    damage_amount = 15f;
     public int                      teamNum;
     public float                    lifeTime;
     public GameObject               hit_effect;
 
+    private Rigidbody2D             rigid;
+
     // Use this for initialization
     void Start () {
+        rigid = GetComponent<Rigidbody2D> ();
         Invoke("DestroyThis", lifeTime);
     }
 
@@ -30,14 +33,25 @@ public class Projectile : MonoBehaviour {
             Destroy(gameObject);
         } 
 		*/
+        transform.rotation = Quaternion.FromToRotation(Vector3.right, rigid.velocity);
     }
 
     protected virtual void OnCollisionEnter2D(Collision2D other){
-        Destroy(gameObject);
         // check if we came in contact with another block/weaponblock
-        if (other.gameObject.CompareTag ("Block") || other.gameObject.CompareTag("Core")) {
-            other.gameObject.GetComponent<Block> ().TakeDamage (damage_amount);
+        if (other.gameObject.tag.StartsWith("Block") || other.gameObject.CompareTag("Core")) {
+            other.gameObject.GetComponent<Block> ().LaserDamage ();
+
+            if (other.gameObject.CompareTag("BlockReflect")) {
+                ReflectLaser (other);
+            }
+            else {
+                Destroy (gameObject);
+            }
         }
+        else {
+            Destroy(gameObject);
+        }
+
 
         // Create hit effect
         GameObject effect = Instantiate(hit_effect, other.contacts[0].point, Quaternion.identity);
@@ -45,6 +59,13 @@ public class Projectile : MonoBehaviour {
             effect.GetComponent<SpriteRenderer>().flipX = true;
         }
         hit_effect.GetComponent<LoopingAnimation>().StartAnimation();
+    }
+
+    void ReflectLaser (Collision2D collisionInfo) {
+        // Normal of collider surface
+        Vector3 normal = collisionInfo.contacts[0].normal;
+
+        rigid.velocity = Vector3.Reflect(rigid.velocity, normal).normalized * bullet_speed;
     }
 
     protected void DestroyThis() {

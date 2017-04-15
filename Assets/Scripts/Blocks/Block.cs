@@ -151,8 +151,8 @@ public class Block : MonoBehaviour {
 
     // Calling condition: when a projectile collides with a block
     // Called by: Projectile.OnTriggerEnter2D()
-    public virtual void TakeDamage(float dmg_amt){
-        health.TakeDamage(dmg_amt);
+    public virtual void LaserDamage(){
+        health.LaserDamage();
 		SFXManager.GetSFXManager ().PlaySFX (SFX.BlockHit);
     }
 

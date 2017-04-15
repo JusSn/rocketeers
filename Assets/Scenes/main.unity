@@ -277,6 +277,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MAX_HEALTH: Infinity
+  DAMAGE_FROM_LASER: 0
+  BASE_DAMAGE_FROM_RAM: 0
   is_core: 0
   health_bar_prefab: {fileID: 1344433025396718, guid: 7ce92948e3d8941b4805e1c164364c13,
     type: 2}
@@ -2474,6 +2476,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MAX_HEALTH: Infinity
+  DAMAGE_FROM_LASER: 0
+  BASE_DAMAGE_FROM_RAM: 0
   is_core: 0
   health_bar_prefab: {fileID: 1344433025396718, guid: 7ce92948e3d8941b4805e1c164364c13,
     type: 2}
@@ -3913,6 +3917,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MAX_HEALTH: Infinity
+  DAMAGE_FROM_LASER: 0
+  BASE_DAMAGE_FROM_RAM: 0
   is_core: 0
   health_bar_prefab: {fileID: 1344433025396718, guid: 7ce92948e3d8941b4805e1c164364c13,
     type: 2}
@@ -4181,6 +4187,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MAX_HEALTH: Infinity
+  DAMAGE_FROM_LASER: 0
+  BASE_DAMAGE_FROM_RAM: 0
   is_core: 0
   health_bar_prefab: {fileID: 1344433025396718, guid: 7ce92948e3d8941b4805e1c164364c13,
     type: 2}
@@ -4886,7 +4894,7 @@ MonoBehaviour:
   placedBlocks: []
   flyingSpeed: 0.2
   gravityScale: 1
-  build_time: 60
+  build_time: 11
   battle_time: -1
   in_tutorial: 0
 --- !u!114 &669842091
@@ -5182,6 +5190,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MAX_HEALTH: Infinity
+  DAMAGE_FROM_LASER: 0
+  BASE_DAMAGE_FROM_RAM: 0
   is_core: 0
   health_bar_prefab: {fileID: 1344433025396718, guid: 7ce92948e3d8941b4805e1c164364c13,
     type: 2}
@@ -6632,6 +6642,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MAX_HEALTH: Infinity
+  DAMAGE_FROM_LASER: 0
+  BASE_DAMAGE_FROM_RAM: 0
   is_core: 0
   health_bar_prefab: {fileID: 1344433025396718, guid: 7ce92948e3d8941b4805e1c164364c13,
     type: 2}
@@ -7563,6 +7575,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MAX_HEALTH: 500
+  DAMAGE_FROM_LASER: 7
+  BASE_DAMAGE_FROM_RAM: 0
   is_core: 1
   health_bar_prefab: {fileID: 1344433025396718, guid: 7ce92948e3d8941b4805e1c164364c13,
     type: 2}
@@ -9955,6 +9969,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MAX_HEALTH: 500
+  DAMAGE_FROM_LASER: 7
+  BASE_DAMAGE_FROM_RAM: 0
   is_core: 1
   health_bar_prefab: {fileID: 1344433025396718, guid: 7ce92948e3d8941b4805e1c164364c13,
     type: 2}
@@ -10780,6 +10796,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MAX_HEALTH: Infinity
+  DAMAGE_FROM_LASER: 0
+  BASE_DAMAGE_FROM_RAM: 0
   is_core: 0
   health_bar_prefab: {fileID: 1344433025396718, guid: 7ce92948e3d8941b4805e1c164364c13,
     type: 2}
@@ -11584,6 +11602,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MAX_HEALTH: Infinity
+  DAMAGE_FROM_LASER: 0
+  BASE_DAMAGE_FROM_RAM: 0
   is_core: 0
   health_bar_prefab: {fileID: 1344433025396718, guid: 7ce92948e3d8941b4805e1c164364c13,
     type: 2}
@@ -11851,6 +11871,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MAX_HEALTH: Infinity
+  DAMAGE_FROM_LASER: 0
+  BASE_DAMAGE_FROM_RAM: 0
   is_core: 0
   health_bar_prefab: {fileID: 1344433025396718, guid: 7ce92948e3d8941b4805e1c164364c13,
     type: 2}
@@ -13771,6 +13793,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MAX_HEALTH: Infinity
+  DAMAGE_FROM_LASER: 0
+  BASE_DAMAGE_FROM_RAM: 0
   is_core: 0
   health_bar_prefab: {fileID: 1344433025396718, guid: 7ce92948e3d8941b4805e1c164364c13,
     type: 2}

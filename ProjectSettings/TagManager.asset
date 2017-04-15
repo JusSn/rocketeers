@@ -13,7 +13,7 @@ TagManager:
   - Spawner
   - Core
   - Rockets
-  - ConvertProjectile
+  - BlockReflect
   layers:
   - Default
   - TransparentFX

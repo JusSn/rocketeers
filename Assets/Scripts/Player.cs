@@ -532,7 +532,7 @@ public class Player : MonoBehaviour {
             GameObject closest_block = cols_in_range[0].gameObject;
             foreach(Collider2D coll in cols_in_range) {
                 float temp_dist = Vector3.Distance(coll.transform.position, transform.position);
-                if(coll.gameObject.GetComponent<Health>().GetHealth() < coll.gameObject.GetComponent<Health>().MAX_HEALTH && Mathf.Abs(temp_dist) < Mathf.Abs(closest_dist)) {
+                if(Mathf.Abs(temp_dist) < Mathf.Abs(closest_dist)) {
                     closest_dist = temp_dist;
                     closest_block = coll.gameObject;
                 }
@@ -707,7 +707,6 @@ public class Player : MonoBehaviour {
     void FireProjectile() {
         GameObject proj = Instantiate<GameObject> (projectilePrefab);
         proj.transform.position = projSource.transform.position;
-        proj.transform.rotation = projSource.transform.rotation;
         proj.GetComponent<Projectile>().teamNum = teamNum;
         proj.layer = LayerMask.NameToLayer("Team" + teamNum + "Projectiles");
         proj.GetComponent<Rigidbody2D> ().velocity = projSource.transform.right * projSpeed;
