@@ -83,18 +83,39 @@ public class MainCamera : MonoBehaviour {
         float x_val = pos.x;
         float y_val = pos.y;
 
+        return IsXOnScreen (x_val) && IsYOnScreen (y_val);
+    }
+
+    public bool IsXOnScreen(float x_val){
         // if the position is out of bounds in the x-axis, return false
-        if (x_val < GetWestCameraBound () || x_val > GetEastCameraBound ()) {
+        if (IsWestOfCamera(x_val) || IsEastOfCamera(x_val)) {
             return false;
         }
-
-        // if the position is out of bounds in the y-axis, return false
-        if (y_val < GetSouthCameraBound () || y_val > GetNorthCameraBound ()) {
-            return false;
-        }
-
-        // otherwise, the position is within the screen!
         return true;
+    }
+
+    public bool IsYOnScreen(float y_val){
+        // if the position is out of bounds in the y-axis, return false
+        if (IsSouthOfCamera(y_val) || IsNorthOfCamera(y_val)) {
+            return false;
+        }
+        return true;
+    }
+
+    public bool IsWestOfCamera(float x_val){
+        return x_val < GetWestCameraBound ();
+    }
+
+    public bool IsEastOfCamera(float x_val){
+        return x_val > GetEastCameraBound ();
+    }
+
+    public bool IsNorthOfCamera(float y_val){
+        return y_val > GetNorthCameraBound ();
+    }
+
+    public bool IsSouthOfCamera(float y_val){
+        return y_val < GetSouthCameraBound ();
     }
 
     // JF: Gameplay check to destroy objects and players if they fall too far below the rocket
@@ -103,32 +124,32 @@ public class MainCamera : MonoBehaviour {
     }
 
     // returns the west bound of the camera
-    float GetWestCameraBound(){
+    public float GetWestCameraBound(){
         return -GetHalfWidthOfCamera ();
     }
 
     // returns the east bound of the camera
-    float GetEastCameraBound(){
+    public float GetEastCameraBound(){
         return GetHalfWidthOfCamera ();
     }
 
     // returns the north bound of the camera
-    float GetNorthCameraBound(){
+    public float GetNorthCameraBound(){
         return GetHalfHeightOfCamera ();
     }
 
     // returns the south bound of the camera
-    float GetSouthCameraBound(){
+    public float GetSouthCameraBound(){
         return -GetHalfHeightOfCamera ();
     }
 
     // returns the width of the camera view
-    float GetHalfWidthOfCamera(){
+    public float GetHalfWidthOfCamera(){
         float height = GetHalfHeightOfCamera ();
         return height * RATIO_MULTIPLIER;
     }
 
-    float GetHalfHeightOfCamera(){
+    public float GetHalfHeightOfCamera(){
         return GetComponent<Camera> ().orthographicSize;
     }
 

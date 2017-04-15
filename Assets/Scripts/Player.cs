@@ -23,6 +23,7 @@ public class Player : MonoBehaviour {
     public float                            throwChargeMax = 2.5f;
     public float                            throwChargeRatio = 10f;
     public GameObject                       projectilePrefab;
+    public GameObject                       offscreenArrowPrefab;
     public float                            projSpeed = 10f;
 	public float 							projCDCounter = 0f;
 	public float							projCDTime = 0.5f;
@@ -70,7 +71,6 @@ public class Player : MonoBehaviour {
 
     // JF: Highlight object
     public GameObject                       highlightObject;
-//    public GameObject                       blockIndicatorObj;
     public GameObject                       swapArrowIndicator;
 
     // AW: Aim arrow
@@ -85,6 +85,9 @@ public class Player : MonoBehaviour {
 	private GameObject 						jetpackFire;
     private JetpackBar                      jetpack_bar;
 	private GameObject 						jetpackFuelBar;
+
+    // CG: offscreen arrow indicator
+    private ArrowIndicator                      offscreen_arrow_manager;
 
     // Detection parameters
     private int                             blockMask;
@@ -108,22 +111,16 @@ public class Player : MonoBehaviour {
         bodyCollider = GetComponent<BoxCollider2D> ();
         point_manager = GetComponent<PointManager> ();
         ufo_manager = GetComponent<UFOManager> ();
+        offscreen_arrow_manager = GetComponent<ArrowIndicator> ();
 
         jetpackObj = sprite.transform.Find ("Jetpack").gameObject;
         jetpack_bar = GetComponent<JetpackBar> ();
         jetpack_bar.SetMaxFuel (jetpackFuelMax);
-        // tt_manager = GetComponent<ToolTipManager> ();
-        // tt_manager.SetPlayer (gameObject);
 
         // JF: Get highlightObject and disable. Enable if item is held later
         highlightObject = transform.Find ("Highlight").gameObject;
         // highlightSprends = highlightObject.GetComponentsInChildren<SpriteRenderer> ();
         highlightObject.SetActive (false);
-
-//        blockIndicatorObj = transform.Find("BlockIndicator").gameObject;
-//        swapArrowIndicator = blockIndicatorObj.transform.Find("SwapArrowIndicator").gameObject; 
-//        blockIndicatorObj.SetActive (false);
-//        swapArrowIndicator.SetActive (false);
 
         // AW: Get arrow sprite for aiming shots and proj source
         aimArrowObject = transform.Find("Aiming").gameObject;
@@ -251,8 +248,6 @@ public class Player : MonoBehaviour {
         // CG: still need to be able to pick up the other items if we're close to them
         TryToPickUpItem ();
 
-        ScanForBlocks ();
-
         // JF: Change location of highlight guide
         Vector3 setPos = GetGridPosition ();
         highlightObject.transform.position = setPos;
@@ -350,6 +345,8 @@ public class Player : MonoBehaviour {
 		if (heldItem) {
 			heldItem.Detach (this);
         }
+        print ("calling enable indicator");
+        offscreen_arrow_manager.EnableIndicator ();
 	}
 
     /******************** Utility ********************/
@@ -749,5 +746,13 @@ public class Player : MonoBehaviour {
 
     public GameObject GetSprite(){
         return sprite;
+    }
+
+    public void DisableIndicator(){
+        offscreen_arrow_manager.DisableIndicator ();
+    }
+
+    public void EnableIndicator(){
+        offscreen_arrow_manager.EnableIndicator ();
     }
 }

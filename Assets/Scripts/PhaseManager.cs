@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -160,10 +161,24 @@ public class PhaseManager : MonoBehaviour {
             obj.GetComponent<Block> ().RemoveHighlights ();
         }
 
+        ExecuteOverPlayers (new player_delegate (SwitchToBattle));
+    }
+
+    public delegate void player_delegate(Player player);
+
+    void ExecuteOverPlayers(player_delegate fn_ptr){
         foreach (GameObject player in players) {
             Player player_script = player.GetComponent<Player> ();
-			player_script.SwitchToBattle ();
+            fn_ptr (player_script);
         }
+    }
+
+    void SwitchToBattle(Player player){
+        player.SwitchToBattle ();
+    }
+
+    void DisableIndicators(Player player){
+        player.DisableIndicator ();
     }
 
     IEnumerator moveGround(Vector3 direction, Vector3 destination) {
@@ -183,6 +198,7 @@ public class PhaseManager : MonoBehaviour {
     // Sets gameOver to true and creates an explosion at the losing team's core
     public void EndGame(Block destroyedCoreBlock) {
         Destroy (TopBattleWall);
+        ExecuteOverPlayers (new player_delegate(DisableIndicators));
 
         int winner = (destroyedCoreBlock.teamNum == 1) ? 2 : 1;
         float slow_mo_speed = 0.2f;
