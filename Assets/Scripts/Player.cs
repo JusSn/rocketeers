@@ -698,8 +698,8 @@ public class Player : MonoBehaviour {
         float downVel = rigid.velocity.y;
         // JF: If downward velocity is negative, lerp to 0 in addition to jetpack thrust. 
         // Greatly increases perceived power of jetpack if player is falling
-        if (downVel < 0) {
-            downVel = Mathf.Lerp(downVel, 0, 5 * Time.deltaTime);
+        if (downVel < 3) {
+            downVel = Mathf.Lerp(downVel, 5, 5 * Time.deltaTime);
         }
 
 		float magnitude = jetpackAccel * Time.deltaTime;
