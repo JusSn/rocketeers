@@ -10,11 +10,11 @@ using InControl;
 public enum MenuState {
 	Home,
 	Character,
-	Team,
 	Confirm
 }
 
 public class MenuController : MonoBehaviour {
+	
 	private static MenuController		singleton;
 
 	public AutoBackgroundScroller		bg;
@@ -24,15 +24,14 @@ public class MenuController : MonoBehaviour {
 	private EventSystem 				es;
 	private GameObject					homeScreen;
 	private GameObject					charSelectScreen;
-	private GameObject					teamSelectScreen;
 	private GameObject					gameConfirmScreen;
 
-	public bool						switching = false;
-	public MenuState 					state;
+	public bool								switching = false;
+	public MenuState 						state;
 	private Dictionary<MenuState, Action>	stateMapUpdate;
-	private CharacterSelectBar[] 		charSelecters;
-	private TeamSelectBar[] 			teamSelecters;
-	private Dictionary<InputDevice, CharacterSettings>  devices;
+	private CharacterSelectBar[] 			charSelecters;
+	private Dictionary<Character, bool>		charStatus;
+	private Dictionary<InputDevice, CharacterSelectBar>  devices;
 
 	void Awake () {
 		singleton = this;
@@ -49,8 +48,6 @@ public class MenuController : MonoBehaviour {
 		homeScreen.SetActive (false);
 		charSelectScreen = transform.Find ("CharacterSelect").gameObject;
 		charSelectScreen.SetActive (false);
-		teamSelectScreen = transform.Find ("TeamSelect").gameObject;
-		teamSelectScreen.SetActive (false);
 		gameConfirmScreen = transform.Find ("Confirm").gameObject;
 		gameConfirmScreen.SetActive (false);
 
@@ -60,7 +57,6 @@ public class MenuController : MonoBehaviour {
 		stateMapUpdate = new Dictionary<MenuState, Action> ();
 		stateMapUpdate.Add (MenuState.Home, HomeUpdate);
 		stateMapUpdate.Add (MenuState.Character, CharacterUpdate);
-		stateMapUpdate.Add (MenuState.Team, TeamUpdate);
 		stateMapUpdate.Add (MenuState.Confirm, ConfirmUpdate);
 
 		charSelecters = new CharacterSelectBar[4];
@@ -69,13 +65,13 @@ public class MenuController : MonoBehaviour {
 		charSelecters [2] = charSelectScreen.transform.Find ("P3Select").GetComponent<CharacterSelectBar>();
 		charSelecters [3] = charSelectScreen.transform.Find ("P4Select").GetComponent<CharacterSelectBar>();
 
-		teamSelecters = new TeamSelectBar[4];
-		teamSelecters [0] = teamSelectScreen.transform.Find("Players").transform.Find ("P1Select").GetComponent<TeamSelectBar>();
-		teamSelecters [1] = teamSelectScreen.transform.Find("Players").transform.Find ("P2Select").GetComponent<TeamSelectBar>();
-		teamSelecters [2] = teamSelectScreen.transform.Find("Players").transform.Find ("P3Select").GetComponent<TeamSelectBar>();
-		teamSelecters [3] = teamSelectScreen.transform.Find("Players").transform.Find ("P4Select").GetComponent<TeamSelectBar>();
+		charStatus = new Dictionary<Character, bool> ();
+		charStatus [Character.Yellow] = false;
+		charStatus [Character.Blue] = false;
+		charStatus [Character.Green] = false;
+		charStatus [Character.Pink] = false;
 
-		devices = new Dictionary<InputDevice, CharacterSettings> ();
+		devices = new Dictionary<InputDevice, CharacterSelectBar> ();
 		foreach (InputDevice device in InputManager.Devices)
 			AddController (device);
 
@@ -94,6 +90,7 @@ public class MenuController : MonoBehaviour {
 				foreach (CharacterSelectBar bar in charSelecters) {
 					if (bar.WaitingForPlayer ()) {
 						bar.AssignPlayer (device);
+						devices [device] = bar;
 						break;
 					}
 				}
@@ -105,17 +102,10 @@ public class MenuController : MonoBehaviour {
 		Debug.Log ("Device Removed: " + device.Name);
 		if(devices.ContainsKey(device)) {
 			if (state == MenuState.Character) {
-				foreach (CharacterSelectBar bar in charSelecters) {
-					if (bar.GetDevice () == device) {
-						if (bar.GetSelectedCharacter ()) {
-							bar.GetSelectedCharacter ().selected = false;
-							bar.GetSelectedCharacter ().teamNumber = 0;
-						}
-						bar.ResetPlayerSelect ();
-					}
+				if (devices [device].GetSelectedCharacter ()) {
+					charStatus [devices [device].GetSelectedCharacter ().GetCharacterType ()] = false;
 				}
-			} else if (state == MenuState.Team) {
-				InitCharacterScreen();
+				devices [device].ResetPlayerSelect ();
 			}
 			devices.Remove (device);
 		}
@@ -125,6 +115,7 @@ public class MenuController : MonoBehaviour {
 	}
 
 	void CharacterUpdate () {
+		// Return to the main menu
 		if (InputManager.ActiveDevice.Action2.WasPressed && devices.ContainsKey(InputManager.ActiveDevice)) {
 			foreach (CharacterSelectBar bar in charSelecters) {
 				if (bar.GetDevice () == InputManager.ActiveDevice
@@ -134,62 +125,34 @@ public class MenuController : MonoBehaviour {
 				}
 			}
 		}
+			
+		bool ready = true;
 
-		int ready = 0;
 		int team1 = 0;
 		int team2 = 0;
 		foreach (CharacterSelectBar bar in charSelecters) {
-			if (!bar.GetSelectedCharacter () && !bar.WaitingForPlayer ())
-				return;
-			if (bar.GetSelectedCharacter () && bar.GetSelectedTeam () > 0) {
-				++ready;
-				if (bar.GetSelectedTeam() == 1)
+			if (!bar.IsReady () && !bar.WaitingForPlayer ()) {
+				ready = false;
+			} else if (bar.IsReady ()) {
+				if (bar.GetSelectedTeam () == 1)
 					++team1;
-				else if (bar.GetSelectedTeam() == 2)
+				else if (bar.GetSelectedTeam () == 2)
 					++team2;
 			}
 		}
 
-		if (ready >= 2 && team1 > 0 && team2 > 0) {
+		if (ready)
+			ready = team1 > 0 && team2 > 0 && team1 + team2 > 1;
+
+		//if (ready >= 2 && team1 > 0 && team2 > 0) 
+		if (ready && InputManager.ActiveDevice.Action1.WasPressed && devices.ContainsKey(InputManager.ActiveDevice)) {
 			// TODO: Display "Press A to Continue"
-			if (InputManager.ActiveDevice.Action1.WasPressed) {
-				foreach (CharacterSelectBar bar in charSelecters) {
-					if (bar.GetSelectedCharacter ())
-						devices [bar.GetDevice ()] = bar.GetSelectedCharacter ();
-				}
 				InitConfirmScreen ();
 				return;
-			}
 		}
+
 	}
-
-	void TeamUpdate () {
-		if (InputManager.ActiveDevice.Action2.WasPressed) {
-			InitCharacterScreen ();
-			return;
-		}
-
-		int team1 = 0, team2 = 0;
-		foreach (KeyValuePair<InputDevice, CharacterSettings> entry in devices) {
-			if (entry.Value) {
-				if (entry.Value.teamNumber == 0)
-					return;
-				else if (entry.Value.teamNumber == 1)
-					++team1;
-				else if (entry.Value.teamNumber == 2)
-					++team2;
-			}
-		}
-
-		if(team1 > 0 && team2 > 0) {
-			// TODO: Display "Press A to Continue"
-			if (InputManager.ActiveDevice.Action1.WasPressed) {
-				InitConfirmScreen ();
-				return;
-			}
-		}
-	}
-
+		
 	void ConfirmUpdate () {
 		if (InputManager.ActiveDevice.Action2.WasPressed) {
 			InitCharacterScreen ();
@@ -202,13 +165,6 @@ public class MenuController : MonoBehaviour {
 			stateMapUpdate[state]();
 		}
 	}
-		
-	void ResetCharacterSettings() {
-		foreach (CharacterSettings character in characters) {
-			character.selected = false;
-			character.teamNumber = 0;
-		}
-	}
 
 	/******************** Switch Screen Functions ********************/
 
@@ -218,7 +174,6 @@ public class MenuController : MonoBehaviour {
 		DeactivateScreens ();
 		homeScreen.SetActive (true);
 
-		ResetCharacterSettings ();
 		bg.SetScrollSpeed (0.5f);
 
 		es.SetSelectedGameObject(homeScreen.transform.Find ("Canvas").Find ("StartButton").gameObject);
@@ -230,38 +185,18 @@ public class MenuController : MonoBehaviour {
 		DeactivateScreens ();
 		charSelectScreen.SetActive (true);
 
-		ResetCharacterSettings ();
 		bg.SetScrollSpeed (1.5f);
 
 		foreach (CharacterSelectBar bar in charSelecters)
 			bar.ResetPlayerSelect ();
-
+		foreach (Character setting in charStatus.Keys.ToList())
+			charStatus [setting] = false;
+		
 		int charSelectCount = 0;
 		foreach (InputDevice key in devices.Keys.ToList()) {
-			devices [key] = null;
+			devices [key] = charSelecters [charSelectCount];
 			charSelecters [charSelectCount].AssignPlayer (key);
 			++charSelectCount;
-		}
-	}
-
-	void InitTeamScreen() {
-		state = MenuState.Team;
-
-		DeactivateScreens ();
-		teamSelectScreen.SetActive (true);
-
-		ResetCharacterSettings ();
-		bg.SetScrollSpeed (3f);
-
-		foreach (TeamSelectBar bar in teamSelecters)
-			bar.ResetTeamSelect ();
-
-		int teamSelectCount = 0;
-		foreach (KeyValuePair<InputDevice, CharacterSettings> entry in devices) {
-			if (entry.Value) {
-				teamSelecters [teamSelectCount].AssignPlayer (entry.Key, entry.Value);
-				++teamSelectCount;
-			}
 		}
 	}
 
@@ -281,8 +216,6 @@ public class MenuController : MonoBehaviour {
 			StartCoroutine (SwitchOffScreen (homeScreen));
 		if (charSelectScreen.activeSelf)
 			StartCoroutine (SwitchOffScreen (charSelectScreen));
-		if (teamSelectScreen.activeSelf)
-			StartCoroutine (SwitchOffScreen (teamSelectScreen));
 		if (gameConfirmScreen.activeSelf) 
 			StartCoroutine (SwitchOffScreen (gameConfirmScreen));
 	}
@@ -304,6 +237,15 @@ public class MenuController : MonoBehaviour {
     void ToggleJellyModeCheckmark(){
         jellyModeCheckmark.SetActive(!jellyModeCheckmark.activeSelf);
     }
+	/******************** Public Interface Functions ********************/
+
+	public bool CharacterIsSelected (Character charType) {
+		return charStatus [charType];
+	}
+
+	public void SetCharacterSelect (Character charType, bool selected) {
+		charStatus [charType] = selected;
+	}
 
 	/******************** Button Functions ********************/
 
