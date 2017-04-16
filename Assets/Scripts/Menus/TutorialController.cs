@@ -80,7 +80,6 @@ public class TutorialController : MonoBehaviour {
         battleText = GameObject.Find ("BattleText");
 
 		players = new GameObject[4];
-        print (GameObject.Find ("Players").transform.Find("Player1"));
         players [0] = GameObject.Find ("Players").transform.Find("Player1").gameObject;
         players [1] = GameObject.Find ("Players").transform.Find ("Player2").gameObject;
         players [2] = GameObject.Find ("Players").transform.Find ("Player3").gameObject;
@@ -178,7 +177,6 @@ public class TutorialController : MonoBehaviour {
     }
 
     void CountdownAdvanceCondition(){
-        print (timeLeft);
         timeLeft -= Time.deltaTime;
         string seconds = (timeLeft % 60f).ToString("00");
         SetTeamText (seconds);

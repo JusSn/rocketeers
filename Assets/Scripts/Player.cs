@@ -345,7 +345,6 @@ public class Player : MonoBehaviour {
 		if (heldItem) {
 			heldItem.Detach (this);
         }
-        print ("calling enable indicator");
         offscreen_arrow_manager.EnableIndicator ();
 	}
 

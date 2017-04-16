@@ -287,7 +287,6 @@ public class PhaseManager : MonoBehaviour {
 
     public void ReportTeamOutOfPoints(int teamNum){
         numPlayersOutOfPoints |= teamNum;
-        print ("Num players out of points: " + numPlayersOutOfPoints);
         if (numPlayersOutOfPoints == 3) {
             SwitchToCountdownPhase ();
             timeLeft = 11f;

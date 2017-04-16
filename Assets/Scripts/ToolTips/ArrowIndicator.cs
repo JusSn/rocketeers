@@ -27,7 +27,6 @@ public class ArrowIndicator : MonoBehaviour {
 	}
 
     void DisplayIndicator(){
-        print (showIndicator);
         if (!showIndicator || MainCamera.S.IsOnScreen (transform.position)) {
             HideIndicator ();
             return;
