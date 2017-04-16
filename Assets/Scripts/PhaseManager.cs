@@ -74,13 +74,15 @@ public class PhaseManager : MonoBehaviour {
         groundDestination = new Vector2 (0, -50f);
 
 		// Instantiating the players
-		List<PlayerInfo> playerSettings = GameManager.GetPlayerList();
-		players = new List<GameObject>();
-		foreach (PlayerInfo pi in GameManager.GetPlayerList()) {
-			GameObject go = Instantiate<GameObject> (playerPrefab);
-			go.GetComponent<Player> ().SetPlayerSettings (pi.input, pi.charSettings, pi.teamSettings);
-			go.transform.position = new Vector3 (UnityEngine.Random.Range (-25f, 25f), 10f, 0f);
-			players.Add (go);
+		if (players.Count == 0) {
+			List<PlayerInfo> playerSettings = GameManager.GetPlayerList ();
+			players = new List<GameObject> ();
+			foreach (PlayerInfo pi in GameManager.GetPlayerList()) {
+				GameObject go = Instantiate<GameObject> (playerPrefab);
+				go.GetComponent<Player> ().SetPlayerSettings (pi.input, pi.charSettings, pi.teamSettings);
+				go.transform.position = new Vector3 (UnityEngine.Random.Range (-25f, 25f), 10f, 0f);
+				players.Add (go);
+			}
 		}
 
         // JF: Set up audiosources:
