@@ -303,7 +303,7 @@ public class PhaseManager : MonoBehaviour {
 
     public void ReportTeamOutOfPoints(int teamNum){
         numPlayersOutOfPoints |= teamNum;
-        if (numPlayersOutOfPoints == 3) {
+        if (numPlayersOutOfPoints == 3 && timeLeft >= 11f) {
             SwitchToCountdownPhase ();
             timeLeft = 11f;
         }
