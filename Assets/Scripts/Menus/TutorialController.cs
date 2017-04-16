@@ -11,6 +11,7 @@ public enum TutorialStage {
 	Objective,       	// 1st page of tutorial
 	BuildControls,		// 2nd page of tutorial
     Countdown,          // filler page
+    BattleControlsFreeze, // gray overlay to emphasize battle controls
 	BattleControls		// 3rd page of tutorial
 }
 
@@ -34,9 +35,12 @@ public class TutorialController : MonoBehaviour {
     private GameObject                  team2Rocket;
 
     private GameObject                  scenery;
+    private GameObject                  grayOverlay;
 
     private Text                        team1BlocksToGo;
     private Text                        team2BlocksToGo;
+
+    private AudioSource                 nasaCountdownAudioClip;
 
     private float                       timeLeft = 3f;
     private float                       startTime;
@@ -62,12 +66,14 @@ public class TutorialController : MonoBehaviour {
             PhaseManager.S.SetInTutorial();
         }
         stage = TutorialStage.Objective;
+        nasaCountdownAudioClip = GetComponent<AudioSource>();
 
 
 		objectiveScreen = transform.Find ("GameObjective").gameObject;
 		buildControlScreen = transform.Find ("BuildControls").gameObject;
 		battleControlScreen = transform.Find ("BattleControls").gameObject;
         battleControlUI = battleControlScreen.transform.Find ("UIController").gameObject;
+        grayOverlay = GameObject.Find ("GrayOverlay");
 
         team1Rocket = GameObject.Find ("Team1Base").gameObject;
         team2Rocket = GameObject.Find ("Team2Base").gameObject;
@@ -88,13 +94,15 @@ public class TutorialController : MonoBehaviour {
 		tutorialMap = new Dictionary<TutorialStage, Action> ();
         tutorialMap.Add (TutorialStage.Objective, InitBuildControls);
         tutorialMap.Add (TutorialStage.BuildControls, InitCountdown);
-        tutorialMap.Add (TutorialStage.Countdown, InitBattleControls);
+        tutorialMap.Add (TutorialStage.Countdown, InitBattleControlFreeze);
+        tutorialMap.Add (TutorialStage.BattleControlsFreeze, InitBattleControls);
 		tutorialMap.Add (TutorialStage.BattleControls, FinishTutorial);
 
         advanceToNextStageMap = new Dictionary<TutorialStage, Action> ();
         advanceToNextStageMap.Add (TutorialStage.Objective, GenericAdvanceCondition);
         advanceToNextStageMap.Add (TutorialStage.BuildControls, BuildAdvanceCondition);
         advanceToNextStageMap.Add (TutorialStage.Countdown, CountdownAdvanceCondition);
+        advanceToNextStageMap.Add (TutorialStage.BattleControlsFreeze, BattleControlsFreezeCondition);
         advanceToNextStageMap.Add (TutorialStage.BattleControls, ShrinkControls);
 
 
@@ -163,17 +171,32 @@ public class TutorialController : MonoBehaviour {
                                      || StartButtonWasPressed());
     }
 
+    public void InitBattleControlFreeze(){
+        shouldAdvanceToNextStage = false;
+        buildControlScreen.SetActive (false);
+        battleControlScreen.SetActive (true);
+        grayOverlay.SetActive (true);
+        battleText.SetActive (false);
+        shouldAdvanceToNextStage = false;
+        TurnOffPlayers ();
+        nasaCountdownAudioClip.Pause ();
+        stage = TutorialStage.BattleControlsFreeze;
+
+    }
+
+    void BattleControlsFreezeCondition(){
+        shouldAdvanceToNextStage = StartButtonWasPressed ();
+    }
+
     public void InitCountdown(){
         GameObject.Find ("Team1BlocksToBuild").gameObject.GetComponent<Text>().text = "";
         GameObject.Find ("Team2BlocksToBuild").gameObject.GetComponent<Text>().text = "";
         team1BlocksToGo.gameObject.SetActive (true);
         team2BlocksToGo.gameObject.SetActive (true);
         stage = TutorialStage.Countdown;
-        AudioSource audioSource = GetComponent<AudioSource>();
-        audioSource.clip = countdownSFX;
-        audioSource.time = 7.5f;
-        audioSource.Play();
-
+        nasaCountdownAudioClip.clip = countdownSFX;
+        nasaCountdownAudioClip.time = 7.5f; // play the countdown at exactly the "3, 2, 1...liftoff" part
+        nasaCountdownAudioClip.Play();
     }
 
     void CountdownAdvanceCondition(){
@@ -187,9 +210,10 @@ public class TutorialController : MonoBehaviour {
     }
 
 	public void InitBattleControls() {
-        shouldAdvanceToNextStage = false;
-		buildControlScreen.SetActive (false);
-		battleControlScreen.SetActive (true);
+        nasaCountdownAudioClip.UnPause ();
+        battleText.SetActive (false);
+        grayOverlay.SetActive (false);
+        TurnOnPlayers ();
 
 		Player[] players = GameManager.GetGameManager ().GetPlayers ();
 		foreach (Player player in players)

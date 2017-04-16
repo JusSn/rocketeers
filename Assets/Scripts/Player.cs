@@ -480,20 +480,6 @@ public class Player : MonoBehaviour {
         
         // Highlight the nearest block
         nearestBlockObj = GetNearestBlock (blockCols);
-
-        // If already selected a block, update the swapping arrow between it
-        // and nearest block
-        if (selectedBlock != null && nearestBlockObj != null) {
-            Vector3 midPos = (nearestBlockObj.transform.position + selectedBlock.transform.position) / 2;
-
-            Vector3 difference = nearestBlockObj.transform.position - selectedBlock.transform.position;
-            float size = difference.magnitude;
-
-            float angle = Mathf.Atan2 (difference.x, difference.y) * Mathf.Rad2Deg - 90;
-            Quaternion rot = Quaternion.AngleAxis (angle, -Vector3.forward);
-
-        }
-
         return nearestBlockObj;
     }
 

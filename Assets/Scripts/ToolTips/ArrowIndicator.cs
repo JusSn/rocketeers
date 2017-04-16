@@ -10,7 +10,6 @@ public class ArrowIndicator : MonoBehaviour {
     public bool                 _____________;
     private bool                showIndicator = false;
     GameObject                  arrow;
-    private int                 DEG_OFFSET = -90;
     private float               Y_EDGE_OFFSET = 1f;
     private float               X_EDGE_OFFSET = 2f;
 

@@ -10,9 +10,6 @@ using InControl;
 public class GameManager : MonoBehaviour {
 	private static GameManager 			singleton;
 
-	private static int					numPlayers;
-
-
 	public static GameManager GetGameManager() {
 		return singleton;
 	}
@@ -33,10 +30,5 @@ public class GameManager : MonoBehaviour {
 		players[2] = GameObject.Find ("Player3").GetComponent<Player>();
 		players[3] = GameObject.Find ("Player4").GetComponent<Player>();
 		return players;
-	}
-
-	/**************** Configuration Funcs ****************/
-	public void SetNumPlayers(int num_players) {
-		numPlayers = num_players;	
 	}
 }

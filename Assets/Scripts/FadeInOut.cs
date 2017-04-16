@@ -10,7 +10,6 @@ public class FadeInOut : MonoBehaviour {
     public Text                     text;
     private bool                    fadeDirection;
     private float                   DELTA_ALPHA = 0.02f;
-    private float                   DURATION = 1f;
 
 	// Use this for initialization
 	void Start () {

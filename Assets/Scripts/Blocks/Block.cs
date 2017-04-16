@@ -69,7 +69,6 @@ public class Block : MonoBehaviour {
     // Block states
     public Dictionary<BlockStates, Action>      states = new Dictionary<BlockStates, Action>();
     private BlockStates                         state = BlockStates.FALLING;
-    private LayerMask                           ground_mask;
 
     private float                               SLEEPING_THRESHOLD = 0.1f;
 
@@ -78,7 +77,6 @@ public class Block : MonoBehaviour {
     void Start () {
         rigid = GetComponent<Rigidbody2D> ();
         health = GetComponent<Health> ();
-        ground_mask = LayerMask.GetMask ("Ground");
         health.SetParent (this);
 
         states.Add (BlockStates.FALLING, Falling);

@@ -12,7 +12,7 @@ public class SlowMo : MonoBehaviour {
     private static float            MIN_FOV; // assigned when the 'begin' method is called
     private static float            MAX_FOV; // assigned when the 'begin' method is called
     private Vector3                 original_cam_pos;
-    private Camera                  camera;
+    private Camera                  _camera;
 
     void Awake()
     {
@@ -20,17 +20,17 @@ public class SlowMo : MonoBehaviour {
     }
 
     void Start(){
-        camera = MainCamera.S.GetComponent<Camera> ();
+        _camera = MainCamera.S.GetComponent<Camera> ();
     }
 
     public static void Begin (float slow_mo_speed, Vector3 target_core){
-        // the Z value would cause the camera to clip and not show up properly,
+        // the Z value would cause the _camera to clip and not show up properly,
         // so we permanently set the z value to -10f
         target_core.z = -10f;
 
-        instance.original_cam_pos = instance.camera.transform.position;
-        MAX_FOV = instance.camera.orthographicSize;
-        MIN_FOV = Mathf.Max (instance.camera.orthographicSize - 3f, 6f);
+        instance.original_cam_pos = instance._camera.transform.position;
+        MAX_FOV = instance._camera.orthographicSize;
+        MIN_FOV = Mathf.Max (instance._camera.orthographicSize - 3f, 6f);
 
         instance.StopAllCoroutines();
         instance.StartCoroutine (
@@ -43,30 +43,30 @@ public class SlowMo : MonoBehaviour {
                 instance.LerpSlowMo (NORMAL_SPEED, instance.original_cam_pos, -ZOOM_SPEED));
     }
 
-    private IEnumerator LerpSlowMo (float target_speed, Vector3 camera_target, float zoom_amt){
+    private IEnumerator LerpSlowMo (float target_speed, Vector3 _camera_target, float zoom_amt){
 
         while (Time.timeScale != target_speed){
             Time.timeScale = Mathf.Lerp (Time.timeScale, target_speed, 0.2f);
-            ZoomOrthoCamera(camera_target, zoom_amt);
+            ZoomOrtho_camera(_camera_target, zoom_amt);
             yield return null;
         }
     }
 
-    // Ortographic camera zoom towards a point (in world coordinates). Negative amount zooms in, positive zooms out
-    void ZoomOrthoCamera(Vector3 zoomTowards, float amount)
+    // Ortographic _camera zoom towards a point (in world coordinates). Negative amount zooms in, positive zooms out
+    void ZoomOrtho_camera(Vector3 zoomTowards, float amount)
     {
         // Calculate how much we will have to move towards the zoomTowards position
-        float multiplier = (1.0f / camera.orthographicSize * Mathf.Abs(amount));
+        float multiplier = (1.0f / _camera.orthographicSize * Mathf.Abs(amount));
 
 
-        Vector3 new_loc = (zoomTowards - camera.transform.position) * multiplier;
-        // Move camera
-        camera.transform.position += new_loc;
+        Vector3 new_loc = (zoomTowards - _camera.transform.position) * multiplier;
+        // Move _camera
+        _camera.transform.position += new_loc;
 
-        if (Vector3.Distance (camera.transform.position, zoomTowards) <= ZOOM_THRESHOLD) {
+        if (Vector3.Distance (_camera.transform.position, zoomTowards) <= ZOOM_THRESHOLD) {
 
-            // Limit camera zoom
-            camera.orthographicSize = Mathf.Clamp (camera.orthographicSize - amount, MIN_FOV, MAX_FOV);
+            // Limit _camera zoom
+            _camera.orthographicSize = Mathf.Clamp (_camera.orthographicSize - amount, MIN_FOV, MAX_FOV);
         }
     }
 
