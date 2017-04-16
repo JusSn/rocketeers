@@ -22,6 +22,7 @@ public class MenuController : MonoBehaviour {
     public GameObject                   jellyModeCheckmark;
 	public TeamSettings 				team1Settings;
 	public TeamSettings					team2Settings;
+    public GameObject                   jellyModeCheckmark;
 
 	private EventSystem 				es;
 	private GameObject					homeScreen;
@@ -248,6 +249,9 @@ public class MenuController : MonoBehaviour {
 	public void SetCharacterSelect (Character charType, bool selected) {
 		charStatus [charType] = selected;
 	}
+    void ToggleJellyModeCheckmark(){
+        jellyModeCheckmark.SetActive(!jellyModeCheckmark.activeSelf);
+    }
 
 	/******************** Button Functions ********************/
 

@@ -1147,6 +1147,11 @@ MonoBehaviour:
     type: 2}
   team2Settings: {fileID: 114615771817847890, guid: ebe2fcef25ee8e04981e9ec64022dcd6,
     type: 2}
+  - {fileID: 11400000, guid: 9b1a48b4fbe9fc2419f0f511d02ea1f0, type: 2}
+  - {fileID: 11400000, guid: 2feba68b6218303419b03fba5f30443e, type: 2}
+  - {fileID: 11400000, guid: 15aa5b04f51884141bd124255c8c66b5, type: 2}
+  - {fileID: 11400000, guid: dd0d12fed75c34a4481d5acaa4064076, type: 2}
+  jellyModeCheckmark: {fileID: 485495201}
   switching: 0
   state: 0
 --- !u!1001 &638566357
