@@ -22,6 +22,8 @@ public class GameManager : MonoBehaviour {
 
 	private static GameManager 			singleton = null;
 	private	static List<PlayerInfo> 	players = null;
+    public bool                         jellyMode;
+
 
 	public static GameManager GetGameManager() {
 		return singleton;
@@ -32,6 +34,7 @@ public class GameManager : MonoBehaviour {
 			singleton = this;
 		if (players == null)
 			players = new List<PlayerInfo> ();
+        DontDestroyOnLoad(this);
 
 		Cursor.visible = false;
 	}
@@ -57,4 +60,11 @@ public class GameManager : MonoBehaviour {
 		PlayerInfo new_player = new PlayerInfo (input, charSet, teamSet);
 		players.Add (new_player);
 	}
+    public bool IsJellyMode(){
+        return jellyMode;
+    }
+
+    public void ToggleJellyMode(){
+        jellyMode = !jellyMode;
+    }
 }

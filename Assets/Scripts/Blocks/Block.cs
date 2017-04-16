@@ -385,4 +385,8 @@ public class Block : MonoBehaviour {
     void OnDestroy(){
         RemoveHighlights ();
     }
+
+    public void SetJellyMode(){
+        rigid.constraints = RigidbodyConstraints2D.None;
+    }
 }

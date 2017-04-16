@@ -19,6 +19,7 @@ public class MenuController : MonoBehaviour {
 
 	public AutoBackgroundScroller		bg;
 	public CharacterSettings[]			characters;
+    public GameObject                   jellyModeCheckmark;
 	public TeamSettings 				team1Settings;
 	public TeamSettings					team2Settings;
 
@@ -235,6 +236,9 @@ public class MenuController : MonoBehaviour {
 		switching = false;
 	}
 
+    void ToggleJellyModeCheckmark(){
+        jellyModeCheckmark.SetActive(!jellyModeCheckmark.activeSelf);
+    }
 	/******************** Public Interface Functions ********************/
 
 	public bool CharacterIsSelected (Character charType) {
@@ -267,6 +271,11 @@ public class MenuController : MonoBehaviour {
 		}
 		SceneManager.LoadScene ("main");
 	}
+
+    public void ToggleJellyModeButton(){
+        GameManager.GetGameManager ().ToggleJellyMode ();
+        ToggleJellyModeCheckmark ();
+    }
 
 	public void ExitButton(){
 		Application.Quit ();

@@ -166,6 +166,9 @@ public class PhaseManager : MonoBehaviour {
         foreach (GameObject go in placedBlocks) {
             go.GetComponent<Rigidbody2D>().gravityScale = 1;
             go.GetComponent<Block> ().RemoveHighlights ();
+            if (GameManager.GetGameManager ().IsJellyMode ()) {
+                go.GetComponent<Block> ().SetJellyMode ();
+            }
         }
 
         // JF: Enable tooltips on cores
@@ -300,7 +303,7 @@ public class PhaseManager : MonoBehaviour {
 
     public void ReportTeamOutOfPoints(int teamNum){
         numPlayersOutOfPoints |= teamNum;
-        if (numPlayersOutOfPoints == 3) {
+        if (numPlayersOutOfPoints == 3 && timeLeft >= 11f) {
             SwitchToCountdownPhase ();
             timeLeft = 11f;
         }
