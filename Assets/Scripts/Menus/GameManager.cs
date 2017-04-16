@@ -8,13 +8,17 @@ using InControl;
 // - Game objects relevant over multipler scenes (players)
 
 public class GameManager : MonoBehaviour {
+    public bool                         jellyMode;
 	private static GameManager 			singleton;
+
 
 	public static GameManager GetGameManager() {
 		return singleton;
 	}
 
 	void Awake() {
+        DontDestroyOnLoad(this);
+
 		singleton = this;
 
 		Cursor.visible = false;
@@ -31,4 +35,12 @@ public class GameManager : MonoBehaviour {
 		players[3] = GameObject.Find ("Player4").GetComponent<Player>();
 		return players;
 	}
+
+    public bool IsJellyMode(){
+        return jellyMode;
+    }
+
+    public void ToggleJellyMode(){
+        jellyMode = !jellyMode;
+    }
 }

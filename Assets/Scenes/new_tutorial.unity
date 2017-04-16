@@ -3362,7 +3362,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 15.77, y: 38.700073}
+  m_AnchoredPosition: {x: 15.7, y: 38.700073}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &360931276
@@ -6049,7 +6049,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 15.77002, y: -19.2}
+  m_AnchoredPosition: {x: 15.7, y: -19.2}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &667277093
@@ -6961,7 +6961,6 @@ GameObject:
   - component: {fileID: 749015367}
   - component: {fileID: 749015366}
   - component: {fileID: 749015365}
-  - component: {fileID: 749015364}
   - component: {fileID: 749015363}
   - component: {fileID: 749015362}
   m_Layer: 0
@@ -7098,17 +7097,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
---- !u!114 &749015364
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 749015360}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 796b0f4f940c3d34b9d5417c50aa0ba7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &749015365
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13542,7 +13530,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1.34, y: 0.000061035156}
+  m_AnchoredPosition: {x: -1.4, y: 0.000061035156}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1442582312

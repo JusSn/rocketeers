@@ -19,6 +19,7 @@ public class MenuController : MonoBehaviour {
 
 	public AutoBackgroundScroller		bg;
 	public CharacterSettings[]			characters;
+    public GameObject                   jellyModeCheckmark;
 
 	private EventSystem 				es;
 	private GameObject					homeScreen;
@@ -300,6 +301,10 @@ public class MenuController : MonoBehaviour {
 		switching = false;
 	}
 
+    void ToggleJellyModeCheckmark(){
+        jellyModeCheckmark.SetActive(!jellyModeCheckmark.activeSelf);
+    }
+
 	/******************** Button Functions ********************/
 
 	public void StartButton(){
@@ -314,6 +319,11 @@ public class MenuController : MonoBehaviour {
 	public void ConfirmButton() {
 		SceneManager.LoadScene ("main");
 	}
+
+    public void ToggleJellyModeButton(){
+        GameManager.GetGameManager ().ToggleJellyMode ();
+        ToggleJellyModeCheckmark ();
+    }
 
 	public void ExitButton(){
 		Application.Quit ();

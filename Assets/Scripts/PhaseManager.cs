@@ -153,6 +153,9 @@ public class PhaseManager : MonoBehaviour {
         foreach (GameObject go in placedBlocks) {
             go.GetComponent<Rigidbody2D>().gravityScale = 1;
             go.GetComponent<Block> ().RemoveHighlights ();
+            if (GameManager.GetGameManager ().IsJellyMode ()) {
+                go.GetComponent<Block> ().SetJellyMode ();
+            }
         }
 
         // JF: Enable tooltips on cores
