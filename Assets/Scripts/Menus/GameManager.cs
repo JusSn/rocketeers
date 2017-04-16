@@ -60,6 +60,11 @@ public class GameManager : MonoBehaviour {
 		PlayerInfo new_player = new PlayerInfo (input, charSet, teamSet);
 		players.Add (new_player);
 	}
+
+	public void ClearPlayers () {
+		players.Clear ();
+	}
+
     public bool IsJellyMode(){
         return jellyMode;
     }

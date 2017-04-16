@@ -262,6 +262,7 @@ public class PhaseManager : MonoBehaviour {
     }
 
     private void BackToMenu() {
+		GameManager.GetGameManager ().ClearPlayers ();
         SceneManager.LoadScene("Menu");
     }
 
