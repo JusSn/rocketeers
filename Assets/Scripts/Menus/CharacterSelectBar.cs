@@ -111,7 +111,7 @@ public class CharacterSelectBar : MonoBehaviour {
 			StartCoroutine ("RetractBeam");
 
 			ufoSprend.color = Color.red;
-			teamNum = 1;
+			teamNum = 2;
 			state = CharacterSelectState.Team;
 			team.SetActive (true);
 			return;
@@ -146,9 +146,9 @@ public class CharacterSelectBar : MonoBehaviour {
 			team.SetActive (false);
 			SFXManager.GetSFXManager ().PlaySFX (SFX.StartPilot);
 			if (ufoSprend.color.r == 1f)
-				teamNum = 1;
-			else
 				teamNum = 2;
+			else
+				teamNum = 1;
 
 			state = CharacterSelectState.Confirmed;
 			confirm.SetActive (true);

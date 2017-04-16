@@ -97,8 +97,10 @@ public class Player : MonoBehaviour {
     // Internal maps
     private Dictionary<PlayerForm, Action>  stateUpdateMap;
 
-    // CG: input object
+	// AW: Player Settings | CG: input object
     private InputDevice                     input;
+	private CharacterSettings				charSettings = null;
+	private TeamSettings					teamSettings = null;
 
     // Use this for initialization
     void Start () {
@@ -141,7 +143,6 @@ public class Player : MonoBehaviour {
 
         // Raycast parameters
         itemLayer = LayerMask.GetMask ("Items");
-        blockMask = LayerMask.GetMask ("Team" + teamNum.ToString() + "Block");
         groundLayer = LayerMask.GetMask ("Ground");
 
         // Filling the function behavior map
@@ -151,15 +152,21 @@ public class Player : MonoBehaviour {
         stateUpdateMap.Add (PlayerForm.Controlling, ControllingUpdate);
         stateUpdateMap.Add (PlayerForm.Respawning, RespawningUpdate);
 
-        try {
-            input = InputManager.Devices [int.Parse (playerNumStr) - 1];
-        } catch {
-            Debug.Log ("4 controllers are not connected. Assigning extra players to first player");
-            input = InputManager.Devices [0];
-        }
+
+		if (charSettings == null) {
+			try {
+				input = InputManager.Devices [int.Parse (playerNumStr) - 1];
+			} catch {
+				Debug.Log ("4 controllers are not connected. Assigning extra players to first player");
+				input = InputManager.Devices [0];
+			}
+		} else {
+			InitPlayerSettings ();
+		}
 
         input.LeftStickX.LowerDeadZone = 0.2f;
         input.LeftStickY.LowerDeadZone = 0.5f;
+		blockMask = LayerMask.GetMask ("Team" + teamNum.ToString() + "Block");
 
         // Have the UFOs bring in the players!
         Respawn (transform.position);
@@ -167,16 +174,16 @@ public class Player : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        // Update general attributes
-        grounded = IsGrounded ();
-        if (grounded) {
-            doubleJumped = false;
-        }
-        ducking = IsDucking ();
-        canDownJump = CanDownJump ();
-        RespawnPlayerIfBelowScreen ();
-        // Call the proper update function
-        stateUpdateMap [form] ();
+		// Update general attributes
+		grounded = IsGrounded ();
+		if (grounded) {
+			doubleJumped = false;
+		}
+		ducking = IsDucking ();
+		canDownJump = CanDownJump ();
+		RespawnPlayerIfBelowScreen ();
+		// Call the proper update function
+		stateUpdateMap [form] ();
     }
 
     /// <summary>
@@ -339,6 +346,12 @@ public class Player : MonoBehaviour {
 
 	/******************** Public Interface ********************/
 
+	public void SetPlayerSettings (InputDevice device, CharacterSettings charSet, TeamSettings teamSet) {
+		input = device;
+		charSettings = charSet;
+		teamSettings = teamSet;
+	}
+
 	public void SwitchToBattle () {
 		buildPhase = false;
         aimArrowObject.SetActive(true);
@@ -349,6 +362,34 @@ public class Player : MonoBehaviour {
 	}
 
     /******************** Utility ********************/
+
+	void InitPlayerSettings () {
+		foreach (InputDevice id in InputManager.Devices) {
+			if (id.Meta == input.Meta) {
+				input = id;
+				print ("What's going on");
+			}
+		}
+
+		// Init Player Settings
+		sprend.sprite = charSettings.GetSprite();
+		animator.runtimeAnimatorController = charSettings.GetAnimator ();
+		projectilePrefab = charSettings.GetProjectile ();
+		ufo_manager.GetComponent<UFOManager>().UFOLakitu = charSettings.GetUFOManager ();
+		offscreen_arrow_manager.GetComponent<ArrowIndicator>().arrowPrefab = charSettings.GetOffscreenIndicator ();
+
+		// Init Team Settings
+		teamNum = teamSettings.teamNum;
+		placementMask = teamSettings.GetPlacementMask ();
+		platformsMask = teamSettings.GetPlatformsMask ();
+		gameObject.layer = LayerMask.NameToLayer("Team" + teamNum + "Player");
+		jetpackObj.transform.Find ("Sprite").GetComponent<SpriteRenderer>().sprite = teamSettings.GetJetpack();
+		aimSprend.sprite = teamSettings.GetWeapon();
+		if (teamNum == 1)
+			point_manager.ui_pts_left = GameObject.Find ("Team1Points").GetComponent<UnityEngine.UI.Text> ();
+		else 
+			point_manager.ui_pts_left = GameObject.Find ("Team2Points").GetComponent<UnityEngine.UI.Text> ();
+	}
 
     // Retrieve and apply any changes to the players movement
     void CalculateMovement() {

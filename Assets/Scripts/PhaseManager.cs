@@ -25,7 +25,8 @@ public class PhaseManager : MonoBehaviour {
     public GameObject                   smoke_plume;
 
     // JF: References to core and player objects
-    public GameObject[]                 players;
+	public GameObject					playerPrefab;
+	public List<GameObject>             players;
     public GameObject[]                 cores;
 
     public GameObject                   TopWall;
@@ -71,6 +72,16 @@ public class PhaseManager : MonoBehaviour {
         placedBlocks = new List<GameObject> ();
         timeLeft = build_time;
         groundDestination = new Vector2 (0, -50f);
+
+		// Instantiating the players
+		List<PlayerInfo> playerSettings = GameManager.GetPlayerList();
+		players = new List<GameObject>();
+		foreach (PlayerInfo pi in GameManager.GetPlayerList()) {
+			GameObject go = Instantiate<GameObject> (playerPrefab);
+			go.GetComponent<Player> ().SetPlayerSettings (pi.input, pi.charSettings, pi.teamSettings);
+			go.transform.position = new Vector3 (UnityEngine.Random.Range (-25f, 25f), 10f, 0f);
+			players.Add (go);
+		}
 
         // JF: Set up audiosources:
         // [0] background musics that loop

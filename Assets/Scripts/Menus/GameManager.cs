@@ -7,9 +7,22 @@ using InControl;
 // - Player Settings (future possibility)
 // - Game objects relevant over multipler scenes (players)
 
+public class PlayerInfo {
+	public PlayerInfo (InputDevice dev, CharacterSettings cs, TeamSettings ts) {
+		input = dev;
+		charSettings = cs;
+		teamSettings = ts;
+	}
+	public InputDevice 			input;
+	public CharacterSettings 	charSettings;
+	public TeamSettings 		teamSettings;
+}
+
 public class GameManager : MonoBehaviour {
+
+	private static GameManager 			singleton = null;
+	private	static List<PlayerInfo> 	players = null;
     public bool                         jellyMode;
-	private static GameManager 			singleton;
 
 
 	public static GameManager GetGameManager() {
@@ -17,6 +30,10 @@ public class GameManager : MonoBehaviour {
 	}
 
 	void Awake() {
+		if(singleton == null)
+			singleton = this;
+		if (players == null)
+			players = new List<PlayerInfo> ();
         DontDestroyOnLoad(this);
 
 		singleton = this;
@@ -27,6 +44,10 @@ public class GameManager : MonoBehaviour {
 
 	/**************** Utility ****************/
 	// TODO: Update GameManager to handle player spawning
+	public static List<PlayerInfo> GetPlayerList () {
+		return players;
+	}
+
 	public Player[] GetPlayers() {
 		Player[] players = new Player[4];
 		players[0] = GameObject.Find ("Player1").GetComponent<Player>();
@@ -36,6 +57,11 @@ public class GameManager : MonoBehaviour {
 		return players;
 	}
 
+	/**************** Configuration Funcs ****************/
+	public void AddPlayer (InputDevice input, CharacterSettings charSet, TeamSettings teamSet) {
+		PlayerInfo new_player = new PlayerInfo (input, charSet, teamSet);
+		players.Add (new_player);
+	}
     public bool IsJellyMode(){
         return jellyMode;
     }
