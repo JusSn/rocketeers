@@ -290,7 +290,7 @@ public class PhaseManager : MonoBehaviour {
         print ("Num players out of points: " + numPlayersOutOfPoints);
         if (numPlayersOutOfPoints == 3) {
             SwitchToCountdownPhase ();
-            timeLeft = 10f;
+            timeLeft = 11f;
         }
     }
 }
