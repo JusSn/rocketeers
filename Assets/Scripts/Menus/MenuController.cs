@@ -19,6 +19,8 @@ public class MenuController : MonoBehaviour {
 
 	public AutoBackgroundScroller		bg;
 	public CharacterSettings[]			characters;
+	public TeamSettings 				team1Settings;
+	public TeamSettings					team2Settings;
 
 	private EventSystem 				es;
 	private GameObject					homeScreen;
@@ -82,7 +84,7 @@ public class MenuController : MonoBehaviour {
 	}
 
 	void AddController (InputDevice device) {
-		Debug.Log ("Device Attached: " + device.Name);
+		Debug.Log ("Device Attached: " + device.Meta);
 		if (devices.Count < 4) {
 			devices.Add (device, null);
 			if (state == MenuState.Character) {
@@ -255,6 +257,14 @@ public class MenuController : MonoBehaviour {
 	}
 
 	public void ConfirmButton() {
+		foreach (KeyValuePair<InputDevice, CharacterSelectBar> sets in devices) {
+			TeamSettings teamSets;
+			if (sets.Value.GetSelectedTeam() == 1)
+				teamSets = team1Settings;
+			else
+				teamSets = team2Settings;
+			GameManager.GetGameManager ().AddPlayer (sets.Key, sets.Value.GetSelectedCharacter(), teamSets);
+		}
 		SceneManager.LoadScene ("main");
 	}
 

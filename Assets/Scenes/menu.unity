@@ -1074,6 +1074,10 @@ MonoBehaviour:
   - {fileID: 114646312384345582, guid: f4ac98f7ea61d9a4a9bff177a67acb6d, type: 2}
   - {fileID: 114945584938639384, guid: be95295e7ce36204b857f6776f761b53, type: 2}
   - {fileID: 114270614252582320, guid: ce7ce944115164d47921828022def69a, type: 2}
+  team1Settings: {fileID: 114922019750719784, guid: 171f284db47e7b34592b7c095aedeefb,
+    type: 2}
+  team2Settings: {fileID: 114615771817847890, guid: ebe2fcef25ee8e04981e9ec64022dcd6,
+    type: 2}
   switching: 0
   state: 0
 --- !u!1001 &638566357
