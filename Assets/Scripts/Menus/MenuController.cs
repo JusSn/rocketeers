@@ -263,12 +263,15 @@ public class MenuController : MonoBehaviour {
 	public void ConfirmButton() {
 		foreach (KeyValuePair<InputDevice, CharacterSelectBar> sets in devices) {
 			TeamSettings teamSets;
-			if (sets.Value.GetSelectedTeam() == 1)
-				teamSets = team1Settings;
-			else
-				teamSets = team2Settings;
-			GameManager.GetGameManager ().AddPlayer (sets.Key, sets.Value.GetSelectedCharacter(), teamSets);
-		}
+            if (sets.Value.GetSelectedTeam() == 1) {
+                teamSets = team1Settings;
+                GameManager.GetGameManager().AddPlayer(sets.Key, sets.Value.GetSelectedCharacter(), teamSets);
+            }
+            else if (sets.Value.GetSelectedTeam() == 2) {
+                teamSets = team2Settings;
+                GameManager.GetGameManager().AddPlayer(sets.Key, sets.Value.GetSelectedCharacter(), teamSets);
+            }
+        }
 		SceneManager.LoadScene ("main");
 	}
 
