@@ -270,6 +270,7 @@ MonoBehaviour:
   MAX_HEALTH: 150
   DAMAGE_FROM_LASER: 7
   BASE_DAMAGE_FROM_RAM: 0
+  DAMAGE_FROM_EXPLOSION: 75
   is_core: 0
   health_bar_prefab: {fileID: 1344433025396718, guid: 7ce92948e3d8941b4805e1c164364c13,
     type: 2}

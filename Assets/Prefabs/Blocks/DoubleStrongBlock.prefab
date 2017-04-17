@@ -55,8 +55,8 @@ GameObject:
   - component: {fileID: 212019697935995300}
   - component: {fileID: 61431347864820268}
   - component: {fileID: 50767454852522626}
-  - component: {fileID: 114720795011954418}
   - component: {fileID: 114786604197903458}
+  - component: {fileID: 114153733430454912}
   m_Layer: 19
   m_Name: DoubleStrongBlock
   m_TagString: Block
@@ -256,7 +256,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &114720795011954418
+--- !u!114 &114153733430454912
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -264,7 +264,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1480987293945216}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea899017a0fc2064e9f5070158584731, type: 3}
+  m_Script: {fileID: 11500000, guid: d0592239e78e0114f8b389159d35e6cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   allBlocksMask:
@@ -278,7 +278,7 @@ MonoBehaviour:
     m_Bits: 837632
   explosion: {fileID: 1593478875652032, guid: a28e92fadf2d42848976be3c82b3d5ac, type: 2}
   ______________________: 0
-  teamNum: 0
+  teamNum: 1
   being_manipulated: 0
   in_placeable_spot: 0
   block_fell: 0
@@ -297,6 +297,7 @@ MonoBehaviour:
   MAX_HEALTH: 100
   DAMAGE_FROM_LASER: 7
   BASE_DAMAGE_FROM_RAM: 0
+  DAMAGE_FROM_EXPLOSION: 75
   is_core: 0
   health_bar_prefab: {fileID: 1344433025396718, guid: 7ce92948e3d8941b4805e1c164364c13,
     type: 2}

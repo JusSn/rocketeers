@@ -101,6 +101,16 @@ public class Block : MonoBehaviour {
         states [state] ();
     }
 
+    /// <summary>
+    /// Sent when an incoming collider makes contact with this object's
+    /// collider (2D physics only).
+    /// </summary>
+    /// <param name="other">The Collision2D data associated with this collision.</param>
+    public virtual void OnCollisionEnter2D(Collision2D other)
+    {
+        
+    }
+
     /******************** State Modifiers & Behaviors ********************/
 
     // Block is in this state if it is falling
@@ -151,11 +161,14 @@ public class Block : MonoBehaviour {
 
     // Calling condition: when a projectile collides with a block
     // Called by: Projectile.OnTriggerEnter2D()
-    public virtual void LaserDamage(){
-        health.LaserDamage();
+    public virtual void LaserDamage (){
+        health.Damage(health.DAMAGE_FROM_LASER);
 		SFXManager.GetSFXManager ().PlaySFX (SFX.BlockHit);
     }
 
+    public virtual void ExplosionDamage () {
+        health.Damage(health.DAMAGE_FROM_EXPLOSION);
+    }
     public void RepairBlock() {
         health.Repair();
     }
@@ -237,8 +250,10 @@ public class Block : MonoBehaviour {
         // RIP our neighbor :'(
         Debug.Assert(connected_neighbors.ContainsKey(dir), "Trying to remove a direction from a map that doesn't contain the direction");
         // need to remove the fixedjoint in this direction, not just the direction from the map
-        Destroy(connected_neighbors[dir].fixed_joint);
-        connected_neighbors.Remove (dir);
+        if (connected_neighbors.ContainsKey(dir)) {
+            Destroy(connected_neighbors[dir].fixed_joint);
+            connected_neighbors.Remove (dir);
+        }
     }
 
     // removes all connections from this block and the connections to other neighbors around us
@@ -247,7 +262,7 @@ public class Block : MonoBehaviour {
         foreach (KeyValuePair<Direction, FixedJointContainer> dir in connected_neighbors) {
 
             // when the ground is removed, the 'block' value is null
-            if (dir.Value.block) {
+            if (dir.Value.block != null) {
                 // since we're removing ourself from our neighbors, the directions
                 // are reversed
                 dir.Value.block.DeleteNeighboringConnection (Utils.GetOppositeDirection (dir.Key));

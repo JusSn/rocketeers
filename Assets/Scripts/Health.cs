@@ -13,6 +13,7 @@ public class Health : MonoBehaviour {
 
     public float                                DAMAGE_FROM_LASER;
     public float                                BASE_DAMAGE_FROM_RAM;
+    public float                                DAMAGE_FROM_EXPLOSION;
     public bool                                 is_core;
 
 
@@ -43,9 +44,9 @@ public class Health : MonoBehaviour {
     //                    takes damage and calls the "TakeDamage" function
     // Called by: the parent block/object
     // NOTE: pass in a positive number to take damage by
-    public void LaserDamage(){
+    public void Damage(float dmg){
         // Debug.Assert (dmg_amount > 0f, "Pass in a positive number to TakeDamage");
-        UpdateHealthByAmount (-DAMAGE_FROM_LASER);
+        UpdateHealthByAmount (-dmg);
         CheckToDestroy ();
         FlashHealthBar ();
     }
