@@ -64,8 +64,12 @@ public class Projectile : MonoBehaviour {
     void ReflectLaser (Collision2D collisionInfo) {
         // Normal of collider surface
         Vector3 normal = collisionInfo.contacts[0].normal;
-
+        // Reflect laser
         rigid.velocity = Vector3.Reflect(rigid.velocity, normal).normalized * bullet_speed;
+        // Change layer to other team
+        gameObject.layer = (gameObject.layer == LayerMask.NameToLayer("Team1Projectiles")) 
+                            ? LayerMask.NameToLayer("Team2Projectiles") 
+                            : LayerMask.NameToLayer("Team1Projectiles");
     }
 
     protected void DestroyThis() {
