@@ -161,9 +161,9 @@ public class Block : MonoBehaviour {
 
     // Calling condition: when a projectile collides with a block
     // Called by: Projectile.OnTriggerEnter2D()
-    public virtual void LaserDamage (){
+    public virtual void LaserDamage(Collision2D block, GameObject projectile){
         health.Damage(health.DAMAGE_FROM_LASER);
-		SFXManager.GetSFXManager ().PlaySFX (SFX.BlockHit);
+        SFXManager.GetSFXManager ().PlaySFX (SFX.BlockHit);
     }
 
     public virtual void ExplosionDamage () {
@@ -171,6 +171,15 @@ public class Block : MonoBehaviour {
     }
     public void RepairBlock() {
         health.Repair();
+    }
+
+    // called when this block has <= 0 health
+    public virtual void Kill(){
+        UnhingeAndFall ();
+    }
+
+    protected virtual void OnCollisionEnter2D(Collision2D otherBlock){
+        // do nothing in the basic block or reflection block case
     }
 
 

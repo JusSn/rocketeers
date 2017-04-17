@@ -74,7 +74,7 @@ public class Health : MonoBehaviour {
                 Destroy(gameObject.transform.parent.gameObject);
             }
             // remove all the hinges on the block to let it fall offscreen
-            parent_block.UnhingeAndFall ();
+            parent_block.Kill ();
         }
     }
 
