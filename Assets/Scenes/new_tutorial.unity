@@ -13375,7 +13375,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 050b649068c83474c8f6be7e12d32848, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -13516,8 +13516,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stage: 0
   in_tutorial: 1
-  countdownSFX: {fileID: 8300000, guid: 6705c656007130846a616cd5e124e55b, type: 3}
   battleText: {fileID: 1284699708}
+  countdownSFX: {fileID: 8300000, guid: 6705c656007130846a616cd5e124e55b, type: 3}
 --- !u!224 &1451044779
 RectTransform:
   m_ObjectHideFlags: 0
