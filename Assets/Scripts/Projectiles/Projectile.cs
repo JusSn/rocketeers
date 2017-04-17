@@ -5,7 +5,7 @@ using UnityEngine;
 public class Projectile : MonoBehaviour {
 
     // inspector tunables
-    public float                    bullet_speed = 4f;
+    public float                    bullet_speed;
     // public float                    damage_amount = 15f;
     public int                      teamNum;
     public float                    lifeTime;

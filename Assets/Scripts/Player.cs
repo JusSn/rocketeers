@@ -24,7 +24,7 @@ public class Player : MonoBehaviour {
     public float                            throwChargeRatio = 10f;
     public GameObject                       projectilePrefab;
     public GameObject                       offscreenArrowPrefab;
-    public float                            projSpeed = 10f;
+    public float                            projSpeed;
 	public float 							projCDCounter = 0f;
 	public float							projCDTime = 0.5f;
     public float                            DRIVE_SPEED_X = 4f;
@@ -707,6 +707,7 @@ public class Player : MonoBehaviour {
     void FireProjectile() {
         GameObject proj = Instantiate<GameObject> (projectilePrefab);
         proj.transform.position = projSource.transform.position;
+        proj.transform.rotation = projSource.transform.rotation;
         proj.GetComponent<Projectile>().teamNum = teamNum;
         proj.layer = LayerMask.NameToLayer("Team" + teamNum + "Projectiles");
         proj.GetComponent<Rigidbody2D> ().velocity = projSource.transform.right * projSpeed;
