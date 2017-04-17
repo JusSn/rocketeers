@@ -4894,7 +4894,7 @@ MonoBehaviour:
   placedBlocks: []
   flyingSpeed: 0.2
   gravityScale: 1
-  build_time: 11
+  build_time: 60
   battle_time: -1
   in_tutorial: 0
 --- !u!114 &669842091

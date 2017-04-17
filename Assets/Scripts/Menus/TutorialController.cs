@@ -11,15 +11,14 @@ public enum TutorialStage {
 	Objective,       	// 1st page of tutorial
 	BuildControls,		// 2nd page of tutorial
     Countdown,          // filler page
-    BattleControlsFreeze, // gray overlay to emphasize battle controls
 	BattleControls		// 3rd page of tutorial
 }
 
 public class TutorialController : MonoBehaviour {
 
-	public AutoBackgroundScroller		bg;
 	public TutorialStage				stage;
     public bool                         in_tutorial = true;
+    public  GameObject                  battleText;
     public AudioClip                    countdownSFX;
 
     private static TutorialController   singleton = null;
@@ -29,13 +28,11 @@ public class TutorialController : MonoBehaviour {
 	private GameObject					buildControlScreen;
 	private GameObject					battleControlScreen;
     private GameObject                  battleControlUI;
-    private GameObject                  battleText;
 
     private GameObject                  team1Rocket;
     private GameObject                  team2Rocket;
 
     private GameObject                  scenery;
-    private GameObject                  grayOverlay;
 
     private Text                        team1BlocksToGo;
     private Text                        team2BlocksToGo;
@@ -73,7 +70,6 @@ public class TutorialController : MonoBehaviour {
 		buildControlScreen = transform.Find ("BuildControls").gameObject;
 		battleControlScreen = transform.Find ("BattleControls").gameObject;
         battleControlUI = battleControlScreen.transform.Find ("UIController").gameObject;
-        grayOverlay = GameObject.Find ("GrayOverlay");
 
         team1Rocket = GameObject.Find ("Team1Base").gameObject;
         team2Rocket = GameObject.Find ("Team2Base").gameObject;
@@ -82,8 +78,6 @@ public class TutorialController : MonoBehaviour {
 
         team1BlocksToGo = GameObject.Find ("Team1BlocksToGo").gameObject.GetComponent<Text>();
         team2BlocksToGo = GameObject.Find ("Team2BlocksToGo").gameObject.GetComponent<Text>();
-
-        battleText = GameObject.Find ("BattleText");
 
 		players = new GameObject[4];
         players [0] = GameObject.Find ("Players").transform.Find("Player1").gameObject;
@@ -94,15 +88,13 @@ public class TutorialController : MonoBehaviour {
 		tutorialMap = new Dictionary<TutorialStage, Action> ();
         tutorialMap.Add (TutorialStage.Objective, InitBuildControls);
         tutorialMap.Add (TutorialStage.BuildControls, InitCountdown);
-        tutorialMap.Add (TutorialStage.Countdown, InitBattleControlFreeze);
-        tutorialMap.Add (TutorialStage.BattleControlsFreeze, InitBattleControls);
+        tutorialMap.Add (TutorialStage.Countdown, InitBattleControls);
 		tutorialMap.Add (TutorialStage.BattleControls, FinishTutorial);
 
         advanceToNextStageMap = new Dictionary<TutorialStage, Action> ();
         advanceToNextStageMap.Add (TutorialStage.Objective, GenericAdvanceCondition);
         advanceToNextStageMap.Add (TutorialStage.BuildControls, BuildAdvanceCondition);
         advanceToNextStageMap.Add (TutorialStage.Countdown, CountdownAdvanceCondition);
-        advanceToNextStageMap.Add (TutorialStage.BattleControlsFreeze, BattleControlsFreezeCondition);
         advanceToNextStageMap.Add (TutorialStage.BattleControls, ShrinkControls);
 
 
@@ -171,23 +163,6 @@ public class TutorialController : MonoBehaviour {
                                      || StartButtonWasPressed());
     }
 
-    public void InitBattleControlFreeze(){
-        shouldAdvanceToNextStage = false;
-        buildControlScreen.SetActive (false);
-        battleControlScreen.SetActive (true);
-        grayOverlay.SetActive (true);
-        battleText.SetActive (false);
-        shouldAdvanceToNextStage = false;
-        TurnOffPlayers ();
-        nasaCountdownAudioClip.Pause ();
-        stage = TutorialStage.BattleControlsFreeze;
-
-    }
-
-    void BattleControlsFreezeCondition(){
-        shouldAdvanceToNextStage = StartButtonWasPressed ();
-    }
-
     public void InitCountdown(){
         GameObject.Find ("Team1BlocksToBuild").gameObject.GetComponent<Text>().text = "";
         GameObject.Find ("Team2BlocksToBuild").gameObject.GetComponent<Text>().text = "";
@@ -210,9 +185,8 @@ public class TutorialController : MonoBehaviour {
     }
 
 	public void InitBattleControls() {
-        nasaCountdownAudioClip.UnPause ();
-        battleText.SetActive (false);
-        grayOverlay.SetActive (false);
+        buildControlScreen.SetActive (false);
+        battleControlScreen.SetActive (true);
         TurnOnPlayers ();
 
 		Player[] players = GameManager.GetGameManager ().GetPlayers ();
@@ -295,6 +269,6 @@ public class TutorialController : MonoBehaviour {
     }
 
     void ClearBattleText(){
-        battleText.SetActive (false);
+        Destroy (battleText);
     }
 }

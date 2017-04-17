@@ -262,6 +262,7 @@ public class PhaseManager : MonoBehaviour {
     }
 
     private void BackToMenu() {
+        Destroy (GameObject.Find("PersistentSettings"));
 		GameManager.GetGameManager ().ClearPlayers ();
         SceneManager.LoadScene("Menu");
     }
