@@ -54,6 +54,9 @@ public class Health : MonoBehaviour {
     public void ExplosiveDamage(){
         Damage (DAMAGE_FROM_EXPLOSION);
     }
+    public void RammingDamage(float bonus){
+        Damage (BASE_DAMAGE_FROM_RAM + bonus);
+    }
 
     public void Repair() {
         UpdateHealthByAmount(50);
@@ -105,7 +108,7 @@ public class Health : MonoBehaviour {
         }
 
         // adjust the green health bar so that the red background shows
-        greenBG.transform.localScale = new Vector3 (cur_health/MAX_HEALTH, 1f, 0f);
+        greenBG.transform.localScale = new Vector3 (Mathf.Max(cur_health/MAX_HEALTH, 0f), 1f, 0f);
 
         // TODO: IF WE DON'T LIKE HAVING HEALTH BARS AROUND WE CAN MAKE THEM DISAPPEAR AFTER A COUPLE SECONDS
         // OR THEY CAN EXIST ONLY ONCE A BLOCK IS DAMAGED THE FIRST TIME (THIS IS THE CURRENT SITUATION)

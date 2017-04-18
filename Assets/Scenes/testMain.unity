@@ -2323,7 +2323,7 @@ MonoBehaviour:
   placedBlocks: []
   flyingSpeed: 0.2
   gravityScale: 1
-  build_time: 30
+  build_time: 11
   battle_time: -1
   in_tutorial: 0
 --- !u!114 &282386699

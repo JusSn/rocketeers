@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ReflectionBlock : Block {
 
+    float                       RAMMING_MULTIPLIER = 1.5f;
     public override void LaserDamage(Collision2D block, GameObject projectile){
         base.LaserDamage (block, projectile);
         ReflectLaser (block, projectile);
@@ -18,6 +19,10 @@ public class ReflectionBlock : Block {
         projectile.layer = (projectile.layer == LayerMask.NameToLayer("Team1Projectiles")) 
             ? LayerMask.NameToLayer("Team2Projectiles") 
             : LayerMask.NameToLayer("Team1Projectiles");
+    }
+
+    public override void RammingDamage(float bonus){
+        health.RammingDamage (bonus * RAMMING_MULTIPLIER);
     }
 
     // default behavior is to destroy the projectile in the base class LaserDamage function,
