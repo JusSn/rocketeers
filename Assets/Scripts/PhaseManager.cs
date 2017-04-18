@@ -73,6 +73,14 @@ public class PhaseManager : MonoBehaviour {
         timeLeft = build_time;
         groundDestination = new Vector2 (0, -50f);
 
+		// JF: Set up audiosources:
+		// [0] background musics that loop
+		// [1] sound effects that do not loop
+		audioSource = GetComponent<AudioSource> ();
+		Invoke ("PlayMusic", 3f);
+
+		MiddleBanner.GetBanner ().CreateBanner("Ready...Set...", 4f);
+
 		// Instantiating the players
 		if (players.Count == 0) {
 			players = new List<GameObject> ();
@@ -83,12 +91,6 @@ public class PhaseManager : MonoBehaviour {
 				players.Add (go);
 			}
 		}
-
-        // JF: Set up audiosources:
-        // [0] background musics that loop
-        // [1] sound effects that do not loop
-        audioSource = GetComponent<AudioSource> ();
-        Invoke ("PlayMusic", 3f);
     }
 
 	// Update is called once per frame
@@ -288,6 +290,8 @@ public class PhaseManager : MonoBehaviour {
 
     void PlayMusic(){
         if (!in_tutorial) {
+			MiddleBanner.GetBanner ().ChangeText ("GO!");
+			SFXManager.GetSFXManager ().PlaySFX (SFX.AirHorn, 0.5f);
             begin_game = true;
             audioSource.clip = buildBgm;
             audioSource.loop = true;
