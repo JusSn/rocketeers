@@ -279,6 +279,7 @@ MonoBehaviour:
   MAX_HEALTH: Infinity
   DAMAGE_FROM_LASER: 0
   BASE_DAMAGE_FROM_RAM: 0
+  DAMAGE_FROM_EXPLOSION: 0
   is_core: 0
   health_bar_prefab: {fileID: 1344433025396718, guid: 7ce92948e3d8941b4805e1c164364c13,
     type: 2}
@@ -2478,6 +2479,7 @@ MonoBehaviour:
   MAX_HEALTH: Infinity
   DAMAGE_FROM_LASER: 0
   BASE_DAMAGE_FROM_RAM: 0
+  DAMAGE_FROM_EXPLOSION: 0
   is_core: 0
   health_bar_prefab: {fileID: 1344433025396718, guid: 7ce92948e3d8941b4805e1c164364c13,
     type: 2}
@@ -2734,7 +2736,7 @@ GameObject:
   m_Component:
   - component: {fileID: 432029558}
   m_Layer: 8
-  m_Name: DoubleStrongSpawner
+  m_Name: ExplosiveSpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3919,6 +3921,7 @@ MonoBehaviour:
   MAX_HEALTH: Infinity
   DAMAGE_FROM_LASER: 0
   BASE_DAMAGE_FROM_RAM: 0
+  DAMAGE_FROM_EXPLOSION: 0
   is_core: 0
   health_bar_prefab: {fileID: 1344433025396718, guid: 7ce92948e3d8941b4805e1c164364c13,
     type: 2}
@@ -4189,6 +4192,7 @@ MonoBehaviour:
   MAX_HEALTH: Infinity
   DAMAGE_FROM_LASER: 0
   BASE_DAMAGE_FROM_RAM: 0
+  DAMAGE_FROM_EXPLOSION: 0
   is_core: 0
   health_bar_prefab: {fileID: 1344433025396718, guid: 7ce92948e3d8941b4805e1c164364c13,
     type: 2}
@@ -5192,6 +5196,7 @@ MonoBehaviour:
   MAX_HEALTH: Infinity
   DAMAGE_FROM_LASER: 0
   BASE_DAMAGE_FROM_RAM: 0
+  DAMAGE_FROM_EXPLOSION: 0
   is_core: 0
   health_bar_prefab: {fileID: 1344433025396718, guid: 7ce92948e3d8941b4805e1c164364c13,
     type: 2}
@@ -5344,6 +5349,22 @@ Prefab:
       propertyPath: m_LocalScale.y
       value: 1.5
       objectReference: {fileID: 0}
+    - target: {fileID: 114149249183579222, guid: 240c92e5bb8bc4f268550bbdadfaf160,
+        type: 2}
+      propertyPath: setObject
+      value: 
+      objectReference: {fileID: 1576750538154138, guid: d8e3d7724fa8f470f8072466c8135a73,
+        type: 2}
+    - target: {fileID: 1403720562659648, guid: 240c92e5bb8bc4f268550bbdadfaf160, type: 2}
+      propertyPath: m_Name
+      value: GenericItem
+      objectReference: {fileID: 0}
+    - target: {fileID: 212223248893138628, guid: 240c92e5bb8bc4f268550bbdadfaf160,
+        type: 2}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 7169883c4d852ac41bd4eb16fe01d1bf,
+        type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 240c92e5bb8bc4f268550bbdadfaf160, type: 2}
   m_IsPrefabParent: 0
@@ -5724,7 +5745,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 150
+  m_Text: 200
 --- !u!222 &781308087
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6644,6 +6665,7 @@ MonoBehaviour:
   MAX_HEALTH: Infinity
   DAMAGE_FROM_LASER: 0
   BASE_DAMAGE_FROM_RAM: 0
+  DAMAGE_FROM_EXPLOSION: 0
   is_core: 0
   health_bar_prefab: {fileID: 1344433025396718, guid: 7ce92948e3d8941b4805e1c164364c13,
     type: 2}
@@ -7577,6 +7599,7 @@ MonoBehaviour:
   MAX_HEALTH: 500
   DAMAGE_FROM_LASER: 7
   BASE_DAMAGE_FROM_RAM: 0
+  DAMAGE_FROM_EXPLOSION: 0
   is_core: 1
   health_bar_prefab: {fileID: 1344433025396718, guid: 7ce92948e3d8941b4805e1c164364c13,
     type: 2}
@@ -7887,7 +7910,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1100558907}
   m_Layer: 8
-  m_Name: OneAndHalfStrongSpawner
+  m_Name: ReflectiveSpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8839,6 +8862,27 @@ Prefab:
       propertyPath: m_LocalScale.y
       value: 1.5
       objectReference: {fileID: 0}
+    - target: {fileID: 1403720562659648, guid: 705a6c43b4a5444b1a6550c5c73a5aa5, type: 2}
+      propertyPath: m_Name
+      value: ReflectiveItem
+      objectReference: {fileID: 0}
+    - target: {fileID: 212223248893138628, guid: 705a6c43b4a5444b1a6550c5c73a5aa5,
+        type: 2}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: e84548409f8c5b94393794c14b9618bd,
+        type: 3}
+    - target: {fileID: 114149249183579222, guid: 705a6c43b4a5444b1a6550c5c73a5aa5,
+        type: 2}
+      propertyPath: resource_cost
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 114149249183579222, guid: 705a6c43b4a5444b1a6550c5c73a5aa5,
+        type: 2}
+      propertyPath: setObject
+      value: 
+      objectReference: {fileID: 1480987293945216, guid: 2220d1ac8c81343d9ba6b414c8bf0f9d,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 705a6c43b4a5444b1a6550c5c73a5aa5, type: 2}
   m_IsPrefabParent: 0
@@ -9173,7 +9217,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1281612907}
   m_Layer: 8
-  m_Name: RegularBlockSpawner
+  m_Name: GenericSpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9971,6 +10015,7 @@ MonoBehaviour:
   MAX_HEALTH: 500
   DAMAGE_FROM_LASER: 7
   BASE_DAMAGE_FROM_RAM: 0
+  DAMAGE_FROM_EXPLOSION: 0
   is_core: 1
   health_bar_prefab: {fileID: 1344433025396718, guid: 7ce92948e3d8941b4805e1c164364c13,
     type: 2}
@@ -10301,7 +10346,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 200
+  m_Text: '400
+
+'
 --- !u!222 &1412067433
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -10693,6 +10740,17 @@ Prefab:
       propertyPath: m_LocalScale.y
       value: 1.5
       objectReference: {fileID: 0}
+    - target: {fileID: 114149249183579222, guid: e259b06431c154949a5f9cf8ff0b9361,
+        type: 2}
+      propertyPath: setObject
+      value: 
+      objectReference: {fileID: 1480987293945216, guid: 42daa1e5c8ffc4598ad038c2d55c3d40,
+        type: 2}
+    - target: {fileID: 114149249183579222, guid: e259b06431c154949a5f9cf8ff0b9361,
+        type: 2}
+      propertyPath: resource_cost
+      value: 400
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e259b06431c154949a5f9cf8ff0b9361, type: 2}
   m_IsPrefabParent: 0
@@ -10798,6 +10856,7 @@ MonoBehaviour:
   MAX_HEALTH: Infinity
   DAMAGE_FROM_LASER: 0
   BASE_DAMAGE_FROM_RAM: 0
+  DAMAGE_FROM_EXPLOSION: 0
   is_core: 0
   health_bar_prefab: {fileID: 1344433025396718, guid: 7ce92948e3d8941b4805e1c164364c13,
     type: 2}
@@ -11604,6 +11663,7 @@ MonoBehaviour:
   MAX_HEALTH: Infinity
   DAMAGE_FROM_LASER: 0
   BASE_DAMAGE_FROM_RAM: 0
+  DAMAGE_FROM_EXPLOSION: 0
   is_core: 0
   health_bar_prefab: {fileID: 1344433025396718, guid: 7ce92948e3d8941b4805e1c164364c13,
     type: 2}
@@ -11873,6 +11933,7 @@ MonoBehaviour:
   MAX_HEALTH: Infinity
   DAMAGE_FROM_LASER: 0
   BASE_DAMAGE_FROM_RAM: 0
+  DAMAGE_FROM_EXPLOSION: 0
   is_core: 0
   health_bar_prefab: {fileID: 1344433025396718, guid: 7ce92948e3d8941b4805e1c164364c13,
     type: 2}
@@ -13795,6 +13856,7 @@ MonoBehaviour:
   MAX_HEALTH: Infinity
   DAMAGE_FROM_LASER: 0
   BASE_DAMAGE_FROM_RAM: 0
+  DAMAGE_FROM_EXPLOSION: 0
   is_core: 0
   health_bar_prefab: {fileID: 1344433025396718, guid: 7ce92948e3d8941b4805e1c164364c13,
     type: 2}

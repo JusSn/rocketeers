@@ -1,4 +1,4 @@
-﻿/*  Author: SK && CG
+﻿    /*  Author: SK && CG
  *
  *  Update (3/5/17): Make block stick to any neighbors it has on creation
  */
@@ -101,16 +101,6 @@ public class Block : MonoBehaviour {
         states [state] ();
     }
 
-    /// <summary>
-    /// Sent when an incoming collider makes contact with this object's
-    /// collider (2D physics only).
-    /// </summary>
-    /// <param name="other">The Collision2D data associated with this collision.</param>
-    public virtual void OnCollisionEnter2D(Collision2D other)
-    {
-        
-    }
-
     /******************** State Modifiers & Behaviors ********************/
 
     // Block is in this state if it is falling
@@ -164,11 +154,18 @@ public class Block : MonoBehaviour {
     public virtual void LaserDamage(Collision2D block, GameObject projectile){
         health.Damage(health.DAMAGE_FROM_LASER);
         SFXManager.GetSFXManager ().PlaySFX (SFX.BlockHit);
+        DestroyProjectile (projectile);
+    }
+
+    protected virtual void DestroyProjectile(GameObject projectile){
+        Destroy (projectile);
     }
 
     public virtual void ExplosionDamage () {
-        health.Damage(health.DAMAGE_FROM_EXPLOSION);
+        if (health)
+            health.ExplosiveDamage ();
     }
+
     public void RepairBlock() {
         health.Repair();
     }
@@ -255,9 +252,13 @@ public class Block : MonoBehaviour {
     // Calling condition: A neighboring block dies
     // Called by: neighboring block - not invoked by this on itself.
     public void DeleteNeighboringConnection(Direction dir){
-        // delete our connection to a now deceased neighbor
-        // RIP our neighbor :'(
-        Debug.Assert(connected_neighbors.ContainsKey(dir), "Trying to remove a direction from a map that doesn't contain the direction");
+        // CG: I've determined that it's plausible this function could be called on two neighboring blocks
+        // in the same frame and thus one will run fine, but the other will throw what used to be a Debug.Assert
+        // because the other neighbor will have already been destroyed. Instead, just return and assume the
+        // fixed joint has been taken care of
+        if (!connected_neighbors.ContainsKey (dir)) {
+            return;
+        }
         // need to remove the fixedjoint in this direction, not just the direction from the map
         if (connected_neighbors.ContainsKey(dir)) {
             Destroy(connected_neighbors[dir].fixed_joint);

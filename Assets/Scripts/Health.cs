@@ -51,6 +51,10 @@ public class Health : MonoBehaviour {
         FlashHealthBar ();
     }
 
+    public void ExplosiveDamage(){
+        Damage (DAMAGE_FROM_EXPLOSION);
+    }
+
     public void Repair() {
         UpdateHealthByAmount(50);
         FlashHealthBar();

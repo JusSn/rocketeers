@@ -75,7 +75,6 @@ public class PhaseManager : MonoBehaviour {
 
 		// Instantiating the players
 		if (players.Count == 0) {
-			List<PlayerInfo> playerSettings = GameManager.GetPlayerList ();
 			players = new List<GameObject> ();
 			foreach (PlayerInfo pi in GameManager.GetPlayerList()) {
 				GameObject go = Instantiate<GameObject> (playerPrefab);
