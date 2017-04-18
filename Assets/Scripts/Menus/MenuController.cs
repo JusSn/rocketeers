@@ -147,10 +147,15 @@ public class MenuController : MonoBehaviour {
 			ready = team1 > 0 && team2 > 0 && team1 + team2 > 1;
 
 		//if (ready >= 2 && team1 > 0 && team2 > 0) 
-		if (ready && InputManager.ActiveDevice.Action1.WasPressed && devices.ContainsKey(InputManager.ActiveDevice)) {
-			// TODO: Display "Press A to Continue"
+		if (ready) {
+			MiddleBanner.GetBanner ().CreateBanner ("Press A To Continue");
+			if (InputManager.ActiveDevice.Action1.WasPressed && devices.ContainsKey (InputManager.ActiveDevice)) {
 				InitConfirmScreen ();
+				MiddleBanner.GetBanner ().DestroyBanner ();
 				return;
+			}
+		} else {
+			MiddleBanner.GetBanner().DestroyBanner ();
 		}
 
 	}
@@ -225,10 +230,10 @@ public class MenuController : MonoBehaviour {
 	IEnumerator SwitchOffScreen (GameObject screen) {
 		switching = true;
 		screen.transform.localScale = Vector3.one;
-		Vector3 big = new Vector3 (0f, 1f, 1f);
+		Vector3 big = new Vector3 (0f, 0f, 1f);
 		print ("Switching off: " + screen.name);
-		while (screen.transform.localScale.x > 0.01f) {
-			screen.transform.localScale = Vector3.Lerp (screen.transform.localScale, big, 0.25f);
+		while (screen.transform.localScale.x > big.y + 0.01f) {
+			screen.transform.localScale = Vector3.Lerp (screen.transform.localScale, big, 0.4f);
 			yield return null;
 		}
 		screen.SetActive (false);

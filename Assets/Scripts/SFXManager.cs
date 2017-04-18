@@ -14,7 +14,8 @@ public enum SFX {
 	StartPilot,
 	StopPilot,
 	MenuConfirm,
-	NasaCountdown
+	NasaCountdown,
+	AirHorn
 }
 
 public class SFXManager : MonoBehaviour {
@@ -38,6 +39,8 @@ public class SFXManager : MonoBehaviour {
 	public AudioClip 					blockDestroyed;
 	public AudioClip 					startPilot;
 	public AudioClip					stopPilot;
+
+	public AudioClip 					airHorn;
 
 	private AudioSource					source;
 	private Dictionary<SFX, AudioClip> 	sfxMap;
@@ -70,6 +73,7 @@ public class SFXManager : MonoBehaviour {
 		sfxMap [SFX.StartPilot] 	= startPilot;
 		sfxMap [SFX.StopPilot] 		= stopPilot;
 
+		sfxMap [SFX.AirHorn] 		= airHorn;
  	}
 		
     public void PlaySFX(SFX sfx, float volume = 1f) {
