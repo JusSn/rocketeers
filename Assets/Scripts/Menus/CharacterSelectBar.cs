@@ -30,7 +30,7 @@ public class CharacterSelectBar : MonoBehaviour {
 	private int						teamNum = 0;
 
 	public CharacterSelectState		state;
-	private InputDevice				input;
+	private InputDevice				input = null;
 	private bool 					switched = false;
 	private Dictionary<CharacterSelectState, Action>  stateUpdateMap;
 	private bool 					animating = false;
@@ -201,6 +201,14 @@ public class CharacterSelectBar : MonoBehaviour {
 	// Assumes ResetPlayerSelect as been called
 	public void AssignPlayer (InputDevice controller) {
 		input = controller;
+	}
+
+	public void RemovePlayer () {
+		input = null;
+	}
+
+	public bool WasAssignedPlayer () {
+		return input != null;
 	}
 
 	void UpdateSprite () {
