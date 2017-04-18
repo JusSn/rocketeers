@@ -817,9 +817,7 @@ GameObject:
   - component: {fileID: 51368094}
   - component: {fileID: 51368093}
   - component: {fileID: 51368087}
-  - component: {fileID: 51368092}
   - component: {fileID: 51368091}
-  - component: {fileID: 51368090}
   - component: {fileID: 51368089}
   - component: {fileID: 51368088}
   m_Layer: 14
@@ -894,25 +892,6 @@ FixedJoint2D:
   m_ConnectedAnchor: {x: -1.0000005, y: 0}
   m_DampingRatio: 0
   m_Frequency: 0
---- !u!114 &51368090
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 114574370088354748, guid: 6fa99bba588ee4a328b733bb38f1c774,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 51368086}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8231b0c45c81a4bc4ba43a7c2e1e14f1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MAX_HEALTH: Infinity
-  DAMAGE_FROM_LASER: 0
-  BASE_DAMAGE_FROM_RAM: 0
-  DAMAGE_FROM_EXPLOSION: 0
-  is_core: 0
-  health_bar_prefab: {fileID: 1344433025396718, guid: 7ce92948e3d8941b4805e1c164364c13,
-    type: 2}
 --- !u!255 &51368091
 FixedJoint2D:
   m_ObjectHideFlags: 0
@@ -931,33 +910,6 @@ FixedJoint2D:
   m_ConnectedAnchor: {x: 1, y: 0}
   m_DampingRatio: 0
   m_Frequency: 0
---- !u!114 &51368092
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 114314271761463980, guid: 6fa99bba588ee4a328b733bb38f1c774,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 51368086}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea899017a0fc2064e9f5070158584731, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  allBlocksMask:
-    serializedVersion: 2
-    m_Bits: 0
-  snap_radius: 0.75
-  highlight_sprend: {fileID: 0}
-  placementMask:
-    serializedVersion: 2
-    m_Bits: 0
-  explosion: {fileID: 0}
-  ______________________: 0
-  teamNum: 0
-  being_manipulated: 0
-  in_placeable_spot: 0
-  block_fell: 0
-  image: {fileID: 0}
 --- !u!212 &51368093
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1827,8 +1779,6 @@ GameObject:
   - component: {fileID: 138555359}
   - component: {fileID: 138555358}
   - component: {fileID: 138555357}
-  - component: {fileID: 138555356}
-  - component: {fileID: 138555355}
   - component: {fileID: 138555354}
   - component: {fileID: 138555353}
   m_Layer: 15
@@ -1897,52 +1847,6 @@ FixedJoint2D:
   m_ConnectedAnchor: {x: 1.0000005, y: 0}
   m_DampingRatio: 0
   m_Frequency: 0
---- !u!114 &138555355
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 114899098755107426, guid: 6fa99bba588ee4a328b733bb38f1c774,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 138555351}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8231b0c45c81a4bc4ba43a7c2e1e14f1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MAX_HEALTH: Infinity
-  DAMAGE_FROM_LASER: 0
-  BASE_DAMAGE_FROM_RAM: 0
-  DAMAGE_FROM_EXPLOSION: 0
-  is_core: 0
-  health_bar_prefab: {fileID: 1344433025396718, guid: 7ce92948e3d8941b4805e1c164364c13,
-    type: 2}
---- !u!114 &138555356
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 114256548849104926, guid: 6fa99bba588ee4a328b733bb38f1c774,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 138555351}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea899017a0fc2064e9f5070158584731, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  allBlocksMask:
-    serializedVersion: 2
-    m_Bits: 0
-  snap_radius: 0.75
-  highlight_sprend: {fileID: 0}
-  placementMask:
-    serializedVersion: 2
-    m_Bits: 0
-  explosion: {fileID: 0}
-  ______________________: 0
-  teamNum: 0
-  being_manipulated: 0
-  in_placeable_spot: 0
-  block_fell: 0
-  image: {fileID: 0}
 --- !u!255 &138555357
 FixedJoint2D:
   m_ObjectHideFlags: 0
@@ -2230,9 +2134,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: '400
-
-'
+  m_Text: 800
 --- !u!222 &162552046
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3092,8 +2994,6 @@ GameObject:
   - component: {fileID: 281679796}
   - component: {fileID: 281679795}
   - component: {fileID: 281679791}
-  - component: {fileID: 281679794}
-  - component: {fileID: 281679793}
   - component: {fileID: 281679792}
   m_Layer: 14
   m_Name: rocketEngines_0
@@ -3149,52 +3049,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &281679793
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 114761907187130446, guid: 6fa99bba588ee4a328b733bb38f1c774,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 281679790}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8231b0c45c81a4bc4ba43a7c2e1e14f1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MAX_HEALTH: Infinity
-  DAMAGE_FROM_LASER: 0
-  BASE_DAMAGE_FROM_RAM: 0
-  DAMAGE_FROM_EXPLOSION: 0
-  is_core: 0
-  health_bar_prefab: {fileID: 1344433025396718, guid: 7ce92948e3d8941b4805e1c164364c13,
-    type: 2}
---- !u!114 &281679794
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 114001122290702970, guid: 6fa99bba588ee4a328b733bb38f1c774,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 281679790}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea899017a0fc2064e9f5070158584731, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  allBlocksMask:
-    serializedVersion: 2
-    m_Bits: 0
-  snap_radius: 0.75
-  highlight_sprend: {fileID: 0}
-  placementMask:
-    serializedVersion: 2
-    m_Bits: 0
-  explosion: {fileID: 0}
-  ______________________: 0
-  teamNum: 0
-  being_manipulated: 0
-  in_placeable_spot: 0
-  block_fell: 0
-  image: {fileID: 0}
 --- !u!212 &281679795
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -4735,8 +4589,6 @@ GameObject:
   - component: {fileID: 548302158}
   - component: {fileID: 548302163}
   - component: {fileID: 548302162}
-  - component: {fileID: 548302161}
-  - component: {fileID: 548302160}
   - component: {fileID: 548302159}
   m_Layer: 14
   m_Name: rocketEngines_4
@@ -4786,52 +4638,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &548302160
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 114285210267259622, guid: 6fa99bba588ee4a328b733bb38f1c774,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 548302157}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8231b0c45c81a4bc4ba43a7c2e1e14f1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MAX_HEALTH: Infinity
-  DAMAGE_FROM_LASER: 0
-  BASE_DAMAGE_FROM_RAM: 0
-  DAMAGE_FROM_EXPLOSION: 0
-  is_core: 0
-  health_bar_prefab: {fileID: 1344433025396718, guid: 7ce92948e3d8941b4805e1c164364c13,
-    type: 2}
---- !u!114 &548302161
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 114212452485082788, guid: 6fa99bba588ee4a328b733bb38f1c774,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 548302157}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea899017a0fc2064e9f5070158584731, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  allBlocksMask:
-    serializedVersion: 2
-    m_Bits: 0
-  snap_radius: 0.75
-  highlight_sprend: {fileID: 0}
-  placementMask:
-    serializedVersion: 2
-    m_Bits: 0
-  explosion: {fileID: 0}
-  ______________________: 0
-  teamNum: 0
-  being_manipulated: 0
-  in_placeable_spot: 0
-  block_fell: 0
-  image: {fileID: 0}
 --- !u!50 &548302162
 Rigidbody2D:
   serializedVersion: 4
@@ -5393,9 +5199,7 @@ GameObject:
   - component: {fileID: 625698088}
   - component: {fileID: 625698087}
   - component: {fileID: 625698081}
-  - component: {fileID: 625698086}
   - component: {fileID: 625698085}
-  - component: {fileID: 625698084}
   - component: {fileID: 625698083}
   - component: {fileID: 625698082}
   m_Layer: 15
@@ -5470,25 +5274,6 @@ FixedJoint2D:
   m_ConnectedAnchor: {x: -1.0000005, y: 0}
   m_DampingRatio: 0
   m_Frequency: 0
---- !u!114 &625698084
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 114574370088354748, guid: 6fa99bba588ee4a328b733bb38f1c774,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 625698080}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8231b0c45c81a4bc4ba43a7c2e1e14f1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MAX_HEALTH: Infinity
-  DAMAGE_FROM_LASER: 0
-  BASE_DAMAGE_FROM_RAM: 0
-  DAMAGE_FROM_EXPLOSION: 0
-  is_core: 0
-  health_bar_prefab: {fileID: 1344433025396718, guid: 7ce92948e3d8941b4805e1c164364c13,
-    type: 2}
 --- !u!255 &625698085
 FixedJoint2D:
   m_ObjectHideFlags: 0
@@ -5507,33 +5292,6 @@ FixedJoint2D:
   m_ConnectedAnchor: {x: 1, y: 0}
   m_DampingRatio: 0
   m_Frequency: 0
---- !u!114 &625698086
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 114314271761463980, guid: 6fa99bba588ee4a328b733bb38f1c774,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 625698080}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea899017a0fc2064e9f5070158584731, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  allBlocksMask:
-    serializedVersion: 2
-    m_Bits: 0
-  snap_radius: 0.75
-  highlight_sprend: {fileID: 0}
-  placementMask:
-    serializedVersion: 2
-    m_Bits: 0
-  explosion: {fileID: 0}
-  ______________________: 0
-  teamNum: 0
-  being_manipulated: 0
-  in_placeable_spot: 0
-  block_fell: 0
-  image: {fileID: 0}
 --- !u!212 &625698087
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -5750,8 +5508,6 @@ GameObject:
   - component: {fileID: 657698900}
   - component: {fileID: 657698894}
   - component: {fileID: 657698899}
-  - component: {fileID: 657698898}
-  - component: {fileID: 657698897}
   - component: {fileID: 657698896}
   - component: {fileID: 657698895}
   m_Layer: 15
@@ -5826,52 +5582,6 @@ FixedJoint2D:
   m_ConnectedAnchor: {x: -1, y: 0}
   m_DampingRatio: 0
   m_Frequency: 0
---- !u!114 &657698897
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 114647729498545338, guid: 6fa99bba588ee4a328b733bb38f1c774,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 657698893}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8231b0c45c81a4bc4ba43a7c2e1e14f1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MAX_HEALTH: Infinity
-  DAMAGE_FROM_LASER: 0
-  BASE_DAMAGE_FROM_RAM: 0
-  DAMAGE_FROM_EXPLOSION: 0
-  is_core: 0
-  health_bar_prefab: {fileID: 1344433025396718, guid: 7ce92948e3d8941b4805e1c164364c13,
-    type: 2}
---- !u!114 &657698898
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 114630956836021738, guid: 6fa99bba588ee4a328b733bb38f1c774,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 657698893}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea899017a0fc2064e9f5070158584731, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  allBlocksMask:
-    serializedVersion: 2
-    m_Bits: 0
-  snap_radius: 0.75
-  highlight_sprend: {fileID: 0}
-  placementMask:
-    serializedVersion: 2
-    m_Bits: 0
-  explosion: {fileID: 0}
-  ______________________: 0
-  teamNum: 0
-  being_manipulated: 0
-  in_placeable_spot: 0
-  block_fell: 0
-  image: {fileID: 0}
 --- !u!255 &657698899
 FixedJoint2D:
   m_ObjectHideFlags: 0
@@ -6263,8 +5973,6 @@ GameObject:
   - component: {fileID: 677729264}
   - component: {fileID: 677729269}
   - component: {fileID: 677729268}
-  - component: {fileID: 677729267}
-  - component: {fileID: 677729266}
   - component: {fileID: 677729265}
   m_Layer: 15
   m_Name: rocketEngines_4
@@ -6314,52 +6022,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &677729266
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 114285210267259622, guid: 6fa99bba588ee4a328b733bb38f1c774,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 677729263}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8231b0c45c81a4bc4ba43a7c2e1e14f1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MAX_HEALTH: Infinity
-  DAMAGE_FROM_LASER: 0
-  BASE_DAMAGE_FROM_RAM: 0
-  DAMAGE_FROM_EXPLOSION: 0
-  is_core: 0
-  health_bar_prefab: {fileID: 1344433025396718, guid: 7ce92948e3d8941b4805e1c164364c13,
-    type: 2}
---- !u!114 &677729267
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 114212452485082788, guid: 6fa99bba588ee4a328b733bb38f1c774,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 677729263}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea899017a0fc2064e9f5070158584731, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  allBlocksMask:
-    serializedVersion: 2
-    m_Bits: 0
-  snap_radius: 0.75
-  highlight_sprend: {fileID: 0}
-  placementMask:
-    serializedVersion: 2
-    m_Bits: 0
-  explosion: {fileID: 0}
-  ______________________: 0
-  teamNum: 0
-  being_manipulated: 0
-  in_placeable_spot: 0
-  block_fell: 0
-  image: {fileID: 0}
 --- !u!50 &677729268
 Rigidbody2D:
   serializedVersion: 4
@@ -9851,8 +9513,6 @@ GameObject:
   - component: {fileID: 1050966742}
   - component: {fileID: 1050966741}
   - component: {fileID: 1050966737}
-  - component: {fileID: 1050966740}
-  - component: {fileID: 1050966739}
   - component: {fileID: 1050966738}
   m_Layer: 15
   m_Name: rocketEngines_0
@@ -9908,52 +9568,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &1050966739
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 114761907187130446, guid: 6fa99bba588ee4a328b733bb38f1c774,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1050966736}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8231b0c45c81a4bc4ba43a7c2e1e14f1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MAX_HEALTH: Infinity
-  DAMAGE_FROM_LASER: 0
-  BASE_DAMAGE_FROM_RAM: 0
-  DAMAGE_FROM_EXPLOSION: 0
-  is_core: 0
-  health_bar_prefab: {fileID: 1344433025396718, guid: 7ce92948e3d8941b4805e1c164364c13,
-    type: 2}
---- !u!114 &1050966740
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 114001122290702970, guid: 6fa99bba588ee4a328b733bb38f1c774,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1050966736}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea899017a0fc2064e9f5070158584731, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  allBlocksMask:
-    serializedVersion: 2
-    m_Bits: 0
-  snap_radius: 0.75
-  highlight_sprend: {fileID: 0}
-  placementMask:
-    serializedVersion: 2
-    m_Bits: 0
-  explosion: {fileID: 0}
-  ______________________: 0
-  teamNum: 0
-  being_manipulated: 0
-  in_placeable_spot: 0
-  block_fell: 0
-  image: {fileID: 0}
 --- !u!212 &1050966741
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -11186,7 +10800,7 @@ Prefab:
     - target: {fileID: 114149249183579222, guid: e259b06431c154949a5f9cf8ff0b9361,
         type: 2}
       propertyPath: resource_cost
-      value: 400
+      value: 800
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e259b06431c154949a5f9cf8ff0b9361, type: 2}
@@ -12362,8 +11976,6 @@ GameObject:
   - component: {fileID: 1343754694}
   - component: {fileID: 1343754688}
   - component: {fileID: 1343754693}
-  - component: {fileID: 1343754692}
-  - component: {fileID: 1343754691}
   - component: {fileID: 1343754690}
   - component: {fileID: 1343754689}
   m_Layer: 14
@@ -12438,52 +12050,6 @@ FixedJoint2D:
   m_ConnectedAnchor: {x: -1, y: 0}
   m_DampingRatio: 0
   m_Frequency: 0
---- !u!114 &1343754691
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 114647729498545338, guid: 6fa99bba588ee4a328b733bb38f1c774,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1343754687}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8231b0c45c81a4bc4ba43a7c2e1e14f1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MAX_HEALTH: Infinity
-  DAMAGE_FROM_LASER: 0
-  BASE_DAMAGE_FROM_RAM: 0
-  DAMAGE_FROM_EXPLOSION: 0
-  is_core: 0
-  health_bar_prefab: {fileID: 1344433025396718, guid: 7ce92948e3d8941b4805e1c164364c13,
-    type: 2}
---- !u!114 &1343754692
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 114630956836021738, guid: 6fa99bba588ee4a328b733bb38f1c774,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1343754687}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea899017a0fc2064e9f5070158584731, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  allBlocksMask:
-    serializedVersion: 2
-    m_Bits: 0
-  snap_radius: 0.75
-  highlight_sprend: {fileID: 0}
-  placementMask:
-    serializedVersion: 2
-    m_Bits: 0
-  explosion: {fileID: 0}
-  ______________________: 0
-  teamNum: 0
-  being_manipulated: 0
-  in_placeable_spot: 0
-  block_fell: 0
-  image: {fileID: 0}
 --- !u!255 &1343754693
 FixedJoint2D:
   m_ObjectHideFlags: 0
@@ -18135,8 +17701,6 @@ GameObject:
   - component: {fileID: 1998048817}
   - component: {fileID: 1998048816}
   - component: {fileID: 1998048815}
-  - component: {fileID: 1998048814}
-  - component: {fileID: 1998048813}
   - component: {fileID: 1998048812}
   - component: {fileID: 1998048811}
   m_Layer: 14
@@ -18205,52 +17769,6 @@ FixedJoint2D:
   m_ConnectedAnchor: {x: 1.0000005, y: 0}
   m_DampingRatio: 0
   m_Frequency: 0
---- !u!114 &1998048813
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 114899098755107426, guid: 6fa99bba588ee4a328b733bb38f1c774,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1998048809}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8231b0c45c81a4bc4ba43a7c2e1e14f1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MAX_HEALTH: Infinity
-  DAMAGE_FROM_LASER: 0
-  BASE_DAMAGE_FROM_RAM: 0
-  DAMAGE_FROM_EXPLOSION: 0
-  is_core: 0
-  health_bar_prefab: {fileID: 1344433025396718, guid: 7ce92948e3d8941b4805e1c164364c13,
-    type: 2}
---- !u!114 &1998048814
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 114256548849104926, guid: 6fa99bba588ee4a328b733bb38f1c774,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1998048809}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea899017a0fc2064e9f5070158584731, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  allBlocksMask:
-    serializedVersion: 2
-    m_Bits: 0
-  snap_radius: 0.75
-  highlight_sprend: {fileID: 0}
-  placementMask:
-    serializedVersion: 2
-    m_Bits: 0
-  explosion: {fileID: 0}
-  ______________________: 0
-  teamNum: 0
-  being_manipulated: 0
-  in_placeable_spot: 0
-  block_fell: 0
-  image: {fileID: 0}
 --- !u!255 &1998048815
 FixedJoint2D:
   m_ObjectHideFlags: 0

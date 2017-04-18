@@ -24,7 +24,6 @@ public class Projectile : MonoBehaviour {
     }
 
     protected virtual void OnCollisionEnter2D(Collision2D other){
-        print (other.gameObject);
         // check if we came in contact with another block/weaponblock
         if (other.gameObject.tag.StartsWith ("Block") || other.gameObject.tag == "Core"){
             other.gameObject.GetComponent<Block> ().LaserDamage (other, gameObject);

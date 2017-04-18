@@ -43,16 +43,14 @@ public class ExplosiveBlock : Block {
 
         // get all colliders we interfere with
         Collider2D[] blockCols = Physics2D.OverlapCircleAll (transform.position, EXPLOSION_RADIUS);
-//            LayerMask.NameToLayer("ImpenetrableToTeam" + otherteamNum) | LayerMask.NameToLayer("Team" + otherteamNum + "Block") | LayerMask.NameToLayer("Team" + otherteamNum + "Platform"));
 		foreach (Collider2D col in blockCols) {
 
-			Block blockScript = col.GetComponent<Block> ();
-			
-            // make sure the layer of the collider is not our own block
-            if (col.gameObject && blockScript != null
-                && col.gameObject.layer != gameObject.layer
-                && col.gameObject.layer != LayerMask.NameToLayer("ImpenetrableToTeam" + teamNum)) {
-                blockScript.ExplosionDamage ();
+			Block blockScript = col.gameObject.GetComponent<Block> ();
+            if (blockScript) {
+                bool notSameTeam = blockScript.teamNum != teamNum;
+                if (notSameTeam) {
+                    blockScript.ExplosionDamage ();
+                }
 			}
 		}
         UnhingeAndFall ();

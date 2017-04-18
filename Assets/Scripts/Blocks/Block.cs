@@ -71,7 +71,7 @@ public class Block : MonoBehaviour {
     private BlockStates                         state = BlockStates.FALLING;
 
     private float                               SLEEPING_THRESHOLD = 0.1f;
-    private float                               MINIMUM_RAMMING_VELOCITY = 4f;
+    private float                               MINIMUM_RAMMING_VELOCITY = 3.9f;
 
 
 
@@ -177,19 +177,13 @@ public class Block : MonoBehaviour {
         health.RammingDamage (bonus);
     }
 
-    public void RepairBlock() {
-        health.Repair();
-    }
-
     // called when this block has <= 0 health
     public virtual void Kill(){
         UnhingeAndFall ();
     }
 
     protected virtual void OnCollisionEnter2D(Collision2D other){
-        if (rigid.velocity.magnitude < MINIMUM_RAMMING_VELOCITY
-            || other.gameObject.layer == gameObject.layer
-            || other.gameObject.layer != LayerMask.NameToLayer ("Team" + teamNum + "Rockets")) {
+        if (rigid.velocity.magnitude < MINIMUM_RAMMING_VELOCITY){
             return;
         }
 
@@ -248,29 +242,18 @@ public class Block : MonoBehaviour {
         Block neighbor = null;
         int neighborTeamNum = CheckForNeighbor (dir, out neighbor);
         if (neighborTeamNum > 0) {
-            if (!connected_neighbors.ContainsKey(dir)) {
+            if (!connected_neighbors.ContainsKey (dir)) {
                 // we have a neighbor, so connect to it
-                ConnectToNeighbor(dir, neighbor);
+                ConnectToNeighbor (dir, neighbor);
                 // connect the neighbor in the opposite direction, since that's the side
                 // this block is on
-                neighbor.ConnectToNeighbor(Utils.GetOppositeDirection(dir), this);
+                neighbor.ConnectToNeighbor (Utils.GetOppositeDirection (dir), this);
 
                 // JF: Assign teamNum to this block according to neighborTeamNum
                 AssignTeamToBlock (this, neighborTeamNum);
             }
         }
     }
-
-    // Calling condition: when a block is placed, it could be on the
-    //                    ground and a rigid body attachment needs to be made
-    // Called by: this.CheckAndConnectToNeighbor()
-    // void CheckForGround(){
-    //     Collider2D obj = Utils.CheckForObj (transform.position + Vector3.down, ground_mask);
-    //     if (obj != null && obj.gameObject.CompareTag("Ground")) {
-    //         ConnectToGround (Direction.SOUTH, obj.gameObject);
-    //     }
-    // }
-
 
     // Calling condition: A neighboring block dies
     // Called by: neighboring block - not invoked by this on itself.
