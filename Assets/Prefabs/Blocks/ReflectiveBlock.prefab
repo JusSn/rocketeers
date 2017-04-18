@@ -268,7 +268,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MAX_HEALTH: 150
-  DAMAGE_FROM_LASER: 3
+  DAMAGE_FROM_LASER: 5
   BASE_DAMAGE_FROM_RAM: 5
   DAMAGE_FROM_EXPLOSION: 75
   is_core: 0

@@ -56,13 +56,10 @@ public class TutorialController : MonoBehaviour {
 
     void Awake() {
         singleton = this;
+        PhaseManager.S.SetInTutorial();
     }
 
 	void Start() {
-        if (in_tutorial) {
-            PhaseManager.S.SetInTutorial();
-        }
-
         stage = TutorialStage.Objective;
 
 

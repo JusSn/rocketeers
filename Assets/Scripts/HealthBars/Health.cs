@@ -20,16 +20,23 @@ public class Health : MonoBehaviour {
     public GameObject                           health_bar_prefab;
 
     // health_bar attributes
-    private GameObject                          health_bar;
-    private Transform                           greenBG;
-    private Block                               parent_block;
-    private Vector3                             health_bar_pos = new Vector3(0f, -0.25f, 0f);
+    public GameObject                             health_bar;
+    protected Transform                           greenBG;
+    protected Block                               parent_block;
+    protected Vector3                             health_bar_pos = new Vector3(0f, -0.25f, 0f);
 
     // health attributes
-    private float                               cur_health;
+    protected float                               cur_health;
 
-    void Start(){
+    protected void Start(){
         cur_health = MAX_HEALTH;
+        if (health_bar) {
+            if (PhaseManager.S.in_tutorial) {
+                greenBG = health_bar.transform.Find ("GreenBackground");
+            } else {
+                greenBG = health_bar.transform.Find ("Canvas/GreenBackground");
+            }
+        }
     }
 
 
@@ -56,15 +63,6 @@ public class Health : MonoBehaviour {
     }
     public void RammingDamage(float bonus){
         Damage (BASE_DAMAGE_FROM_RAM + bonus);
-    }
-
-    public void Repair() {
-        UpdateHealthByAmount(50);
-        FlashHealthBar();
-        if (cur_health >= MAX_HEALTH) {
-            Destroy(health_bar);
-            health_bar = null;
-        }
     }
 
     public float GetHealth() {
@@ -94,14 +92,11 @@ public class Health : MonoBehaviour {
     // Calling condition: when taking damage the health bar will appear
     // Called by: this
     // displays the health bar slightly below center of the parent block
-    void FlashHealthBar(){
+    protected virtual void FlashHealthBar(){
         // for the case that the health_bar will be displayed and destroyed, don't create
         // additional health_bars if one is already present
         if (health_bar == null){
-            health_bar = Instantiate<GameObject> (health_bar_prefab, Vector3.down, Quaternion.identity);
-            // sets the health bar as being a child of the parent_block gameObject
-            health_bar.transform.parent = parent_block.transform;
-            health_bar.transform.localPosition = health_bar_pos;
+            InstantiateHealthBar ();
 
             // JF: Don't have to do a Find every time you want to update green bar
             greenBG = health_bar.transform.Find("Canvas/GreenBackground");
@@ -114,6 +109,18 @@ public class Health : MonoBehaviour {
         // OR THEY CAN EXIST ONLY ONCE A BLOCK IS DAMAGED THE FIRST TIME (THIS IS THE CURRENT SITUATION)
         // destroy the health_bar after 2 seconds
         //Destroy (health_bar, 2f);
+    }
+
+    protected virtual void InstantiateHealthBar(){
+        health_bar = Instantiate<GameObject> (health_bar_prefab, Vector3.down, Quaternion.identity);
+
+        SetPosition ();// sets the health bar as being a child of the parent_block gameObject
+
+    }
+
+    protected virtual void SetPosition(){
+        health_bar.transform.parent = parent_block.transform;
+        health_bar.transform.localPosition = health_bar_pos;
     }
 
 }
