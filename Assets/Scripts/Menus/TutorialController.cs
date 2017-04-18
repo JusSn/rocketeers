@@ -18,7 +18,7 @@ public class TutorialController : MonoBehaviour {
 
 	public TutorialStage				stage;
     public bool                         in_tutorial = true;
-    public  GameObject                  battleText;
+    public GameObject                   battleText;
     public AudioClip                    countdownSFX;
 
     private static TutorialController   singleton = null;
@@ -37,7 +37,7 @@ public class TutorialController : MonoBehaviour {
     private Text                        team1BlocksToGo;
     private Text                        team2BlocksToGo;
 
-    private AudioSource                 nasaCountdownAudioClip;
+    private AudioSource                 nasaCountdownAudioSource;
 
     private float                       timeLeft = 3f;
     private float                       startTime;
@@ -62,8 +62,8 @@ public class TutorialController : MonoBehaviour {
         if (in_tutorial) {
             PhaseManager.S.SetInTutorial();
         }
+
         stage = TutorialStage.Objective;
-        nasaCountdownAudioClip = GetComponent<AudioSource>();
 
 
 		objectiveScreen = transform.Find ("GameObjective").gameObject;
@@ -78,6 +78,9 @@ public class TutorialController : MonoBehaviour {
 
         team1BlocksToGo = GameObject.Find ("Team1BlocksToGo").gameObject.GetComponent<Text>();
         team2BlocksToGo = GameObject.Find ("Team2BlocksToGo").gameObject.GetComponent<Text>();
+        nasaCountdownAudioSource = gameObject.AddComponent<AudioSource>();
+        nasaCountdownAudioSource.clip = countdownSFX;
+        nasaCountdownAudioSource.time = 7.5f; // play the countdown at exactly the "3, 2, 1...liftoff" part
 
 		players = new GameObject[4];
         players [0] = GameObject.Find ("Players").transform.Find("Player1").gameObject;
@@ -169,9 +172,7 @@ public class TutorialController : MonoBehaviour {
         team1BlocksToGo.gameObject.SetActive (true);
         team2BlocksToGo.gameObject.SetActive (true);
         stage = TutorialStage.Countdown;
-        nasaCountdownAudioClip.clip = countdownSFX;
-        nasaCountdownAudioClip.time = 7.5f; // play the countdown at exactly the "3, 2, 1...liftoff" part
-        nasaCountdownAudioClip.Play();
+        nasaCountdownAudioSource.Play();
     }
 
     void CountdownAdvanceCondition(){

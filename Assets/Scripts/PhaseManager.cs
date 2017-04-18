@@ -77,9 +77,11 @@ public class PhaseManager : MonoBehaviour {
 		// [0] background musics that loop
 		// [1] sound effects that do not loop
 		audioSource = GetComponent<AudioSource> ();
-		Invoke ("PlayMusic", 3f);
+        if (!in_tutorial) {
+            Invoke ("PlayMusic", 3f);
 
-		MiddleBanner.GetBanner ().CreateBanner("Ready...Set...", 4f);
+            MiddleBanner.GetBanner ().CreateBanner ("Ready...Set...", 4f);
+        }
 
 		// Instantiating the players
 		if (players.Count == 0) {
