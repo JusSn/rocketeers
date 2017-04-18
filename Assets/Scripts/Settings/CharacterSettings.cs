@@ -16,6 +16,7 @@ public class CharacterSettings : MonoBehaviour {
 	public GameObject					projectile;
 	public GameObject					ufoManager;
 	public GameObject					offscreenIndicator;
+	public GameObject					locationArrow;
 
 	public Character GetCharacterType () {
 		return character;
@@ -39,5 +40,9 @@ public class CharacterSettings : MonoBehaviour {
 
 	public GameObject GetOffscreenIndicator() {
 		return offscreenIndicator;
+	}
+
+	public GameObject GetLocationArrow() {
+		return locationArrow;
 	}
 }

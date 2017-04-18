@@ -59,6 +59,8 @@ MonoBehaviour:
   ufoManager: {fileID: 1923554983700856, guid: 05f823836a167486496b9d975b0fa7ae, type: 2}
   offscreenIndicator: {fileID: 1329522148263542, guid: de62967eabc124185a50ccbec67eed7c,
     type: 2}
+  locationArrow: {fileID: 1566312220659758, guid: db963dab42ebb664c8312f0ddc7d4a3c,
+    type: 2}
 --- !u!212 &212660192306923870
 SpriteRenderer:
   m_ObjectHideFlags: 1

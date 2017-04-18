@@ -224,6 +224,7 @@ GameObject:
   - component: {fileID: 114680217622344244}
   - component: {fileID: 114503214241377472}
   - component: {fileID: 114618603198775892}
+  - component: {fileID: 114528296588006404}
   m_Layer: 9
   m_Name: Player
   m_TagString: Player
@@ -679,6 +680,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UFOLakitu: {fileID: 1923554983700856, guid: 75c6db2bd5f5c4eacb3954f816404b1a, type: 2}
+--- !u!114 &114528296588006404
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1749041598868772}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d43ae2ddfc3166c449362055ccad9f6c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  arrowPrefab: {fileID: 1227939951368536, guid: 4d11bc8b532b52544b67a049275f585a,
+    type: 2}
 --- !u!114 &114606313410146976
 MonoBehaviour:
   m_ObjectHideFlags: 1
