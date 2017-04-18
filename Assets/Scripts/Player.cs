@@ -376,7 +376,8 @@ public class Player : MonoBehaviour {
 		animator.runtimeAnimatorController = charSettings.GetAnimator ();
 		projectilePrefab = charSettings.GetProjectile ();
 		ufo_manager.GetComponent<UFOManager>().UFOLakitu = charSettings.GetUFOManager ();
-		offscreen_arrow_manager.GetComponent<ArrowIndicator>().arrowPrefab = charSettings.GetOffscreenIndicator ();
+		offscreen_arrow_manager.arrowPrefab = charSettings.GetOffscreenIndicator ();
+		GetComponent<LocationArrow> ().arrowPrefab = charSettings.GetLocationArrow ();
 
 		// Init Team Settings
 		teamNum = teamSettings.teamNum;
