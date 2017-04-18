@@ -71,10 +71,12 @@ public class Block : MonoBehaviour {
     private BlockStates                         state = BlockStates.FALLING;
 
     private float                               SLEEPING_THRESHOLD = 0.1f;
+    private float                               MINIMUM_RAMMING_VELOCITY = 4f;
 
 
-    // Use this for initialization
-    void Start () {
+
+    void Awake(){
+
         rigid = GetComponent<Rigidbody2D> ();
         health = GetComponent<Health> ();
         health.SetParent (this);
@@ -82,6 +84,11 @@ public class Block : MonoBehaviour {
         states.Add (BlockStates.FALLING, Falling);
         states.Add (BlockStates.STILL, Still);
         states.Add (BlockStates.UNHINGED, Unhinged);
+
+    }
+
+    // Use this for initialization
+    void Start () {
 
         // JF: Get image object if core
         if (tag == "Core") {
@@ -166,6 +173,10 @@ public class Block : MonoBehaviour {
             health.ExplosiveDamage ();
     }
 
+    public virtual void RammingDamage(float bonus){
+        health.RammingDamage (bonus);
+    }
+
     public void RepairBlock() {
         health.Repair();
     }
@@ -175,8 +186,20 @@ public class Block : MonoBehaviour {
         UnhingeAndFall ();
     }
 
-    protected virtual void OnCollisionEnter2D(Collision2D otherBlock){
-        // do nothing in the basic block or reflection block case
+    protected virtual void OnCollisionEnter2D(Collision2D other){
+        if (rigid.velocity.magnitude < MINIMUM_RAMMING_VELOCITY
+            || other.gameObject.layer == gameObject.layer
+            || other.gameObject.layer != LayerMask.NameToLayer ("Team" + teamNum + "Rockets")) {
+            return;
+        }
+
+        Block otherBlock = other.gameObject.GetComponent<Block> ();
+
+        if (otherBlock) {
+            otherBlock.RammingDamage (rigid.velocity.magnitude);
+            // do the base amount of ramming damage to ourselves, no multipliers applied
+            RammingDamage (0f);
+        }
     }
 
 
