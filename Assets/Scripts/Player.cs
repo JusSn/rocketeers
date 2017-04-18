@@ -619,10 +619,6 @@ public class Player : MonoBehaviour {
         swapArrowIndicator.SetActive (false);
     }
 
-    void RepairBlock(GameObject closest_block) {
-        closest_block.GetComponent<Block>().RepairBlock();
-    }
-
     // used when attaching to a controllable block if one is below us
     bool AttachToBlock(Collider2D potential_controllable){
         controlled_block = potential_controllable.gameObject.GetComponent<Controllable>();
