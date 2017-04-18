@@ -232,7 +232,7 @@ public class Player : MonoBehaviour {
 				}
 			}
             if (nearestBlockObj != null){
-                if (input.RightBumper.WasPressed) {
+				if (input.Action1.WasPressed) {
                     if (TryToSitInBlock()) {
                         // there's a weapon underneath us, so sit in it
                         form = PlayerForm.Controlling;
@@ -267,7 +267,7 @@ public class Player : MonoBehaviour {
         // show or don't show the valid placement object
         if (!blocker && valid_neighbor && Utils.ValidBlockLocation(setPos)) {
             highlightObject.SetActive (true);
-            if (input.RightBumper.WasPressed) {
+			if (input.Action1.WasPressed) {
                 SetItem (setPos);
             }
         } else {
@@ -289,7 +289,7 @@ public class Player : MonoBehaviour {
         FlipAllSprites (x_val);
 
         // Detach from the block if the user wants to
-        if (!input.RightBumper.IsPressed){
+        if (!input.Action1.IsPressed){
             DetachFromBlock ();
             return;
         }
@@ -487,8 +487,11 @@ public class Player : MonoBehaviour {
 
     // Return a vector3 of the location pointed to by the aiming joystick
     // Rounded to nearest 0.5 (e.g. 1.2 rounds to 1.5, 0.8 rounds to 0.5, etc.)
-    Vector3 GetGridPosition() {
-		Vector3 gridPos = sprend.transform.position + GetRightJoyDirection ();
+	Vector3 GetGridPosition(bool use_joystick = false) {
+		Vector3 gridPos = sprend.transform.position;
+		if(use_joystick)
+			gridPos += GetRightJoyDirection ();
+		
         gridPos.x = Mathf.Round (gridPos.x);
         gridPos.y = Mathf.Round (gridPos.y);
         return gridPos;
