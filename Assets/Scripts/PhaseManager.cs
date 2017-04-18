@@ -80,7 +80,8 @@ public class PhaseManager : MonoBehaviour {
         if (!in_tutorial) {
             Invoke ("PlayMusic", 3f);
 
-            MiddleBanner.GetBanner ().CreateBanner ("Ready...Set...", 4f);
+            MiddleBanner.GetBanner ().CreateBanner ("Ready...", 4f);
+            Invoke("SetBannerDisplay", 1.75f);
         }
 
 		// Instantiating the players
@@ -299,6 +300,10 @@ public class PhaseManager : MonoBehaviour {
             audioSource.loop = true;
             audioSource.Play ();
         }
+    }
+
+    void SetBannerDisplay(){
+        MiddleBanner.GetBanner ().ChangeText ("Set...");
     }
 
     public void AddBlock(GameObject go, GameObject settableBlock){
