@@ -90,7 +90,7 @@ public class MenuController : MonoBehaviour {
 			devices.Add (device, null);
 			if (state == MenuState.Character) {
 				foreach (CharacterSelectBar bar in charSelecters) {
-					if (bar.WaitingForPlayer ()) {
+					if (!bar.WasAssignedPlayer()) {
 						bar.AssignPlayer (device);
 						devices [device] = bar;
 						break;
@@ -107,6 +107,7 @@ public class MenuController : MonoBehaviour {
 				if (devices [device].GetSelectedCharacter ()) {
 					charStatus [devices [device].GetSelectedCharacter ().GetCharacterType ()] = false;
 				}
+				devices [device].RemovePlayer ();
 				devices [device].ResetPlayerSelect ();
 			}
 			devices.Remove (device);
