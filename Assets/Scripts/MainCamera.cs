@@ -52,8 +52,6 @@ public class MainCamera : MonoBehaviour {
 
     void CheckForRestart(){
 		if (Input.GetButtonDown("Back")) {
-            GameManager.GetGameManager ().ClearPlayers ();
-            Destroy (GameObject.Find("PersistentSettings"));
             SceneManager.LoadScene ("menu");
         }
     }
