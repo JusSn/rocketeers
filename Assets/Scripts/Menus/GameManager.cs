@@ -30,11 +30,13 @@ public class GameManager : MonoBehaviour {
 	}
 
 	void Awake() {
-		if(singleton == null)
-			singleton = this;
+        if (singleton == null) {
+            singleton = this;
+            DontDestroyOnLoad (this);
+        }
+
 		if (players == null)
 			players = new List<PlayerInfo> ();
-        DontDestroyOnLoad(this);
 
 		Cursor.visible = false;
 	}
