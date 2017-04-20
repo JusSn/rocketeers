@@ -274,6 +274,11 @@ MonoBehaviour:
   is_core: 0
   health_bar_prefab: {fileID: 1344433025396718, guid: 7ce92948e3d8941b4805e1c164364c13,
     type: 2}
+  damage_sprites:
+  - {fileID: 21300000, guid: a7728efa231d2424f870f2c5ed5ef403, type: 3}
+  - {fileID: 21300000, guid: 82eb70739fcb5754596041bf5522e7b5, type: 3}
+  - {fileID: 21300000, guid: 98e95f7538e4d2646a468fbc080e6cc1, type: 3}
+  health_bar: {fileID: 0}
 --- !u!114 &114546016792703760
 MonoBehaviour:
   m_ObjectHideFlags: 1

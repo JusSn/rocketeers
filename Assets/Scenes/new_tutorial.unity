@@ -1022,7 +1022,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 64553a98e20236845b5777db940e38c9, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 26a44670f324f3c498b0b0bde98ee1a2, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -4467,6 +4467,7 @@ MonoBehaviour:
   DAMAGE_FROM_EXPLOSION: 75
   is_core: 1
   health_bar_prefab: {fileID: 2037807541}
+  damage_sprites: []
   health_bar: {fileID: 2037807541}
 --- !u!255 &559231707
 FixedJoint2D:
@@ -5136,7 +5137,7 @@ Prefab:
         type: 2}
       propertyPath: ui_pts_left
       value: 
-      objectReference: {fileID: 457691502}
+      objectReference: {fileID: 1222099018}
     - target: {fileID: 4926628978617950, guid: d5f3f8a3bac4ba4479ce70f034a940ec, type: 2}
       propertyPath: m_RootOrder
       value: 2
@@ -9353,6 +9354,7 @@ MonoBehaviour:
   DAMAGE_FROM_EXPLOSION: 75
   is_core: 1
   health_bar_prefab: {fileID: 196859613}
+  damage_sprites: []
   health_bar: {fileID: 196859613}
 --- !u!255 &1087999661
 FixedJoint2D:
@@ -9495,7 +9497,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 64553a98e20236845b5777db940e38c9, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 26a44670f324f3c498b0b0bde98ee1a2, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -9950,7 +9952,7 @@ Prefab:
         type: 2}
       propertyPath: ui_pts_left
       value: 
-      objectReference: {fileID: 457691502}
+      objectReference: {fileID: 1222099018}
     - target: {fileID: 4926628978617950, guid: d5f3f8a3bac4ba4479ce70f034a940ec, type: 2}
       propertyPath: m_RootOrder
       value: 2

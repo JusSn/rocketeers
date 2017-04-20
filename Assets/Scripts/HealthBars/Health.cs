@@ -18,9 +18,12 @@ public class Health : MonoBehaviour {
 
 
     public GameObject                           health_bar_prefab;
+    public Sprite[]                             damage_sprites;
 
     // health_bar attributes
     public GameObject                             health_bar;
+
+    private SpriteRenderer                      sprend;
     protected Transform                           greenBG;
     protected Block                               parent_block;
     protected Vector3                             health_bar_pos = new Vector3(0f, -0.25f, 0f);
@@ -37,6 +40,8 @@ public class Health : MonoBehaviour {
                 greenBG = health_bar.transform.Find ("Canvas/GreenBackground");
             }
         }
+
+        sprend = GetComponent<SpriteRenderer> ();
     }
 
 
@@ -87,6 +92,18 @@ public class Health : MonoBehaviour {
     // NOTE: This value can be positive or negative (could adjust health up if repaired)
     public void UpdateHealthByAmount(float health){
         cur_health = Mathf.Min(cur_health + health, MAX_HEALTH);
+
+         // Update sprite to reflect current state of damage
+         if (damage_sprites.Length > 0) {
+             sprend.sprite = damage_sprites[CurrentSprite()];
+         }
+    }
+
+    // Returns appropriate index into damage_sprites to represent damage dealt to block
+    // Assumes that damage_sprites have been set in the inspector with size > 0
+    // Assumes that damage_sprites is sorted from most damaged -> undamaged
+    private int CurrentSprite() {
+        return (int) ((damage_sprites.Length - 1) * (cur_health / MAX_HEALTH));
     }
 
     // Calling condition: when taking damage the health bar will appear

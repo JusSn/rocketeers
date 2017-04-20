@@ -61,6 +61,7 @@ public class Block : MonoBehaviour {
     // JF: Image object to display sprites on the block, such as a tooltip
     public Image                               image;
 
+
     // Neighbor joints
     public Dictionary<Direction, FixedJointContainer>         connected_neighbors = new Dictionary<Direction, FixedJointContainer>();
     public Dictionary<Direction, GameObject>    highlight_map = new Dictionary<Direction, GameObject>();
