@@ -36,6 +36,9 @@ public class ExplosiveBlock : Block {
             GameObject smoke = Instantiate(smoke_plume, transform.position, Quaternion.identity);
             smoke.transform.localScale = Vector3.one * SMOKE_SCALE;
             smoke.GetComponent<LoopingAnimation>().StartAnimation();
+
+            SFXManager.GetSFXManager ().PlaySFX (SFX.LargeExplosion);
+            
             CameraShake.Shake (0.5f, 0.3f);
         }
 

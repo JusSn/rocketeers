@@ -175,6 +175,7 @@ public class Block : MonoBehaviour {
     }
 
     public virtual void RammingDamage(float bonus){
+        SFXManager.GetSFXManager ().PlaySFX (SFX.ShipImpact);
         health.RammingDamage (bonus);
     }
 
@@ -378,6 +379,8 @@ public class Block : MonoBehaviour {
             boom0.transform.localScale = Vector3.one / 2f;
             boom0.GetComponent<LoopingAnimation>().StartAnimation();
         }
+
+        SFXManager.GetSFXManager ().PlaySFX (SFX.SmallExplosion);
 
         DeleteAllNeighboringConnections ();
 

@@ -15,7 +15,11 @@ public enum SFX {
 	StopPilot,
 	MenuConfirm,
 	NasaCountdown,
-	AirHorn
+	AirHorn,
+
+	SmallExplosion,
+	LargeExplosion,
+	ShipImpact
 }
 
 public class SFXManager : MonoBehaviour {
@@ -42,6 +46,9 @@ public class SFXManager : MonoBehaviour {
 
 	public AudioClip 					airHorn;
 
+	public AudioClip 					smallExplosion;
+	public AudioClip 					largeExplosion;
+	public AudioClip 					shipImpact;
 	private AudioSource					source;
 	private Dictionary<SFX, AudioClip> 	sfxMap;
 
@@ -74,6 +81,10 @@ public class SFXManager : MonoBehaviour {
 		sfxMap [SFX.StopPilot] 		= stopPilot;
 
 		sfxMap [SFX.AirHorn] 		= airHorn;
+
+		sfxMap [SFX.SmallExplosion] = smallExplosion;
+		sfxMap [SFX.LargeExplosion] = largeExplosion;
+		sfxMap [SFX.ShipImpact] 	= shipImpact;
  	}
 		
     public void PlaySFX(SFX sfx, float volume = 1f) {

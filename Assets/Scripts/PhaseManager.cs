@@ -253,6 +253,8 @@ public class PhaseManager : MonoBehaviour {
         GameObject boom0 = Instantiate(explosion, corePos, Quaternion.identity);
         boom0.GetComponent<LoopingAnimation>().StartAnimation();
 
+        SFXManager.GetSFXManager ().PlaySFX (SFX.LargeExplosion);
+
         CameraShake.Shake(0.5f, 0.4f, true);
 
         yield return new WaitForSeconds(0.2f);
@@ -260,12 +262,16 @@ public class PhaseManager : MonoBehaviour {
         GameObject boom1 = Instantiate(explosion, rocketPosL, Quaternion.identity);
         boom1.GetComponent<LoopingAnimation>().StartAnimation();
 
+        SFXManager.GetSFXManager ().PlaySFX (SFX.LargeExplosion);
+
         CameraShake.Shake(0.5f, 0.4f, true);
 
         yield return new WaitForSeconds(0.2f);
 
         GameObject boom2 = Instantiate(explosion, rocketPosR, Quaternion.identity);
         boom2.GetComponent<LoopingAnimation>().StartAnimation();
+
+        SFXManager.GetSFXManager ().PlaySFX (SFX.LargeExplosion);
 
         CameraShake.Shake(0.5f, 0.4f, true);
         SlowMo.End ();

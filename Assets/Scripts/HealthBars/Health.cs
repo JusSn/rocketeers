@@ -77,7 +77,7 @@ public class Health : MonoBehaviour {
     void CheckToDestroy(){
         if (cur_health <= 0f) {
             // SK: add logic for core ending the game
-			SFXManager.GetSFXManager().PlaySFX(SFX.BlockDestroyed);
+			//SFXManager.GetSFXManager().PlaySFX(SFX.BlockDestroyed);
             if (is_core) {
                 PhaseManager.S.EndGame(parent_block);
                 // JF: Destroy entire base
@@ -91,7 +91,7 @@ public class Health : MonoBehaviour {
     // Called by: this.TakeDamage(dmg_amount) and potentially other objects
     // NOTE: This value can be positive or negative (could adjust health up if repaired)
     public void UpdateHealthByAmount(float health){
-        cur_health = Mathf.Min(cur_health + health, MAX_HEALTH);
+        cur_health = Mathf.Max(Mathf.Min(cur_health + health, MAX_HEALTH), 0);
 
          // Update sprite to reflect current state of damage
          if (damage_sprites.Length > 0) {

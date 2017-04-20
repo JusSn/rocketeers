@@ -22,6 +22,7 @@ public class ReflectionBlock : Block {
     }
 
     public override void RammingDamage(float bonus){
+        SFXManager.GetSFXManager ().PlaySFX (SFX.ShipImpact);
         health.RammingDamage (bonus * RAMMING_MULTIPLIER);
     }
 
