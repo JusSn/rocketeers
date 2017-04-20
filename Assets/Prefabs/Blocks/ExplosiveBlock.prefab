@@ -304,9 +304,9 @@ MonoBehaviour:
   health_bar_prefab: {fileID: 1344433025396718, guid: 7ce92948e3d8941b4805e1c164364c13,
     type: 2}
   damage_sprites:
-  - {fileID: 21300000, guid: 7fef099cd589307429b55cc216dec00d, type: 3}
-  - {fileID: 21300000, guid: a61af9fe0d2ef5b448c72b593d02d082, type: 3}
-  - {fileID: 21300000, guid: b364442afe3898f44bc4651c1d8b2358, type: 3}
+  - {fileID: 21300000, guid: 9b4769c239a55974397c5d659ac46ede, type: 3}
+  - {fileID: 21300000, guid: 7b7080c7eb0476541a1f7bf73ff24f25, type: 3}
+  - {fileID: 21300000, guid: 1ce6d80207924400a8f4f2d588338f11, type: 3}
   health_bar: {fileID: 0}
 --- !u!212 &212019697935995300
 SpriteRenderer:
