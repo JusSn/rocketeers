@@ -440,7 +440,7 @@ public class Player : MonoBehaviour {
         if (grounded && input.LeftStick.Down > DOWN_JUMP_THRESHOLD && canDownJump){
             // tt_manager.downJumped = true;
             bodyCollider.isTrigger = true;
-            Invoke ("RestoreCollision", 0.3f);
+            Invoke ("RestoreCollision", 0.25f);
         }
 
 		// Jetpack calculations
