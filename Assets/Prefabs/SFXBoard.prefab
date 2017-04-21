@@ -144,3 +144,6 @@ MonoBehaviour:
   startPilot: {fileID: 8300000, guid: b1abf1ae77f4dc24baa52d7065e0ea72, type: 3}
   stopPilot: {fileID: 8300000, guid: 4b45d5965595be84c8c9ccd427d96b2b, type: 3}
   airHorn: {fileID: 8300000, guid: 2a1733d245cd54b44aa1f03019692b8d, type: 3}
+  smallExplosion: {fileID: 8300000, guid: 212e5531e5b0db34b943aecb8b503a2e, type: 3}
+  largeExplosion: {fileID: 8300000, guid: d424a8432113adf419e91d762151696a, type: 3}
+  shipImpact: {fileID: 8300000, guid: 0a2caf8a3fbde724fb198565fc13f6fc, type: 3}
