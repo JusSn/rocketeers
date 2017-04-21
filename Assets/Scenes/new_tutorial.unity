@@ -4412,8 +4412,8 @@ GameObject:
   - component: {fileID: 559231709}
   - component: {fileID: 559231708}
   - component: {fileID: 559231707}
-  - component: {fileID: 559231706}
   - component: {fileID: 559231705}
+  - component: {fileID: 559231706}
   m_Layer: 19
   m_Name: Core
   m_TagString: Core
@@ -4452,13 +4452,12 @@ MonoBehaviour:
 --- !u!114 &559231706
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 114287572377970520, guid: 6fa99bba588ee4a328b733bb38f1c774,
-    type: 2}
+  m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 559231704}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8231b0c45c81a4bc4ba43a7c2e1e14f1, type: 3}
+  m_Script: {fileID: 11500000, guid: b43317e1592a548b885499c7afcf82ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   MAX_HEALTH: 500
@@ -4466,9 +4465,11 @@ MonoBehaviour:
   BASE_DAMAGE_FROM_RAM: 15
   DAMAGE_FROM_EXPLOSION: 75
   is_core: 1
-  health_bar_prefab: {fileID: 2037807541}
+  health_bar_prefab: {fileID: 1344433025396718, guid: 7ce92948e3d8941b4805e1c164364c13,
+    type: 2}
   damage_sprites: []
-  health_bar: {fileID: 2037807541}
+  health_bar: {fileID: 0}
+  largeHealthBar: {fileID: 2037807541}
 --- !u!255 &559231707
 FixedJoint2D:
   m_ObjectHideFlags: 0
@@ -9299,8 +9300,8 @@ GameObject:
   - component: {fileID: 1087999663}
   - component: {fileID: 1087999662}
   - component: {fileID: 1087999661}
-  - component: {fileID: 1087999660}
   - component: {fileID: 1087999659}
+  - component: {fileID: 1087999660}
   m_Layer: 18
   m_Name: Core
   m_TagString: Core
@@ -9339,13 +9340,12 @@ MonoBehaviour:
 --- !u!114 &1087999660
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 114287572377970520, guid: 6fa99bba588ee4a328b733bb38f1c774,
-    type: 2}
+  m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1087999658}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8231b0c45c81a4bc4ba43a7c2e1e14f1, type: 3}
+  m_Script: {fileID: 11500000, guid: b43317e1592a548b885499c7afcf82ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   MAX_HEALTH: 500
@@ -9353,9 +9353,11 @@ MonoBehaviour:
   BASE_DAMAGE_FROM_RAM: 15
   DAMAGE_FROM_EXPLOSION: 75
   is_core: 1
-  health_bar_prefab: {fileID: 196859613}
+  health_bar_prefab: {fileID: 1344433025396718, guid: 7ce92948e3d8941b4805e1c164364c13,
+    type: 2}
   damage_sprites: []
-  health_bar: {fileID: 196859613}
+  health_bar: {fileID: 0}
+  largeHealthBar: {fileID: 196859613}
 --- !u!255 &1087999661
 FixedJoint2D:
   m_ObjectHideFlags: 0

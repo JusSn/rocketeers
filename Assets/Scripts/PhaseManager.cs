@@ -36,9 +36,6 @@ public class PhaseManager : MonoBehaviour {
     public GameObject                   TopBattleWall;
     public GameObject                   TimerDisplay;
 
-    public GameObject                   team1CoreHealthBar;
-    public GameObject                   team2CoreHealthBar;
-
     // Encapsulated attributes
     public static PhaseManager          S;
     public bool                         inBuildPhase = true;
@@ -149,9 +146,6 @@ public class PhaseManager : MonoBehaviour {
 
         StartCoroutine(moveGround(Vector3.down, groundDestination));
 
-        team1CoreHealthBar.SetActive (true);
-        team2CoreHealthBar.SetActive (true);
-
         // CG: Destroy the inner walls of the build phase so players can drive their
         // ships around more
         DestroyInnerWalls ();
@@ -185,6 +179,7 @@ public class PhaseManager : MonoBehaviour {
         foreach (GameObject obj in cores) {
             obj.GetComponent<Block> ().image.enabled = true;
             obj.GetComponent<Block> ().RemoveHighlights ();
+            obj.GetComponent<CoreHealth> ().DisplayHealthBars ();
         }
 
         ExecuteOverPlayers (new player_delegate (SwitchToBattle));

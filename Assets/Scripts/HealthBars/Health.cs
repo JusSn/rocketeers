@@ -31,16 +31,8 @@ public class Health : MonoBehaviour {
     // health attributes
     protected float                               cur_health;
 
-    protected void Start(){
+    protected virtual void Start(){
         cur_health = MAX_HEALTH;
-        if (health_bar) {
-            if (PhaseManager.S.in_tutorial) {
-                greenBG = health_bar.transform.Find ("GreenBackground");
-            } else {
-                greenBG = health_bar.transform.Find ("Canvas/GreenBackground");
-            }
-        }
-
         sprend = GetComponent<SpriteRenderer> ();
     }
 
@@ -114,9 +106,8 @@ public class Health : MonoBehaviour {
         // additional health_bars if one is already present
         if (health_bar == null){
             InstantiateHealthBar ();
-
             // JF: Don't have to do a Find every time you want to update green bar
-            greenBG = health_bar.transform.Find("Canvas/GreenBackground");
+            AssignGreenBG ();
         }
 
         // adjust the green health bar so that the red background shows
@@ -128,16 +119,19 @@ public class Health : MonoBehaviour {
         //Destroy (health_bar, 2f);
     }
 
-    protected virtual void InstantiateHealthBar(){
+    void InstantiateHealthBar(){
         health_bar = Instantiate<GameObject> (health_bar_prefab, Vector3.down, Quaternion.identity);
 
-        SetPosition ();// sets the health bar as being a child of the parent_block gameObject
+        SetPosition (); // sets the health bar as being a child of the parent_block gameObject
 
     }
 
-    protected virtual void SetPosition(){
+    void SetPosition(){
         health_bar.transform.parent = parent_block.transform;
         health_bar.transform.localPosition = health_bar_pos;
     }
 
+    void AssignGreenBG(){
+        greenBG = health_bar.transform.Find ("Canvas/GreenBackground");
+    }
 }
