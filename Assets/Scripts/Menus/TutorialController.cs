@@ -31,6 +31,7 @@ public class TutorialController : MonoBehaviour {
     private GameObject                  team1Rocket;
     private GameObject                  team2Rocket;
 
+	private GameObject					pressStart;
 	private GameObject 					buildSpotUI;
 	private GameObject					battleSpotUI;
 
@@ -74,6 +75,8 @@ public class TutorialController : MonoBehaviour {
 
         scenery = GameObject.Find ("Scenery").gameObject;
 
+		pressStart = GameObject.Find("PressStart");
+		pressStart.SetActive (false);
 		buildSpotUI = GameObject.Find ("BuildSpotUI");
 		buildSpotUI.SetActive (false);
 		battleSpotUI = GameObject.Find ("BattleSpotUI");
@@ -132,10 +135,11 @@ public class TutorialController : MonoBehaviour {
 				tutorialMap [stage] ();
 			}
 		} else {
-			if (InputManager.ActiveDevice.Action1) {
+			if (InputManager.ActiveDevice.MenuWasPressed) {
 				SpotlightPause.S.DestroySpotlight ();
 				spotlight = false;
 				spotlightUI.SetActive (false);
+				pressStart.SetActive (true);
 			}
 		}
 	}
@@ -161,6 +165,7 @@ public class TutorialController : MonoBehaviour {
     }
 
 	public void InitBuildControls() {
+		pressStart.SetActive (true);
         scenery.SetActive (true);
         shouldAdvanceToNextStage = false;
         objectiveScreen.SetActive (false);
@@ -290,6 +295,7 @@ public class TutorialController : MonoBehaviour {
 		SpotlightPause.S.CreateSpotlight (5f);
 		spotlightUI = buildSpotUI;
 		spotlightUI.SetActive (true);
+		pressStart.SetActive (false);
 	}
 
 	void HighlightCockpit() {
@@ -297,5 +303,6 @@ public class TutorialController : MonoBehaviour {
 		SpotlightPause.S.CreateSpotlight (2.5f, -7f);
 		spotlightUI = battleSpotUI;
 		spotlightUI.SetActive (true);
+		pressStart.SetActive (false);
 	}
 }
