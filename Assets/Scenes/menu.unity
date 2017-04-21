@@ -829,6 +829,10 @@ Prefab:
       propertyPath: m_Torque
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 1389393977510146, guid: cb3b65ffb9656a64f9beb484214aa1aa, type: 2}
+      propertyPath: m_Layer
+      value: 26
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: cb3b65ffb9656a64f9beb484214aa1aa, type: 2}
   m_IsPrefabParent: 0
@@ -1008,6 +1012,10 @@ Prefab:
       value: 
       objectReference: {fileID: 21300000, guid: dc4447433cf3cd34b84a538115983dfd,
         type: 3}
+    - target: {fileID: 1389393977510146, guid: cb3b65ffb9656a64f9beb484214aa1aa, type: 2}
+      propertyPath: m_Layer
+      value: 26
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: cb3b65ffb9656a64f9beb484214aa1aa, type: 2}
   m_IsPrefabParent: 0
@@ -1549,7 +1557,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &991779935
 Transform:
   m_ObjectHideFlags: 0
@@ -1720,7 +1728,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1109715051
 Transform:
   m_ObjectHideFlags: 0
@@ -1898,6 +1906,10 @@ Prefab:
     - target: {fileID: 4993137461310574, guid: cb3b65ffb9656a64f9beb484214aa1aa, type: 2}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 77.512
+      objectReference: {fileID: 0}
+    - target: {fileID: 1389393977510146, guid: cb3b65ffb9656a64f9beb484214aa1aa, type: 2}
+      propertyPath: m_Layer
+      value: 26
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: cb3b65ffb9656a64f9beb484214aa1aa, type: 2}
@@ -2654,6 +2666,10 @@ Prefab:
         type: 2}
       propertyPath: m_RelativeForce.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1389393977510146, guid: cb3b65ffb9656a64f9beb484214aa1aa, type: 2}
+      propertyPath: m_Layer
+      value: 26
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: cb3b65ffb9656a64f9beb484214aa1aa, type: 2}
