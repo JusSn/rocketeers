@@ -211,10 +211,6 @@ public class TutorialController : MonoBehaviour {
         battleControlScreen.SetActive (true);
         TurnOnPlayers ();
 
-		Player[] players = GameManager.GetGameManager ().GetPlayers ();
-		foreach (Player player in players)
-			player.SwitchToBattle ();
-
         PhaseManager.S.SwitchToBattlePhase ();
 		stage = TutorialStage.BattleControls;
         startTime = Time.time;
