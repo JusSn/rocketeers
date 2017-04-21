@@ -1946,6 +1946,21 @@ Prefab:
       propertyPath: airHorn
       value: 
       objectReference: {fileID: 8300000, guid: 2a1733d245cd54b44aa1f03019692b8d, type: 3}
+    - target: {fileID: 114587598149821344, guid: f490112fcfea1c24a907ccd0a88ddeba,
+        type: 2}
+      propertyPath: smallExplosion
+      value: 
+      objectReference: {fileID: 8300000, guid: 212e5531e5b0db34b943aecb8b503a2e, type: 3}
+    - target: {fileID: 114587598149821344, guid: f490112fcfea1c24a907ccd0a88ddeba,
+        type: 2}
+      propertyPath: shipImpact
+      value: 
+      objectReference: {fileID: 8300000, guid: 0a2caf8a3fbde724fb198565fc13f6fc, type: 3}
+    - target: {fileID: 114587598149821344, guid: f490112fcfea1c24a907ccd0a88ddeba,
+        type: 2}
+      propertyPath: largeExplosion
+      value: 
+      objectReference: {fileID: 8300000, guid: d424a8432113adf419e91d762151696a, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f490112fcfea1c24a907ccd0a88ddeba, type: 2}
   m_IsPrefabParent: 0
