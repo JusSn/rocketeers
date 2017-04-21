@@ -2,12 +2,10 @@ How To Play
 
 Build a spaceship around your core! Launch towards the stars! 
 
-Protect your core from the enemy team! Don't fall off your ship!
+Protect your core from the enemy team!
 
-Controls [3/13]
+Controls [4/21]
 
 Move			Left Stick
-Grab/Place		Y		
-Cancel			B
-Jump 			A
-Fire Weapon (Battle)	X
+Grab/Place		A		
+Fire Weapon (Battle)	Right Stick
