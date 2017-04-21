@@ -36,33 +36,51 @@ public class SpotlightPause : MonoBehaviour {
 
 	/**************** Public Interface ****************/
 
-	public void CreateSpotlight(float spread) {
-		gameObject.SetActive (true);
+	public bool CreateSpotlight(float spread) {
+		if (!animating && !spotlightOn) {
+			gameObject.SetActive (true);
 
-		SetPosition (0f);
-		SpotlightData dat = new SpotlightData (spread, 0.75f);
-		StartCoroutine ("ExtendSpotlight", dat);
+			SetPosition (0f);
+			SpotlightData dat = new SpotlightData (spread, 0.75f);
+			StartCoroutine ("ExtendSpotlight", dat);
+			return true;
+		} else {
+			return false;
+		}
 	}
 
-	public void CreateSpotlight(float spread, float x_pos) {
-		gameObject.SetActive (true);
+	public bool CreateSpotlight(float spread, float x_pos) {
+		if (!animating && !spotlightOn) {
+			gameObject.SetActive (true);
 
-		SetPosition (x_pos);
-		SpotlightData dat = new SpotlightData (spread, 0.75f);
-		StartCoroutine ("ExtendSpotlight", dat);
+			SetPosition (x_pos);
+			SpotlightData dat = new SpotlightData (spread, 0.75f);
+			StartCoroutine ("ExtendSpotlight", dat);
+			return true;
+		} else {
+			return false;
+		}
 	}
 
-	public void CreateSpotlight(float spread, float x_pos, float alpha) {
-		gameObject.SetActive (true);
+	public bool CreateSpotlight(float spread, float x_pos, float alpha) {
+		if (!animating && !spotlightOn) {
+			gameObject.SetActive (true);
 
-		SetPosition (x_pos);
-		SpotlightData dat = new SpotlightData (spread, alpha);
-		StartCoroutine ("ExtendSpotlight", dat);
+			SetPosition (x_pos);
+			SpotlightData dat = new SpotlightData (spread, alpha);
+			StartCoroutine ("ExtendSpotlight", dat);
+			return true;
+		} else {
+			return false;
+		}
 	}
 
-	public void DestroySpotlight() {
+	public bool DestroySpotlight() {
 		if (!animating && spotlightOn) {
 			StartCoroutine ("RetractSpotlight");
+			return true;
+		} else {
+			return false;
 		}
 	}
 

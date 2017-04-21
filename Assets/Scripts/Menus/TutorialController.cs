@@ -136,10 +136,11 @@ public class TutorialController : MonoBehaviour {
 			}
 		} else {
 			if (InputManager.ActiveDevice.MenuWasPressed) {
-				SpotlightPause.S.DestroySpotlight ();
-				spotlight = false;
-				spotlightUI.SetActive (false);
-				pressStart.SetActive (true);
+				if (SpotlightPause.S.DestroySpotlight ()) {
+					spotlight = false;
+					spotlightUI.SetActive (false);
+					pressStart.SetActive (true);
+				}
 			}
 		}
 	}
