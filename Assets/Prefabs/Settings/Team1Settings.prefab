@@ -56,7 +56,7 @@ MonoBehaviour:
   weapon: {fileID: 21300000, guid: 333333eaf0dc628408151875ab7792f5, type: 3}
   placementMask:
     serializedVersion: 2
-    m_Bits: 804864
+    m_Bits: 808960
   platformsMask:
     serializedVersion: 2
     m_Bits: 1048576
