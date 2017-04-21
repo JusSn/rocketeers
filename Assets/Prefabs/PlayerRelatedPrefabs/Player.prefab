@@ -225,6 +225,7 @@ GameObject:
   - component: {fileID: 114503214241377472}
   - component: {fileID: 114618603198775892}
   - component: {fileID: 114528296588006404}
+  - component: {fileID: 114277267643561676}
   m_Layer: 9
   m_Name: Player
   m_TagString: Player
@@ -331,7 +332,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1749041598868772}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -11.5, y: -6, z: 0}
+  m_LocalPosition: {x: -25.82, y: 8.3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4760495832201670}
@@ -600,7 +601,7 @@ MonoBehaviour:
   placementDetectRadius: 0.3
   throwChargeMax: 2.5
   throwChargeRatio: 10
-  projectilePrefab: {fileID: 1731158819494592, guid: 08d847f8dbb19904fab96cb89f11acc3,
+  projectilePrefab: {fileID: 1731158819494592, guid: e24aa5bb2b1fe453fa3441ae72ed1f3e,
     type: 2}
   offscreenArrowPrefab: {fileID: 0}
   projSpeed: 20
@@ -618,10 +619,10 @@ MonoBehaviour:
   debugMode: 0
   placementMask:
     serializedVersion: 2
-    m_Bits: 804864
+    m_Bits: 808960
   platformsMask:
     serializedVersion: 2
-    m_Bits: 3145728
+    m_Bits: 1048576
   groundedMask:
     serializedVersion: 2
     m_Bits: 3147776
@@ -647,6 +648,19 @@ MonoBehaviour:
   ui_pts_left: {fileID: 0}
   starting_pts: 5000
   _____________: 0
+--- !u!114 &114277267643561676
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1749041598868772}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d43ae2ddfc3166c449362055ccad9f6c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  arrowPrefab: {fileID: 1227939951368536, guid: 4d11bc8b532b52544b67a049275f585a,
+    type: 2}
 --- !u!114 &114330442407335310
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -731,7 +745,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d42cc18cdfb054d6a984c8174deb9315, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  arrowPrefab: {fileID: 1460200171908640, guid: 65747d1dc53294e7095f978e50dbb6dc,
+  arrowPrefab: {fileID: 1455219036511290, guid: dea355d6e7b5747818902457209a26ab,
     type: 2}
   _____________: 0
 --- !u!114 &114680217622344244

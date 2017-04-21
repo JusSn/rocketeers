@@ -275,7 +275,7 @@ MonoBehaviour:
     type: 2}
   placementMask:
     serializedVersion: 2
-    m_Bits: 837632
+    m_Bits: 841728
   explosion: {fileID: 1593478875652032, guid: a28e92fadf2d42848976be3c82b3d5ac, type: 2}
   ______________________: 0
   teamNum: 1
