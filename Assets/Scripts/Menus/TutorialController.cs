@@ -27,10 +27,12 @@ public class TutorialController : MonoBehaviour {
 	private GameObject					objectiveScreen;
 	private GameObject					buildControlScreen;
 	private GameObject					battleControlScreen;
-    private GameObject                  battleControlUI;
 
     private GameObject                  team1Rocket;
     private GameObject                  team2Rocket;
+
+	private GameObject 					buildSpotUI;
+	private GameObject					battleSpotUI;
 
     private GameObject                  scenery;
 
@@ -43,8 +45,6 @@ public class TutorialController : MonoBehaviour {
     private float                       startTime;
     private float                       DELAY_TIME = 10f;
 
-    private Vector3                     finalBattleControlUIPos = new Vector3(-65f, 525f, 0f);
-
 	private SwitchSprites[]				checkBoxes;
 	private GameObject[]				players;
 	private InputDevice[]               inputDevices;
@@ -52,6 +52,8 @@ public class TutorialController : MonoBehaviour {
     private Dictionary<TutorialStage, Action>  tutorialMap;
     private Dictionary<TutorialStage, Action>  advanceToNextStageMap;
     private bool                        shouldAdvanceToNextStage = false;
+	private bool						spotlight = false;
+	private	GameObject 					spotlightUI = null;
 
 
     void Awake() {
@@ -66,12 +68,16 @@ public class TutorialController : MonoBehaviour {
 		objectiveScreen = transform.Find ("GameObjective").gameObject;
 		buildControlScreen = transform.Find ("BuildControls").gameObject;
 		battleControlScreen = transform.Find ("BattleControls").gameObject;
-        battleControlUI = battleControlScreen.transform.Find ("UIController").gameObject;
 
         team1Rocket = GameObject.Find ("Team1Base").gameObject;
         team2Rocket = GameObject.Find ("Team2Base").gameObject;
 
         scenery = GameObject.Find ("Scenery").gameObject;
+
+		buildSpotUI = GameObject.Find ("BuildSpotUI");
+		buildSpotUI.SetActive (false);
+		battleSpotUI = GameObject.Find ("BattleSpotUI");
+		battleSpotUI.SetActive (false);
 
         team1BlocksToGo = GameObject.Find ("Team1BlocksToGo").gameObject.GetComponent<Text>();
         team2BlocksToGo = GameObject.Find ("Team2BlocksToGo").gameObject.GetComponent<Text>();
@@ -114,15 +120,23 @@ public class TutorialController : MonoBehaviour {
 	void Update() {
         PhaseManager.S.SetInTutorial();
 
-		for (int i = 0; i < 4; ++i) {
-			if (inputDevices [i].MenuWasPressed) {
-				SFXManager.GetSFXManager ().PlaySFX (SFX.MenuConfirm);
+		if (!spotlight) {
+			for (int i = 0; i < 4; ++i) {
+				if (inputDevices [i].MenuWasPressed) {
+					SFXManager.GetSFXManager ().PlaySFX (SFX.MenuConfirm);
+				}
 			}
-		}
-        advanceToNextStageMap [stage] ();
+			advanceToNextStageMap [stage] ();
 
-        if (shouldAdvanceToNextStage) {
-			tutorialMap [stage] ();
+			if (shouldAdvanceToNextStage) {
+				tutorialMap [stage] ();
+			}
+		} else {
+			if (InputManager.ActiveDevice.Action1) {
+				SpotlightPause.S.DestroySpotlight ();
+				spotlight = false;
+				spotlightUI.SetActive (false);
+			}
 		}
 	}
 
@@ -155,15 +169,19 @@ public class TutorialController : MonoBehaviour {
         TurnOnPlayers ();
 
 		stage = TutorialStage.BuildControls;
+
+		Invoke ("HighlightBlocks", 1.5f);
 	}
 
     void BuildAdvanceCondition(){
         shouldAdvanceToNextStage = ((int.Parse (team1BlocksToGo.text) == 0
                                      && int.Parse (team2BlocksToGo.text) == 0)
                                      || StartButtonWasPressed());
+		
     }
 
     public void InitCountdown(){
+		CancelInvoke ();
         GameObject.Find ("Team1BlocksToBuild").gameObject.GetComponent<Text>().text = "";
         GameObject.Find ("Team2BlocksToBuild").gameObject.GetComponent<Text>().text = "";
         team1BlocksToGo.gameObject.SetActive (true);
@@ -195,13 +213,10 @@ public class TutorialController : MonoBehaviour {
 		stage = TutorialStage.BattleControls;
         startTime = Time.time;
         Invoke ("ClearBattleText", DELAY_TIME);
+		Invoke ("HighlightCockpit", 3f);
 	}
 
     void ShrinkControls(){
-        if (Time.time - startTime > DELAY_TIME) {
-            battleControlUI.transform.localScale = Vector3.Lerp (battleControlUI.transform.localScale, Vector3.one * 1.5f, 0.025f);
-            battleControlUI.transform.localPosition = Vector3.Lerp (battleControlUI.transform.localPosition, finalBattleControlUIPos, 0.025f);
-        }
         // We enter the battle phase via the PhaseManager so
         // once a team destroys the core there we will go back to the main menu
         // or when someone skips it and presses the start button
@@ -269,4 +284,18 @@ public class TutorialController : MonoBehaviour {
     void ClearBattleText(){
         Destroy (battleText);
     }
+		
+	void HighlightBlocks () {
+		spotlight = true;
+		SpotlightPause.S.CreateSpotlight (5f);
+		spotlightUI = buildSpotUI;
+		spotlightUI.SetActive (true);
+	}
+
+	void HighlightCockpit() {
+		spotlight = true;
+		SpotlightPause.S.CreateSpotlight (2.5f, -7f);
+		spotlightUI = battleSpotUI;
+		spotlightUI.SetActive (true);
+	}
 }

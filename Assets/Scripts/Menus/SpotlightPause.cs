@@ -18,7 +18,6 @@ public class SpotlightPause : MonoBehaviour {
 	public bool					animating = false;
 	private GameObject				rightPanel;
 	private GameObject				leftPanel;
-	private GameObject				prompt;
 
 	void Awake () {
 		S = this;
@@ -29,21 +28,10 @@ public class SpotlightPause : MonoBehaviour {
 
 		rightPanel = transform.Find ("Canvas").Find("Covers").Find("FadeRight").gameObject;
 		leftPanel = transform.Find ("Canvas").Find("Covers").Find("FadeLeft").gameObject;
-		prompt = transform.Find ("Canvas").Find ("Prompt").gameObject;
-		prompt.SetActive (false);
 
 		SetTransparency (0f);
 		SetSpread (0f);
 		SetPosition (0f);
-	}
-
-	// Update is called once per frame
-	void Update () {
-		if (!animating && spotlightOn) {
-			if (InputManager.ActiveDevice.MenuWasPressed) {
-				StartCoroutine ("RetractSpotlight");
-			}
-		}
 	}
 
 	/**************** Public Interface ****************/
@@ -70,6 +58,12 @@ public class SpotlightPause : MonoBehaviour {
 		SetPosition (x_pos);
 		SpotlightData dat = new SpotlightData (spread, alpha);
 		StartCoroutine ("ExtendSpotlight", dat);
+	}
+
+	public void DestroySpotlight() {
+		if (!animating && spotlightOn) {
+			StartCoroutine ("RetractSpotlight");
+		}
 	}
 
 	/**************** Utility ****************/
@@ -121,23 +115,20 @@ public class SpotlightPause : MonoBehaviour {
 		// Expand spotlight
 		while (rightPanel.transform.eulerAngles.z < data.spread - 0.01f) {
 			SetSpread (Mathf.Lerp(rightPanel.transform.eulerAngles.z, data.spread, 0.25f));
-			print (rightPanel.transform.eulerAngles + " | " + data.spread);
 			yield return null;
 		}
 		SetSpread (data.spread);
 
 		animating = false;
 		spotlightOn = true;
-		prompt.SetActive (true);
 	}
 
 	IEnumerator RetractSpotlight () {
-		prompt.SetActive (false);
 		animating = true;
 
 		// Retract spotlight
 		while (rightPanel.transform.rotation.z > 0.01f) {
-			SetSpread (Mathf.Lerp(rightPanel.transform.rotation.z, 0f, 0.25f));
+			SetSpread (Mathf.Lerp(rightPanel.transform.eulerAngles.z, 0f, 0.25f));
 			yield return null;
 		}
 		SetSpread (0f);
