@@ -215,7 +215,7 @@ public class MenuController : MonoBehaviour {
 		gameConfirmScreen.SetActive (true);
 
 		bg.SetScrollSpeed (10f);
-		es.SetSelectedGameObject(gameConfirmScreen.transform.Find ("Canvas").Find ("ConfirmButton").gameObject);
+		es.SetSelectedGameObject(gameConfirmScreen.transform.Find ("Canvas").Find ("JellyMode").gameObject);
 	}
 
 	void DeactivateScreens() {

@@ -45,6 +45,8 @@ public class TutorialController : MonoBehaviour {
     private float                       timeLeft = 3f;
     private float                       startTime;
     private float                       DELAY_TIME = 10f;
+	private bool						canSkip = false;
+	private float						SKIP_DELAY = 3f;
 
 	private SwitchSprites[]				checkBoxes;
 	private GameObject[]				players;
@@ -104,7 +106,7 @@ public class TutorialController : MonoBehaviour {
         advanceToNextStageMap.Add (TutorialStage.Objective, GenericAdvanceCondition);
         advanceToNextStageMap.Add (TutorialStage.BuildControls, BuildAdvanceCondition);
         advanceToNextStageMap.Add (TutorialStage.Countdown, CountdownAdvanceCondition);
-        advanceToNextStageMap.Add (TutorialStage.BattleControls, ShrinkControls);
+		advanceToNextStageMap.Add (TutorialStage.BattleControls, GenericAdvanceCondition);
 
 
 		inputDevices = new InputDevice[4];
@@ -124,11 +126,6 @@ public class TutorialController : MonoBehaviour {
         PhaseManager.S.SetInTutorial();
 
 		if (!spotlight) {
-			for (int i = 0; i < 4; ++i) {
-				if (inputDevices [i].MenuWasPressed) {
-					SFXManager.GetSFXManager ().PlaySFX (SFX.MenuConfirm);
-				}
-			}
 			advanceToNextStageMap [stage] ();
 
 			if (shouldAdvanceToNextStage) {
@@ -139,7 +136,7 @@ public class TutorialController : MonoBehaviour {
 				if (SpotlightPause.S.DestroySpotlight ()) {
 					spotlight = false;
 					spotlightUI.SetActive (false);
-					pressStart.SetActive (true);
+					Invoke ("AllowSkip", SKIP_DELAY);
 				}
 			}
 		}
@@ -159,14 +156,15 @@ public class TutorialController : MonoBehaviour {
 		TurnOffPlayers ();
 
 		stage = TutorialStage.Objective;
+
+		canSkip = true;
 	}
 
     void GenericAdvanceCondition(){
-        shouldAdvanceToNextStage = StartButtonWasPressed ();
+		shouldAdvanceToNextStage = SkipStage ();
     }
 
 	public void InitBuildControls() {
-		pressStart.SetActive (true);
         scenery.SetActive (true);
         shouldAdvanceToNextStage = false;
         objectiveScreen.SetActive (false);
@@ -177,12 +175,14 @@ public class TutorialController : MonoBehaviour {
 		stage = TutorialStage.BuildControls;
 
 		Invoke ("HighlightBlocks", 1.5f);
+
+		canSkip = false;
 	}
 
     void BuildAdvanceCondition(){
         shouldAdvanceToNextStage = ((int.Parse (team1BlocksToGo.text) == 0
                                      && int.Parse (team2BlocksToGo.text) == 0)
-                                     || StartButtonWasPressed());
+									 || SkipStage());
 		
     }
 
@@ -192,15 +192,18 @@ public class TutorialController : MonoBehaviour {
         GameObject.Find ("Team2BlocksToBuild").gameObject.GetComponent<Text>().text = "";
         team1BlocksToGo.gameObject.SetActive (true);
         team2BlocksToGo.gameObject.SetActive (true);
+		pressStart.SetActive (false);
         stage = TutorialStage.Countdown;
         nasaCountdownAudioSource.Play();
+
+		canSkip = false;
     }
 
     void CountdownAdvanceCondition(){
         timeLeft -= Time.deltaTime;
         string seconds = (timeLeft % 60f).ToString("00");
         SetTeamText (seconds);
-        shouldAdvanceToNextStage = StartButtonWasPressed ();
+		shouldAdvanceToNextStage = SkipStage ();
         if (timeLeft % 60f <= 0f) {
             shouldAdvanceToNextStage = true;
         }
@@ -209,6 +212,7 @@ public class TutorialController : MonoBehaviour {
 	public void InitBattleControls() {
         buildControlScreen.SetActive (false);
         battleControlScreen.SetActive (true);
+		pressStart.SetActive (false);
         TurnOnPlayers ();
 
         PhaseManager.S.SwitchToBattlePhase ();
@@ -216,14 +220,13 @@ public class TutorialController : MonoBehaviour {
         startTime = Time.time;
         Invoke ("ClearBattleText", DELAY_TIME);
 		Invoke ("HighlightCockpit", 3f);
+
+		canSkip = false;
 	}
 
-    void ShrinkControls(){
-        // We enter the battle phase via the PhaseManager so
-        // once a team destroys the core there we will go back to the main menu
-        // or when someone skips it and presses the start button
-        shouldAdvanceToNextStage = StartButtonWasPressed ();
-    }
+	public void FinishTutorial() {
+		SceneManager.LoadScene ("menu");
+	}
 
 	public void TurnOnPlayers() {
 		players [0].SetActive (true);
@@ -244,18 +247,13 @@ public class TutorialController : MonoBehaviour {
         team2Rocket.SetActive (active);
     }
 
-    bool StartButtonWasPressed(){
-        for (int i = 0; i < 4; ++i) {
-            if (inputDevices [i].MenuWasPressed) {
-                SFXManager.GetSFXManager ().PlaySFX (SFX.MenuConfirm);
-                return true;
-            }
-        }
-        return false;
-    }
+	bool SkipStage () {
+		if (InputManager.ActiveDevice.MenuWasPressed && canSkip) {
+			SFXManager.GetSFXManager ().PlaySFX (SFX.MenuConfirm);
+			return true;
+		}
 
-    public void FinishTutorial() {
-        SceneManager.LoadScene ("menu");
+		return false;
     }
 
     public void DecreaseBlocksToGo(GameObject settableBlock){
@@ -290,6 +288,7 @@ public class TutorialController : MonoBehaviour {
 	void HighlightBlocks () {
 		spotlight = true;
 		SpotlightPause.S.CreateSpotlight (5f);
+
 		spotlightUI = buildSpotUI;
 		spotlightUI.SetActive (true);
 		pressStart.SetActive (false);
@@ -298,8 +297,14 @@ public class TutorialController : MonoBehaviour {
 	void HighlightCockpit() {
 		spotlight = true;
 		SpotlightPause.S.CreateSpotlight (2.5f, -7f);
+
 		spotlightUI = battleSpotUI;
 		spotlightUI.SetActive (true);
 		pressStart.SetActive (false);
+	}
+
+	void AllowSkip () {
+		pressStart.SetActive (true);
+		canSkip = true;
 	}
 }
