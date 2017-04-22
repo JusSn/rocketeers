@@ -290,7 +290,7 @@ Prefab:
     - target: {fileID: 224419184762612284, guid: 4eb2133591a001d4bad73633e187f90f,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -200
+      value: -220
       objectReference: {fileID: 0}
     - target: {fileID: 224419184762612284, guid: 4eb2133591a001d4bad73633e187f90f,
         type: 2}
@@ -1225,7 +1225,7 @@ Prefab:
     - target: {fileID: 224419184762612284, guid: 4eb2133591a001d4bad73633e187f90f,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -100
+      value: -140
       objectReference: {fileID: 0}
     - target: {fileID: 224419184762612284, guid: 4eb2133591a001d4bad73633e187f90f,
         type: 2}
@@ -1728,7 +1728,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1109715051
 Transform:
   m_ObjectHideFlags: 0
@@ -2571,7 +2571,7 @@ RectTransform:
   m_GameObject: {fileID: 1500492017}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 16, y: 8, z: 1}
+  m_LocalScale: {x: 18, y: 9, z: 1}
   m_Children: []
   m_Father: {fileID: 1361640282}
   m_RootOrder: 0
@@ -2600,7 +2600,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 8c2fa4ccb40f2504b9225f5769756fc9, type: 3}
+  m_Sprite: {fileID: 21300000, guid: cfcdaef11dc45b8409665a68a08da765, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2688,7 +2688,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1714026773
 Transform:
   m_ObjectHideFlags: 0
