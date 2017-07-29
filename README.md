@@ -1,5 +1,5 @@
 # Rocketeers
-### 2D Platformer Ship Building/Co-op Multiplayer Action Game, 2 - 4 Players. Built in Unity 5.6.
+### 2D Platformer Ship Building/Co-op Multiplayer Action Game, 2 - 4 Players. Built in Unity 5.6. Requires XBOX 360 Controllers.
 ### Voted Best Game, EECS 494: Computer Game Development
 ### [Gameplay Trailer](https://drive.google.com/file/d/0BzKrDj0gvYrjczFmMElqM0Fzb1U/view?usp=sharing)
 
